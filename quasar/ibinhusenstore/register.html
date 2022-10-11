@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <!--
+    WARNING! Make sure that you match all Quasar related
+    tags to the same version! (Below it's "@2.0.3")
+  -->
+
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@^4.0.0/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <!-- example of injection point where you write your app template -->
+    <div id="q-app">
+        <div
+        class="row justify-center q-mt-lg"
+        style="margin: 20px 0 0 auto; max-width: 1366px"
+      >
+        <div class="col-3">
+          <q-card class="my-card">
+            <h3 class="q-pa-md text-center text-weight-light">Register</h3>
+            <q-card-section>
+              <q-input
+                v-model="email"
+                class="q-mb-lg"
+                filled
+                type="email"
+                label="Email"
+              ></q-input>
+
+              <!-- Password -->
+              <q-input
+                v-model="password"
+                filled
+                :type="isPwd ? 'password' : 'text'"
+                label="Password"
+                class="q-mt-lg q-mb-lg"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
+              <!-- End of password -->
+
+              <!-- Confirm password -->
+              <q-input
+                v-model="password"
+                filled
+                :type="isPwd ? 'password' : 'text'"
+                label="Confirm password"
+                class="q-mt-lg q-mb-lg"
+              >
+                <template v-slot:append>
+                  <q-icon
+                    :name="isPwd ? 'visibility_off' : 'visibility'"
+                    class="cursor-pointer"
+                    @click="isPwd = !isPwd"
+                  />
+                </template>
+              </q-input>
+              <!-- End of confirm password -->
+              <q-btn color="primary" label="Register"></q-btn>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add the following at the end of your body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.umd.prod.js"></script>
+    
+    <script>
+      /*
+        Example kicking off the UI. Obviously, adapt this to your specific needs.
+        Assumes you have a <div id="q-app"></div> in your <body> above
+       */
+      const app = Vue.createApp({
+        setup () {
+            const lorem = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
+            const password = '';
+            const isPwd = true;
+            const email = '';
+            return { lorem, password, isPwd, email }
+        }
+      })
+
+      app.use(Quasar)
+      app.mount('#q-app')
+    </script>
+  </body>
+</html>
