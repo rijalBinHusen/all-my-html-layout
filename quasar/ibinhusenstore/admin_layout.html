@@ -44,6 +44,29 @@
                       </template>
                     </q-list>
             </q-drawer>
+            <q-page-container>
+                <!-- Search produk -->
+                <div class="q-pa-md">
+                    <q-input outlined v-model="text" label="Cari produk"></q-input>
+                    <q-btn color="primary" label="Buat produk baru"></q-btn>
+                </div>
+                <!-- Search produk -->
+                <q-page class="row justify-between">
+                    <!-- </router-link> -->
+                    <div class="q-pa-md items-start col-3">
+                        <!-- <router-link to="/produk"> -->
+                        <q-card class="my-card cursor-pointer">
+                            <!-- <img :src="imgUrl(product?.img)" /> -->
+                            <q-img src="https://cdn.quasar.dev/img/parallax1.jpg" :ratio="16/9"></q-img>
+                            <q-card-section>
+                                <div class="text-weight-medium text-caption"> product.name </div>
+                                <div class="text-subtitle2 text-weight-regular">RP product.price </div>
+                            </q-card-section>
+                        </q-card>
+                        <!-- </router-link> -->
+                    </div>
+                </q-page>
+            </q-page-container>
           </q-layout>
     </div>
 
