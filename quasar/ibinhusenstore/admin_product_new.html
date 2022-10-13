@@ -55,8 +55,16 @@
                   <q-input outlined v-model="weight" label="berat"></q-input>
                 </div>
                 <!-- Form input -->
+                <!-- Description -->
+                <div class="q-my-md">
+                  <label for="">Deskripsi produk:</label>
+                    <q-editor 
+                    v-model="description"
+                    min-height="5rem">
+                  </q-editor>
+                </div>
                 <!-- Image uploader -->
-                <div class="row q-gutter-sm q-mt-md">
+                <div class="row q-gutter-sm">
                   <q-uploader
                     url="http://localhost:4444/upload"
                     label="Gambar produk"
@@ -99,6 +107,7 @@
             const price = ref('')
             const weight = ref('')
             const images = ref([])
+            const description = ref('Tulis deskripsi produk')
             const leftDrawerOpen = ref(false)
             const menuLists = [
                 {
@@ -141,7 +150,7 @@
   
             return {
                 name, category, price, weight,
-                leftDrawerOpen,
+                leftDrawerOpen, description,
                 menuLists,
                 toggleLeftDrawer () {
                     leftDrawerOpen.value = !leftDrawerOpen.value
