@@ -130,7 +130,14 @@ body {
   background-color: #f1f1f1;
 }
 
-.resizer { width: 10px; height: 10px; background: blue; position:absolute; right: 0; bottom: 0; cursor: se-resize; }
+.resizer { 
+  width: 5px; 
+  height: 100vh; 
+  background: #E67E22; 
+  position:absolute; 
+  right: 0; 
+  bottom: 0; 
+  cursor: col-resize; }
 
 /* End of card End of card End of card End of card End of card End of card End of card End of card End of card End of card */
 
@@ -218,14 +225,17 @@ const main = document.querySelector('.main')
 // get width screen
 const widthScreen = screen.width;
 
-sidebar.addEventListener('click', function init() {
-  sidebar.removeEventListener('click', init, false);
-  sidebar.className = sidebar.className + ' resizable';
-            var resizer = document.createElement('div');
-            resizer.className = 'resizer';
-            sidebar.appendChild(resizer);
-            resizer.addEventListener('mousedown', initDrag, false);
-        }, false);
+sidebar.addEventListener('mouseover', function init() {
+  showResizer()
+}, false);
+
+function showResizer () {
+  // sidebar.className = sidebar.className + ' resizable';
+  var resizer = document.createElement('div');
+  resizer.className = 'resizer';
+  sidebar.appendChild(resizer);
+  resizer.addEventListener('mousedown', initDrag, false);
+}
 
 var startX, startY, startWidth, startHeight;
 
