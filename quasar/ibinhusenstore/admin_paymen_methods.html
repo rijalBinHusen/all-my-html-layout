@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <!--
+    WARNING! Make sure that you match all Quasar related
+    tags to the same version! (Below it's "@2.0.3")
+  -->
+
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@^4.0.0/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <!-- example of injection point where you write your app template -->
+    <div id="q-app">
+        <q-layout view="hHh lpR fFf">
+            <q-header elevated class="bg-primary text-white">
+              <q-toolbar>
+                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        
+                <q-toolbar-title>
+                  <q-avatar>
+                    <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+                  </q-avatar>
+                  Title
+                </q-toolbar-title>
+              </q-toolbar>
+            </q-header>
+        
+            <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+              <q-list>
+                <template v-for="(menuItem, index) in menuLists" :key="index">
+                  <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
+                    <q-item-section avatar>
+                      <q-icon :name="menuItem.icon"></q-icon>
+                    </q-item-section>
+                    <q-item-section>
+                      {{ menuItem.label }}
+                    </q-item-section>
+                  </q-item>
+                  <q-separator :key="'sep' + index"  v-if="menuItem.separator"></q-separator>
+                </template>
+              </q-list>
+            </q-drawer>
+
+            <q-page-container>
+              <q-page class="q-pa-lg">
+                <!-- Button dashboard -->
+                <div class="row q-mb-md q-gutter-sm">
+
+                  <q-input outlined type="text" v-model="name" label="Nama metode" ></q-input>
+
+                  <q-input outlined type="text" class="col-7" v-model="deskripsi" label="Deskripsi" ></q-input>
+
+                  <q-btn color="primary" label="Kirim"></q-btn>
+                </div>
+                <!-- Button -->
+                <q-table
+                  title="Metode pembayaran"
+                  :rows="rowsArray"
+                  :columns="headsArray"
+                  row-key="name"
+                >
+                  <template v-slot:body="props">
+                    <q-tr :props="props">
+                      <q-td key="name" :props="props">
+                        {{ props.row.name }}
+                      </q-td>
+                      <q-td key="description" :props="props">
+                        {{ props.row.description }}
+                      </q-td>
+                      <q-td key="action" :props="props">
+                        <q-btn color="primary" label="Edit"></q-btn>
+                        <q-btn color="purple" label="Hapus"></q-btn>
+                        {{ props.row.action }}
+                      </q-td>
+                    </q-tr>
+                  </template>
+                </q-table>
+              </q-page>
+            </q-page-container>
+
+          </q-layout>
+    </div>
+
+    <!-- Add the following at the end of your body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.umd.prod.js"></script>
+    
+    <script>
+      /*
+        Example kicking off the UI. Obviously, adapt this to your specific needs.
+        Assumes you have a <div id="q-app"></div> in your <body> above
+       */
+        const headsArray = [
+          { label: 'Nama metode', name: 'name', field:'name', align: 'left' },
+          { label: 'Deskripsi', name: 'description', field: 'description', align: 'left' },
+          { label: 'Action', name: 'action', field: 'action'}        
+        ]
+
+        const rowsArray = [
+          { name: 'Cash on delivery', description: 'Hanya mendukung beberapa wilayah', action: 1 },
+          { name: 'Transfer bank', description: 'Hanya mendukung bank BCA', action: 1},
+          { name: 'Payment gateway', description: 'Menggunakan pembayaran gerbang pihak ketiga (Biaya admin 2500)', action: 1},
+          { name: 'Checkout lewat shopee', description: 'Pembelian dilakukan melalui toko kami yang beradad di shopee', action: 1}
+          ]
+
+      const { createApp, ref } = Vue;
+      const app = createApp({
+        setup () {
+            const name = ref('')
+            const deskripsi = ref('')
+            const leftDrawerOpen = ref(false)
+            const menuLists = [
+                {
+                    icon: 'box',
+                    label: 'Products',
+                    separator: true
+                },
+                {
+                    icon: 'send',
+                    label: 'Outbox',
+                    separator: false
+                },
+                {
+                    icon: 'delete',
+                    label: 'Trash',
+                    separator: false
+                },
+                {
+                    icon: 'error',
+                    label: 'Spam',
+                    separator: true
+                },
+                {
+                    icon: 'settings',
+                    label: 'Settings',
+                    separator: false
+                },
+                {
+                    icon: 'feedback',
+                    label: 'Send Feedback',
+                    separator: false
+                },
+                {
+                    icon: 'help',
+                    iconColor: 'primary',
+                    label: 'Help',
+                    separator: false
+                }
+            ]
+  
+            return {
+                menuLists, rowsArray, headsArray, name, deskripsi,
+                toggleLeftDrawer () {
+                    leftDrawerOpen.value = !leftDrawerOpen.value
+                }
+            }
+        }
+      })
+
+      app.use(Quasar)
+      app.mount('#q-app')
+    </script>
+  </body>
+</html>
