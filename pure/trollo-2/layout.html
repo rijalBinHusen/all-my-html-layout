@@ -33,7 +33,6 @@ body {
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
-  resize: horizontal;
 }
 
 /* Style the sidenav links and the dropdown button */
@@ -131,6 +130,8 @@ body {
   background-color: #f1f1f1;
 }
 
+.resizer { width: 10px; height: 10px; background: blue; position:absolute; right: 0; bottom: 0; cursor: se-resize; }
+
 /* End of card End of card End of card End of card End of card End of card End of card End of card End of card End of card */
 
 </style>
@@ -190,9 +191,12 @@ body {
 
 <script>
 /* Loop through all dropdown buttons to toggle between hiding and showing its dropdown content - This allows the user to have multiple dropdowns without any conflict */
+// catch all dropdown button
 var dropdown = document.getElementsByClassName("dropdown-btn");
-var i;
 
+// initiate variabel
+var i;
+// we doing loop here, to add event listener for each button dropdown
 for (i = 0; i < dropdown.length; i++) {
   dropdown[i].addEventListener("click", function() {
     this.classList.toggle("active");
@@ -204,6 +208,48 @@ for (i = 0; i < dropdown.length; i++) {
     }
   });
 }
+
+
+// function to resize sidebar
+// catch the sidebar elemetn
+const sidebar = document.querySelector('.sidenav')
+// get the main element
+const main = document.querySelector('.main')
+// get width screen
+const widthScreen = screen.width;
+
+sidebar.addEventListener('click', function init() {
+  sidebar.removeEventListener('click', init, false);
+  sidebar.className = sidebar.className + ' resizable';
+            var resizer = document.createElement('div');
+            resizer.className = 'resizer';
+            sidebar.appendChild(resizer);
+            resizer.addEventListener('mousedown', initDrag, false);
+        }, false);
+
+var startX, startY, startWidth, startHeight;
+
+function initDrag(e) {
+    startX = e.clientX;
+    startY = e.clientY;
+    startWidth = parseInt(document.defaultView.getComputedStyle(sidebar).width, 10);
+    startHeight = parseInt(document.defaultView.getComputedStyle(sidebar).height, 10);
+    document.documentElement.addEventListener('mousemove', doDrag, false);
+    document.documentElement.addEventListener('mouseup', stopDrag, false);
+}
+
+function doDrag(e) {
+    console.log('dodrag', startWidth, e.clientX, startX, widthScreen)
+    sidebar.style.width = (startWidth + e.clientX - startX) + 'px';
+    main.style.width = (widthScreen - e.clientX) + 'px';
+    // sidebar.style.height = (startHeight + e.clientY - startY) + 'px';
+}
+
+function stopDrag(e) {
+    console.log('stopdrag', e)
+    document.documentElement.removeEventListener('mousemove', doDrag, false);    document.documentElement.removeEventListener('mouseup', stopDrag, false);
+}
+
 </script>
 
 </body>
