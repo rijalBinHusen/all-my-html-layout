@@ -239,14 +239,15 @@ function initDrag(e) {
 }
 
 function doDrag(e) {
-    console.log('dodrag', startWidth, e.clientX, startX, widthScreen)
+    // console.log('dodrag', startWidth, e.clientX, startX, widthScreen)
     sidebar.style.width = (startWidth + e.clientX - startX) + 'px';
-    main.style.width = (widthScreen - e.clientX) + 'px';
+    main.style.width = (widthScreen - e.clientX - 30) + 'px';
+    main.style.marginLeft = (startWidth + e.clientX - startX) + 'px';
     // sidebar.style.height = (startHeight + e.clientY - startY) + 'px';
 }
 
 function stopDrag(e) {
-    console.log('stopdrag', e)
+    // console.log('stopdrag', e)
     document.documentElement.removeEventListener('mousemove', doDrag, false);    document.documentElement.removeEventListener('mouseup', stopDrag, false);
 }
 
