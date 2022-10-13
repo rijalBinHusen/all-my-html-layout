@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <!--
+    WARNING! Make sure that you match all Quasar related
+    tags to the same version! (Below it's "@2.0.3")
+  -->
+
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900|Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@^4.0.0/animate.min.css" rel="stylesheet" type="text/css">
+    <link href="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.prod.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+    <!-- example of injection point where you write your app template -->
+    <div id="q-app">
+        <q-layout view="hHh lpR fFf">
+            <q-header elevated class="bg-primary text-white">
+              <q-toolbar>
+                <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
+        
+                <q-toolbar-title>
+                  <q-avatar>
+                    <img src="https://cdn.quasar.dev/logo-v2/svg/logo-mono-white.svg">
+                  </q-avatar>
+                  Title
+                </q-toolbar-title>
+              </q-toolbar>
+            </q-header>
+        
+            <q-drawer show-if-above v-model="leftDrawerOpen" side="left" bordered>
+              <q-list>
+                <template v-for="(menuItem, index) in menuLists" :key="index">
+                  <q-item clickable :active="menuItem.label === 'Outbox'" v-ripple>
+                    <q-item-section avatar>
+                      <q-icon :name="menuItem.icon"></q-icon>
+                    </q-item-section>
+                    <q-item-section>
+                      {{ menuItem.label }}
+                    </q-item-section>
+                  </q-item>
+                  <q-separator :key="'sep' + index"  v-if="menuItem.separator"></q-separator>
+                </template>
+              </q-list>
+            </q-drawer>
+
+            <q-page-container>
+              <q-page class="q-pa-lg">
+                <!-- Button dashboard -->
+                <div class="row q-mb-md q-gutter-lg">
+                    <q-select
+                    v-model="typeIsSent"
+                    :options="orderOptions"
+                    option-value="isSent"
+                    option-label="isSentLabel"
+                    option-disable="inactive"
+                    emit-value
+                    map-options
+                    outlined
+                    label="Type pesanan"
+                  >
+                  </q-select>
+
+                  <q-input outlined type="number" v-model="totalRecord" label="Jumlah" ></q-input>
+
+                  <q-btn color="primary" label="Cari record"></q-btn>
+                </div>
+                <!-- Button -->
+                <q-table
+                  title="Datar pesanan"
+                  :rows="rowsArray"
+                  :columns="headsArray"
+                  row-key="name"
+                >
+                  <template v-slot:body="props">
+                    <q-tr :props="props">
+                      <q-td key="id" :props="props">
+                        <a href="#">{{ props.row.id }}</a>
+                      </q-td>
+                      <q-td key="tanggalOrder" :props="props">
+                        {{ props.row.tanggalOrder }}
+                      </q-td>
+                      <q-td key="namaPemesan" :props="props">
+                        {{ props.row.namaPemesan }}
+                      </q-td>
+                      <q-td key="dikirim" :props="props">
+                        {{ props.row.dikirim }}
+                      </q-td>
+                      <q-td key="totalPrice" :props="props">
+                        {{ props.row.totalPrice }}
+                      </q-td>
+                    </q-tr>
+                  </template>
+                </q-table>
+              </q-page>
+            </q-page-container>
+
+          </q-layout>
+    </div>
+
+    <!-- Add the following at the end of your body tag -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/quasar@2.0.3/dist/quasar.umd.prod.js"></script>
+    
+    <script>
+      /*
+        Example kicking off the UI. Obviously, adapt this to your specific needs.
+        Assumes you have a <div id="q-app"></div> in your <body> above
+       */
+        const headsArray = [
+          { label: 'Nomor order', name: 'id', field:'id', align: 'left', format: val => `<a href='#'>${val}</a>` },
+          { label: 'Order', name: 'tanggalOrder', field: 'tanggalOrder', align: 'left', sortable: true},
+          { label: 'Nama pemesan', name: 'namaPemesan', field: 'namaPemesan', align: 'left'},
+          { label: 'Dikirim sebelum', name: 'dikirim', field: 'dikirim' },
+          { label: 'Total bayar', name: 'totalPrice', field: 'totalPrice', format: val => `Rp.${val}`}          
+        ]
+
+        const rowsArray = [
+          {"id":1,"idUser":"3686297868","tanggalOrder":"7/1/2022","judul":"RGC Resources Inc.","namaPemesan":"lelks0","namaPenerima":"cwhitfeld0","nomorWhatsApp":"670-122-6806","dikirim":"10/13/2021","provinsi":"Horní Bečva","kabupaten":"Impendle","kecamatan":"Washington","kodepos":26,"alamatLengkap":"4342 Mcguire Lane","totalPrice":1264,"ongkosKirim":5349,"kurir":"Duobam","metodePembayaran":1},
+          {"id":2,"idUser":"6823155981","tanggalOrder":"5/29/2022","judul":"Quidel Corporation","namaPemesan":"lguille1","namaPenerima":"hjerg1","nomorWhatsApp":"161-613-0642","dikirim":"2/19/2022","provinsi":"Paris 12","kabupaten":"Kauswagan","kecamatan":"Sātkania","kodepos":91,"alamatLengkap":"78 Mendota Junction","totalPrice":1657,"ongkosKirim":6851,"kurir":"Alphazap","metodePembayaran":3},
+          {"id":3,"idUser":"5823028709","tanggalOrder":"3/3/2022","judul":"CNOOC Limited","namaPemesan":"mmcclifferty2","namaPenerima":"cfryd2","nomorWhatsApp":"261-848-1800","dikirim":"12/19/2021","provinsi":"Ramon’","kabupaten":"Khānaqāh","kecamatan":"Romanovo","kodepos":80,"alamatLengkap":"5167 Paget Pass","totalPrice":1723,"ongkosKirim":5138,"kurir":"Asoka","metodePembayaran":3},
+          {"id":4,"idUser":"0833353373","tanggalOrder":"12/8/2021","judul":"Teradata Corporation","namaPemesan":"tmudie3","namaPenerima":"tperdue3","nomorWhatsApp":"315-787-8148","dikirim":"6/4/2022","provinsi":"San Luis","kabupaten":"Wilmington","kecamatan":"Dasht-e Qal‘ah","kodepos":38,"alamatLengkap":"6 Colorado Lane","totalPrice":1054,"ongkosKirim":5449,"kurir":"Alpha","metodePembayaran":1},
+          {"id":5,"idUser":"4060469319","tanggalOrder":"3/4/2022","judul":"Global Water Resources, Inc.","namaPemesan":"kschimann4","namaPenerima":"cickowics4","nomorWhatsApp":"968-263-4347","dikirim":"5/16/2022","provinsi":"Cabugao","kabupaten":"Zhongping","kecamatan":"Cayang","kodepos":11,"alamatLengkap":"4913 Thierer Crossing","totalPrice":1129,"ongkosKirim":5125,"kurir":"Tres-Zap","metodePembayaran":1},
+          {"id":6,"idUser":"9820207541","tanggalOrder":"1/24/2022","judul":"Nustar Energy L.P.","namaPemesan":"sfallows5","namaPenerima":"lhrynczyk5","nomorWhatsApp":"791-888-4208","dikirim":"9/14/2022","provinsi":"Fada N'gourma","kabupaten":"Sannikovo","kecamatan":"Luleå","kodepos":62,"alamatLengkap":"43 Pleasure Circle","totalPrice":1259,"ongkosKirim":6400,"kurir":"Bitwolf","metodePembayaran":2},
+          {"id":7,"idUser":"4225576728","tanggalOrder":"6/30/2022","judul":"Electrum Special Acquisition Corporation","namaPemesan":"bplumridege6","namaPenerima":"klovelace6","nomorWhatsApp":"663-936-1052","dikirim":"9/12/2022","provinsi":"Horad Rechytsa","kabupaten":"Roissy Charles-de-Gaulle","kecamatan":"Hamburg","kodepos":22,"alamatLengkap":"962 Esch Street","totalPrice":1463,"ongkosKirim":5653,"kurir":"Tempsoft","metodePembayaran":1},
+          {"id":8,"idUser":"7857908207","tanggalOrder":"5/7/2022","judul":"Western Asset Mortgage Capital Corporation","namaPemesan":"dstennings7","namaPenerima":"ideware7","nomorWhatsApp":"308-546-9161","dikirim":"2/19/2022","provinsi":"Kebonbencoy","kabupaten":"Doropeti","kecamatan":"Kendal","kodepos":26,"alamatLengkap":"6730 Derek Lane","totalPrice":1702,"ongkosKirim":5018,"kurir":"Bitwolf","metodePembayaran":3},
+          {"id":9,"idUser":"7417837662","tanggalOrder":"8/5/2022","judul":"Apartment Investment and Management Company","namaPemesan":"swillatts8","namaPenerima":"mkingsman8","nomorWhatsApp":"611-875-0205","dikirim":"12/23/2021","provinsi":"Kurmanayevka","kabupaten":"Nong Khai","kecamatan":"Lugang","kodepos":82,"alamatLengkap":"3 Scoville Court","totalPrice":1625,"ongkosKirim":5684,"kurir":"Zaam-Dox","metodePembayaran":3},
+          {"id":10,"idUser":"9159655518","tanggalOrder":"7/23/2022","judul":"Gap, Inc. (The)","namaPemesan":"cbottlestone9","namaPenerima":"brizzotto9","nomorWhatsApp":"196-630-0153","dikirim":"12/16/2021","provinsi":"Nierumai","kabupaten":"Esmeralda","kecamatan":"Katumba","kodepos":88,"alamatLengkap":"8 Fieldstone Place","totalPrice":1914,"ongkosKirim":5306,"kurir":"Matsoft","metodePembayaran":2},
+          {"id":11,"idUser":"6759820215","tanggalOrder":"4/14/2022","judul":"Blackrock MuniAssets Fund, Inc.","namaPemesan":"ilivensa","namaPenerima":"hribaa","nomorWhatsApp":"977-417-6839","dikirim":"11/23/2021","provinsi":"Gävle","kabupaten":"Bela Vista do Paraíso","kecamatan":"Mayuge","kodepos":88,"alamatLengkap":"828 Carpenter Parkway","totalPrice":1701,"ongkosKirim":6318,"kurir":"Latlux","metodePembayaran":3},
+          {"id":12,"idUser":"7241139216","tanggalOrder":"5/18/2022","judul":"Town Sports International Holdings, Inc.","namaPemesan":"aavrasinb","namaPenerima":"fcaurahb","nomorWhatsApp":"507-488-3948","dikirim":"12/15/2021","provinsi":"Anahawan","kabupaten":"Campraksanta","kecamatan":"Rizal","kodepos":77,"alamatLengkap":"0 Loeprich Lane","totalPrice":1466,"ongkosKirim":5098,"kurir":"Stronghold","metodePembayaran":1},
+          {"id":13,"idUser":"0970089864","tanggalOrder":"8/22/2022","judul":"New America High Income Fund, Inc. (The)","namaPemesan":"cbasnettc","namaPenerima":"fforsdickec","nomorWhatsApp":"767-661-9066","dikirim":"10/28/2021","provinsi":"Creil","kabupaten":"Yläne","kecamatan":"Boguszów-Gorce","kodepos":22,"alamatLengkap":"8 Shasta Junction","totalPrice":1709,"ongkosKirim":5750,"kurir":"Bitwolf","metodePembayaran":2},
+          {"id":14,"idUser":"5208897830","tanggalOrder":"7/7/2022","judul":"QTS Realty Trust, Inc.","namaPemesan":"thampshired","namaPenerima":"akaresd","nomorWhatsApp":"603-868-4411","dikirim":"12/10/2021","provinsi":"Pervoavgustovskiy","kabupaten":"Zhongling","kecamatan":"San Jose","kodepos":92,"alamatLengkap":"55 Miller Point","totalPrice":1450,"ongkosKirim":6214,"kurir":"Biodex","metodePembayaran":2},
+          {"id":15,"idUser":"5905213550","tanggalOrder":"4/3/2022","judul":"CBRE Clarion Global Real Estate Income Fund","namaPemesan":"rmagrannelle","namaPenerima":"iworthingtone","nomorWhatsApp":"286-565-9773","dikirim":"4/25/2022","provinsi":"Capitão Poço","kabupaten":"Leme","kecamatan":"Eger","kodepos":8,"alamatLengkap":"818 Harbort Lane","totalPrice":1902,"ongkosKirim":5335,"kurir":"Veribet","metodePembayaran":1},
+          {"id":16,"idUser":"0703659871","tanggalOrder":"1/24/2022","judul":"Cass Information Systems, Inc","namaPemesan":"lbrichamf","namaPenerima":"bfarrensf","nomorWhatsApp":"908-887-8165","dikirim":"1/22/2022","provinsi":"Třebíč","kabupaten":"Sakharovo","kecamatan":"Ervedosa do Douro","kodepos":41,"alamatLengkap":"18 Esker Trail","totalPrice":1483,"ongkosKirim":5429,"kurir":"Biodex","metodePembayaran":3},
+          {"id":17,"idUser":"9946163985","tanggalOrder":"11/20/2021","judul":"BioTelemetry, Inc.","namaPemesan":"csirrg","namaPenerima":"mwandrichg","nomorWhatsApp":"819-173-3847","dikirim":"5/12/2022","provinsi":"Buguruslan","kabupaten":"Skellefteå","kecamatan":"Phimai","kodepos":37,"alamatLengkap":"91 Melby Way","totalPrice":1764,"ongkosKirim":6168,"kurir":"Aerified","metodePembayaran":3},
+          {"id":18,"idUser":"6078420062","tanggalOrder":"7/28/2022","judul":"Franklin Covey Company","namaPemesan":"dyurtsevh","namaPenerima":"rberth","nomorWhatsApp":"313-239-6875","dikirim":"9/11/2022","provinsi":"La Unión","kabupaten":"Ilebo","kecamatan":"Heby","kodepos":64,"alamatLengkap":"44 Caliangt Point","totalPrice":1901,"ongkosKirim":6433,"kurir":"Bitwolf","metodePembayaran":1},
+          {"id":19,"idUser":"3459374470","tanggalOrder":"8/5/2022","judul":"CGG","namaPemesan":"zgartani","namaPenerima":"craouxi","nomorWhatsApp":"244-531-8618","dikirim":"6/12/2022","provinsi":"Alasmalang","kabupaten":"Yong’an","kecamatan":"Itapetininga","kodepos":87,"alamatLengkap":"51 Loftsgordon Alley","totalPrice":1208,"ongkosKirim":5347,"kurir":"Rank","metodePembayaran":1},
+          {"id":20,"idUser":"9075667221","tanggalOrder":"4/3/2022","judul":"Public Storage","namaPemesan":"agallandrej","namaPenerima":"ghearonj","nomorWhatsApp":"320-185-3932","dikirim":"5/20/2022","provinsi":"Licuan","kabupaten":"Bogandinskiy","kecamatan":"Patemon","kodepos":97,"alamatLengkap":"6137 Green Ridge Hill","totalPrice":1626,"ongkosKirim":6011,"kurir":"Gembucket","metodePembayaran":1}
+        ]
+
+      const { createApp, ref } = Vue;
+      const app = createApp({
+        setup () {
+            const orderOptions = [
+              { isSent: true, isSentLabel: 'Sudah dikirim' },
+              { isSent: false, isSentLabel: 'Belum dikirim' }
+            ]
+            const typeIsSent = ref(false)
+            const totalRecord = ref(10)
+            const leftDrawerOpen = ref(false)
+            const menuLists = [
+                {
+                    icon: 'box',
+                    label: 'Products',
+                    separator: true
+                },
+                {
+                    icon: 'send',
+                    label: 'Outbox',
+                    separator: false
+                },
+                {
+                    icon: 'delete',
+                    label: 'Trash',
+                    separator: false
+                },
+                {
+                    icon: 'error',
+                    label: 'Spam',
+                    separator: true
+                },
+                {
+                    icon: 'settings',
+                    label: 'Settings',
+                    separator: false
+                },
+                {
+                    icon: 'feedback',
+                    label: 'Send Feedback',
+                    separator: false
+                },
+                {
+                    icon: 'help',
+                    iconColor: 'primary',
+                    label: 'Help',
+                    separator: false
+                }
+            ]
+  
+            return {
+                menuLists, rowsArray, headsArray, orderOptions, typeIsSent, totalRecord,
+                toggleLeftDrawer () {
+                    leftDrawerOpen.value = !leftDrawerOpen.value
+                }
+            }
+        }
+      })
+
+      app.use(Quasar)
+      app.mount('#q-app')
+    </script>
+  </body>
+</html>
