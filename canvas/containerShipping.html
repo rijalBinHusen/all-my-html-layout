@@ -11,7 +11,7 @@ Your browser does not support the canvas element.
 
 var canvas = document.getElementById("myCanvas");
 var ctx = canvas.getContext("2d");
-ctx.fillStyle = 'rgb(300, 110, 110)'; // red
+ctx.fillStyle = 'rgb(110, 110, 200)'; // red
 ctx.strokeStyle = 'rgb(0, 0, 0)'; // black
 
 // Draw the front side of the box
@@ -19,12 +19,19 @@ ctx.fillRect(100, 100, 100, 100);
 
 // Draw the top side of the box
 ctx.beginPath();
+// put the pen to 100x and 100y
 ctx.moveTo(100, 100);
+// shift the pen from(100,100) to (300,50)
 ctx.lineTo(300, 50);
+// shift the pen from(300,50) to(400,50)
 ctx.lineTo(400, 50);
+// shift the pen form (400,50) to (200,100)
 ctx.lineTo(200, 100);
+// close drawing process
 ctx.closePath();
+// fill path
 ctx.fill();
+// creat stroke line on path
 ctx.stroke();
 
 // Draw the side of the box
