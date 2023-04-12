@@ -9,30 +9,98 @@ Your browser does not support the canvas element.
 
 <script>
 
-var canvas = document.getElementById("myCanvas");
-var ctx = canvas.getContext("2d");
-ctx.fillStyle = 'rgb(110, 110, 200)'; // red
-ctx.strokeStyle = 'rgb(0, 0, 0)'; // black
+class shippingContainer {
+    canvas;
+    firstCoordinateX;
+    firstCoordinateY;
+    pen;
+    fillColor1 = 'rgb(110, 110, 200)'; // red;
+    strokeColor1 = 'rgb(0, 0, 0)'; //black
+    width;
+    height;
+    constructor(canvasId, coordinateX, coordinateY, width, height) {
+        const canvasElm = document.getElementById(canvasId);
+        if(!canvasElm) {
+            alert('Element not found')
+            return
+        }
+        this.canvas = canvasElm;
+        this.firstCoordinateX = coordinateX;
+        this.firstCoordinateY = coordinateY
+        this.pen = this.canvas.getContext("2d");
+        // fill style
+        this.pen.fillStyle = this.fillColor1;
+        // stroke style
+        this.pen.strokeStyle = this.strokeColor1;
+        this.width = width;
+        this.height = height;
+    }
 
-// Draw the front side of the box
-ctx.fillRect(100, 100, 100, 100);
+    putThePen (coordinateX, coordinateY) {
+        this.pen.beginPath();
+        // put the pen
+        this.pen.moveTo(coordinateX, coordinateY)
+    }
 
-// Draw the top side of the box
-ctx.beginPath();
-// put the pen to 100x and 100y
-ctx.moveTo(100, 100);
-// shift the pen from(100,100) to (300,50)
-ctx.lineTo(300, 50);
-// shift the pen from(300,50) to(400,50)
-ctx.lineTo(400, 50);
-// shift the pen form (400,50) to (200,100)
-ctx.lineTo(200, 100);
-// close drawing process
-ctx.closePath();
-// fill path
-ctx.fill();
-// creat stroke line on path
-ctx.stroke();
+    shiftThePen(coordinateX, coordinateY) {
+        this.pen.lineTo(coordinateX, coordinateY)
+    }
+
+    pickUpThePen() {
+        // pickup
+        this.pen.closePath()
+        // coloring
+        this.pen.fill()
+        // add stroke line
+        this.pen.stroke()
+    }
+
+    drawFrontSideContainer () {
+        this.pen.fillRect(this.firstCoordinateX, this.firstCoordinateX, this.height, this.width);
+    }
+
+    drawTopSideContainer () {
+        this.putThePen(this.firstCoordinateX, this.firstCoordinateY)
+        this.shiftThePen(this.firstCoordinateX+200, this.firstCoordinateY-50)
+        this.shiftThePen(this.firstCoordinateX+300, this.firstCoordinateY-50);
+        this.shiftThePen(this.firstCoordinateX+100, this.firstCoordinateY);
+        this.pickUpThePen();
+    }
+
+    draw() {
+        this.drawFrontSideContainer()
+        this.drawTopSideContainer()
+    }
+}
+
+// var canvas = document.getElementById("myCanvas");
+
+const container = new shippingContainer("myCanvas", 200, 200, 200, 200)
+container.draw()
+
+// var ctx = canvas.getContext("2d");
+// ctx.fillStyle = 'rgb(110, 110, 200)'; // red
+// ctx.strokeStyle = 'rgb(0, 0, 0)'; // black
+
+// // Draw the front side of the box
+// ctx.fillRect(100, 100, 100, 100);
+
+// // Draw the top side of the box
+// ctx.beginPath();
+// // put the pen to 100x and 100y
+// ctx.moveTo(100, 100);
+// // shift the pen from(100,100) to (300,50)
+// ctx.lineTo(300, 50);
+// // shift the pen from(300,50) to(400,50)
+// ctx.lineTo(400, 50);
+// // shift the pen form (400,50) to (200,100)
+// ctx.lineTo(200, 100);
+// // close drawing process
+// ctx.closePath();
+// // fill path
+// ctx.fill();
+// // creat stroke line on path
+// ctx.stroke();
 
 // Draw the side of the box
 //ctx.beginPath();
