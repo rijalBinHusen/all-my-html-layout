@@ -2,6 +2,8 @@
 <html>
 <body>
 
+    <p id="mousePosition"></p>
+
 <canvas id="myCanvas" width="600" height="600"
 style="border:1px solid #d3d3d3;">
 Your browser does not support the canvas element.
@@ -61,11 +63,11 @@ class shippingContainer {
         this.pen.stroke()
     }
 
-    drawFrontSideContainer () {
+    drawFrontContainer () {
         this.pen.fillRect(this.firstCoordinateX, this.firstCoordinateY, this.height, this.width);
     }
 
-    drawTopSideContainer () {
+    drawTopContainer () {
         this.putThePen(this.firstCoordinateX, this.firstCoordinateY);
         this.shiftThePen(this.lastCoordinateX+200, (this.lastCoordinateY/2));
         this.shiftThePen(this.lastCoordinateX+150, this.lastCoordinateY);
@@ -73,9 +75,19 @@ class shippingContainer {
         this.pickUpThePen();
     }
 
+    drawSideContainer() {
+        this.putThePen(this.firstCoordinateX+200, this.firstCoordinateY);
+        this.shiftThePen(this.lastCoordinateX+150, this.lastCoordinateY/2);
+        this.shiftThePen(this.lastCoordinateX, this.lastCoordinateY+150);
+        this.shiftThePen(this.lastCoordinateX-150, this.lastCoordinateY+250);
+        this.pickUpThePen()
+
+    }
+
     draw() {
-        this.drawFrontSideContainer()
-        this.drawTopSideContainer()
+        this.drawFrontContainer()
+        this.drawTopContainer()
+        this.drawSideContainer()
     }
 }
 
@@ -84,51 +96,26 @@ class shippingContainer {
 const container = new shippingContainer("myCanvas", 100, 400, 200, 200)
 container.draw()
 
-// var ctx = canvas.getContext("2d");
-// ctx.fillStyle = 'rgb(110, 110, 200)'; // red
-// ctx.strokeStyle = 'rgb(0, 0, 0)'; // black
+// detecting mouse position
+// Get canvas element
+const canvas = document.getElementById('myCanvas');
+const mousePosition = document.getElementById('mousePosition')
 
-// // Draw the front side of the box
-// ctx.fillRect(100, 100, 100, 100);
+// Add "mousemove" event listener
+canvas.addEventListener('mousemove', handleMouseMove);
 
-// // Draw the top side of the box
-// ctx.beginPath();
-// // put the pen to 100x and 100y
-// ctx.moveTo(100, 100);
-// // shift the pen from(100,100) to (300,50)
-// ctx.lineTo(300, 50);
-// // shift the pen from(300,50) to(400,50)
-// ctx.lineTo(400, 50);
-// // shift the pen form (400,50) to (200,100)
-// ctx.lineTo(200, 100);
-// // close drawing process
-// ctx.closePath();
-// // fill path
-// ctx.fill();
-// // creat stroke line on path
-// ctx.stroke();
+// Mousemove event handler
+function handleMouseMove(event) {
+  // Get mouse coordinates relative to the canvas
+  const rect = canvas.getBoundingClientRect();
+  const mouseX = event.clientX - rect.left;
+  const mouseY = event.clientY - rect.top;
 
-// Draw the side of the box
-//ctx.beginPath();
-//ctx.moveTo(200, 100);
-//ctx.lineTo(200, 200);
-//ctx.lineTo(250, 250);
-//ctx.lineTo(250, 150);
-//ctx.closePath();
-////ctx.fill();
-//ctx.stroke();
+  // Use mouseX and mouseY for further processing
+  mousePosition.innerHTML = `Mouse X: ${mouseX} | Mouse Y:, ${mouseY}`;
+  
+}
 
-
-// Draw the top side of the box
-//ctx.beginPath();
-//ctx.moveTo(300, 300);
-//ctx.lineTo(250, 50);
-////ctx.lineTo(250, 50);
-//ctx.lineTo(200, 100);
-//ctx.lineTo(300, 100);
-//ctx.closePath();
-//ctx.fill();
-//ctx.stroke();
 
 </script>
 
