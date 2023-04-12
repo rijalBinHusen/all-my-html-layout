@@ -7,9 +7,13 @@
 <script>
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+// using the canvas height for radius, make the clock work for all canvas sizes.
 var radius = canvas.height / 2;
+// remap (0,0) position (of the drawing object) to the center of the canvas
 ctx.translate(radius, radius);
+// reduce the clock radius to (90%) to draw the clock well inside the canvas
 radius = radius * 0.90
+
 drawClock();
 
 function drawClock() {
