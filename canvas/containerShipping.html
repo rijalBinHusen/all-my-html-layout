@@ -13,6 +13,8 @@ class shippingContainer {
     canvas;
     firstCoordinateX;
     firstCoordinateY;
+    lastCoordinateX;
+    lastCoordinateY;
     pen;
     fillColor1 = 'rgb(110, 110, 200)'; // red;
     strokeColor1 = 'rgb(0, 0, 0)'; //black
@@ -40,10 +42,14 @@ class shippingContainer {
         this.pen.beginPath();
         // put the pen
         this.pen.moveTo(coordinateX, coordinateY)
+        this.lastCoordinateX = coordinateX;
+        this.lastCoordinateY = coordinateY;
     }
 
     shiftThePen(coordinateX, coordinateY) {
         this.pen.lineTo(coordinateX, coordinateY)
+        this.lastCoordinateX = coordinateX;
+        this.lastCoordinateY = coordinateY;
     }
 
     pickUpThePen() {
@@ -56,14 +62,14 @@ class shippingContainer {
     }
 
     drawFrontSideContainer () {
-        this.pen.fillRect(this.firstCoordinateX, this.firstCoordinateX, this.height, this.width);
+        this.pen.fillRect(this.firstCoordinateX, this.firstCoordinateY, this.height, this.width);
     }
 
     drawTopSideContainer () {
-        this.putThePen(this.firstCoordinateX, this.firstCoordinateY)
-        this.shiftThePen(this.firstCoordinateX+200, this.firstCoordinateY-50)
-        this.shiftThePen(this.firstCoordinateX+300, this.firstCoordinateY-50);
-        this.shiftThePen(this.firstCoordinateX+100, this.firstCoordinateY);
+        this.putThePen(this.firstCoordinateX, this.firstCoordinateY);
+        this.shiftThePen(this.lastCoordinateX+200, (this.lastCoordinateY/2));
+        this.shiftThePen(this.lastCoordinateX+150, this.lastCoordinateY);
+        this.shiftThePen(this.lastCoordinateX-150, this.firstCoordinateY);
         this.pickUpThePen();
     }
 
@@ -75,7 +81,7 @@ class shippingContainer {
 
 // var canvas = document.getElementById("myCanvas");
 
-const container = new shippingContainer("myCanvas", 200, 200, 200, 200)
+const container = new shippingContainer("myCanvas", 100, 400, 200, 200)
 container.draw()
 
 // var ctx = canvas.getContext("2d");
