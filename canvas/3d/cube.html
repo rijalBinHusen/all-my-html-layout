@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cube</title>
+    <style>
+        body {
+            margin: 0;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+
+<script>
+    const COLOR_BG = "black";
+    const COLOR_CUBE = "yellow";
+    const SPEED_X = 0.05; //rps
+    const SPEED_Y = 0.15; //rps
+    const SPEED_Z = 0.10; //rps
+    const POINT3D = function (x, y, z) { 
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    // setup canvas and the context
+    const canvas = document.createElement("canvas")
+    document.body.appendChild(canvas);
+    const ctx = canvas.getContext("2d")
+
+
+    // dimensions
+    const h = document.documentElement.clientHeight;
+    const w = document.documentElement.clientWidth;
+    canvas.height = h;
+    canvas.width = w;
+
+    //colours and lines
+    ctx.fillStyle = COLOR_BG;
+    ctx.strokeStyle = COLOR_CUBE;
+    ctx.lineWidth = w / 100;
+    ctx.lineCap = "round";
+
+    // setup the animation loop
+    let timeDelta, timeLast = 0;
+    requestAnimationFrame(loop);
+
+    function loop(timeNow) {
+        // calculate the time difference
+        timeDelta = timeNow - timeLast;
+        timeLast = timeNow;
+        // backround
+        ctx.fillRect(0, 0, w, h);
+
+        // call the next frame
+        requestAnimationFrame(loop);
+    }
+</script>
+</body>
+</html>
