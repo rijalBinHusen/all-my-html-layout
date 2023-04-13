@@ -80,6 +80,19 @@
         // backround
         ctx.fillRect(0, 0, w, h);
 
+        // rotate the cube
+        let angle = timeDelta * 0.001 * SPEED_Z * Math.PI * 2;
+
+        for (let v of vertices) {
+            let dx = v.x - cx;
+            let dy = v.y - cy;
+            let x = dx * Math.cos(angle) - dy * Math.sin(angle);
+            let y = dx * Math.sin(angle) + dy * Math.cos(angle);
+            v.x = x + cx;
+            v.y = y + cy;
+        }
+
+        // draw the edge
         for(let edge of edges) {
             ctx.beginPath();
             ctx.moveTo(vertices[edge[0]].x, vertices[edge[0]].y)
