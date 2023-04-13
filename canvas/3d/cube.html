@@ -82,7 +82,7 @@
 
         // rotate the cube
         let angle = timeDelta * 0.001 * SPEED_Z * Math.PI * 2;
-
+        // rotate the cube along the z axis
         for (let v of vertices) {
             let dx = v.x - cx;
             let dy = v.y - cy;
@@ -90,6 +90,17 @@
             let y = dx * Math.sin(angle) + dy * Math.cos(angle);
             v.x = x + cx;
             v.y = y + cy;
+        }
+
+        // rotate the cube along the x axis
+        angle = timeDelta * 0.001 * SPEED_X * Math.PI * 2;
+        for (let v of vertices) {
+            let dy = v.y - cy;
+            let dz = v.z - cz;
+            let y = dy * Math.cos(angle) - dz * Math.sin(angle);
+            let z = dy * Math.sin(angle) + dz * Math.cos(angle);
+            v.y = y + cy;
+            v.z = z + cz;
         }
 
         // draw the edge
