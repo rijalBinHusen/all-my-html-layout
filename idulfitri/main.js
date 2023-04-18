@@ -1,5 +1,4 @@
 import * as THREE from 'three';
-import { OrbitControls } from "controls";
 import { GLTFLoader } from "loader"
 
 const scene = new THREE.Scene();
@@ -20,8 +19,6 @@ camera.position.z = 5;
 camera.position.x = 4;
 // camera.position.y = -5;
 
-
-const controls = new OrbitControls( camera, renderer.domElement );
 
 const ambientlight = new THREE.AmbientLight( 0xffffff,  10); // soft white light
 scene.add( ambientlight );
@@ -50,7 +47,6 @@ function animate() {
         ketupat.rotation.y  += 0.01;
     }
 	renderer.render( scene, camera );
-    controls.update()
 }
 
 animate();
