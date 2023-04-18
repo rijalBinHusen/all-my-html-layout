@@ -7,9 +7,8 @@ const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.inner
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
-document.body.appendChild( renderer.domElement );
-
-const controls = new OrbitControls( camera, renderer.domElement );
+// document.body.appendChild( renderer.domElement );
+document.getElementById('ketupatContainer').appendChild(renderer.domElement)
 
 // const geometry = new THREE.BoxGeometry( 1, 1, 1 );
 // // const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
@@ -18,8 +17,11 @@ const controls = new OrbitControls( camera, renderer.domElement );
 // scene.add( cube );
 
 camera.position.z = 5;
-// camera.position.x = 4;
+camera.position.x = 4;
 // camera.position.y = -5;
+
+
+const controls = new OrbitControls( camera, renderer.domElement );
 
 const ambientlight = new THREE.AmbientLight( 0xffffff,  10); // soft white light
 scene.add( ambientlight );
@@ -35,7 +37,7 @@ loader.load( 'ketupat/scene.gltf', function ( gltf ) {
     ketupat = gltf.scene
     ketupat.scale.set(30, 30, 30)
 	scene.add( ketupat );
-
+    ketupat.rotation.z = 0.3
 }, undefined, function ( error ) {
 
 	console.error( error );
@@ -48,7 +50,7 @@ function animate() {
         ketupat.rotation.y  += 0.01;
     }
 	renderer.render( scene, camera );
-    // controls.update()
+    controls.update()
 }
 
 animate();
