@@ -20,8 +20,9 @@
       <canvas id="canvas" width="1349" height="625"></canvas>
 
       <div class="content">
-        <h1 id="content"></h1>
-        <!-- <h1>Make a Beautiful <span class="text-highlight">Background</span> with Starback.js</h1> -->
+        <h2 id="myName"></h2>
+        <h1 id="content1st"></h1>
+        <p id="content2nd"></p>
       </div>
     </section>
   </div>
@@ -64,19 +65,31 @@
           mountain.height
         );
       });
-      typeWriter()
+      typeGreeting()
+    }
+    
+    async function typeGreeting() {
+      const myName = "Rijal bin Husen dan keluarga mengucapkan"
+      await typeWriter(myName, "myName")
+      const content1st = "Selamat Hari Raya Idul Adha 1444 H."
+      await typeWriter(content1st, "content1st")
+      const content2nd = " Semoga semangat pengorbanan Nabi Ibrahim dan Nabi Ismail menjadi pengingat ketaqwaan kita kepada Allah سبحانه وتعالى"
+      await typeWriter(content2nd, "content2nd")
     }
 
-    const greeting = "Selamat Hari Raya Idul Adha 1443 H. Semoga semangat pengorbanan Nabi Ibrahim dan Nabi Ismail menjadi pengingat ketaqwaan kita kepada Allah سبحانه وتعالى."
-
-    let i = 0;
-    const speed = [30, 60, 90, 120, 150, 180, 210, 240, 290];
-    function typeWriter() {
-      if (i < greeting.length) {
-        document.getElementById("content").innerHTML += greeting.charAt(i);
-        i++;
+    async function typeWriter(yourText, yourElementId) {
+      let i = 0;
+      const speed = [30, 60, 90, 120, 150, 180, 210, 240, 290];
+      const element = document.getElementById(yourElementId)
+      
+      for(let i =0; i < yourText.length; i++) {
+        
+        element.innerHTML += yourText.charAt(i);
         const randomSpeed = Math.ceil(Math.random() * speed.length)
-        setTimeout(typeWriter, speed[randomSpeed]);
+
+        await new Promise((resolve) => {
+          setTimeout(() => resolve() , 50);
+        })
       }
     }
   </script>
