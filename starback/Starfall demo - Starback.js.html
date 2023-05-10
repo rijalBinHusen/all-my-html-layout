@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+<html lang="en">
+  <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starfall demo - Starback.js</title>
+  <link rel="stylesheet" href="./src/style.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+  <link href="./src/css2" rel="stylesheet">
+</head>
+
+<body>
+  <div id="app">
+    <section id="hero">
+      <canvas id="canvas" width="1349" height="625"></canvas>
+
+      <div class="content">
+        <h1 id="content"></h1>
+        <!-- <h1>Make a Beautiful <span class="text-highlight">Background</span> with Starback.js</h1> -->
+      </div>
+    </section>
+  </div>
+
+  <script src="./src/starback.global.js.download"></script>
+
+  <script>
+    const starback = new Starback("#canvas", {
+      width: document.body.clientWidth,
+      height: document.body.clientHeight,
+      type: 'line',
+      speed: 5,
+      frequency: 5,
+      slope: { x: -1, y: 10 },
+      directionX: 1,
+      speed: 3,
+      spread: -10,
+      randomOpacity: true,
+      backgroundColor: ['#0F2027', '#203A43', '#2C5364'],
+      quantity: 30,
+    });
+    const getCanvas = document.getElementsByTagName("canvas");
+    getCanvas[0].height = window.innerHeight;
+    getCanvas[0].width = window.innerWidth;
+    
+    let mountain = new Image();
+    mountain.src = 'src/mountain2.png';
+
+    mountain.onload = () => {
+      starback.addToFront((ctx) => {
+        ctx.drawImage(
+          mountain,
+          0,
+          0,
+          mountain.width,
+          mountain.height,
+          0,
+          canvas.height - mountain.height,
+          canvas.width,
+          mountain.height
+        );
+      });
+      typeWriter()
+    }
+
+    const greeting = "Selamat Hari Raya Idul Adha 1443 H. Semoga semangat pengorbanan Nabi Ibrahim dan Nabi Ismail menjadi pengingat ketaqwaan kita kepada Allah سبحانه وتعالى."
+
+    let i = 0;
+    const speed = [30, 60, 90, 120, 150, 180, 210, 240, 290];
+    function typeWriter() {
+      if (i < greeting.length) {
+        document.getElementById("content").innerHTML += greeting.charAt(i);
+        i++;
+        const randomSpeed = Math.ceil(Math.random() * speed.length)
+        setTimeout(typeWriter, speed[randomSpeed]);
+      }
+    }
+  </script>
+
+
+
+</body></html>
