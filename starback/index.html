@@ -15,17 +15,17 @@
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="greeting-idul-adha.ibinhusen.my.id/">
+    <meta property="og:url" content="https://greeting-idul-adha.ibinhusen.my.id/">
     <meta property="og:title" content="Ibinhusen eid al-adha Greeting">
     <meta property="og:description" content="Greeting eid al-adha 1444 Hijriah">
-    <meta property="og:image" content="https://greeting-idul-adha.ibinhusen.my.id/thumbnail.jpg">
+    <meta property="og:image" content="https://greeting-idul-adha.ibinhusen.my.id/thumbnail.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="greeting-idul-adha.ibinhusen.my.id/">
+    <meta property="twitter:url" content="https://greeting-idul-adha.ibinhusen.my.id/">
     <meta property="twitter:title" content="Ibinhusen eid al-adha Greeting">
     <meta property="twitter:description" content="Greeting eid al-adha 1444 Hijriah">
-    <meta property="twitter:image" content="https://greeting-idul-adha.ibinhusen.my.id/thumbnail.jpg">
+    <meta property="twitter:image" content="https://greeting-idul-adha.ibinhusen.my.id/thumbnail.png">
 
     <link rel="stylesheet" href="./src/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -87,6 +87,9 @@
     }
     
     async function typeGreeting() {
+      await new Promise((resolve) => {
+          setTimeout(() => resolve() , 1000);
+        })
       const myName = "Rijal bin Husen dan keluarga mengucapkan"
       await typeWriter(myName, "myName")
       const content1st = "Selamat Hari Raya Idul Adha 1444 H."
