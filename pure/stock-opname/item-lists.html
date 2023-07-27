@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="src/style.css">
+  </head>
+  <body>
+    
+    <div class="container">
+      <div class="item-toolbar">
+        <input type="text" class="item-name" name="item-name" id="item-name" placeholder="Nama item baru">
+        <button class="button">Tambahkan</button>
+      </div>
+      <div class="item-lists">
+        <table>
+          <thead>
+            <tr>
+              <th>Column 1</th>
+              <th>Column 2</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Row 1</td>
+              <td>Row 1</td>
+            </tr>
+            <tr>
+              <td>Row 2</td>
+              <td>Row 2</td>
+            </tr>
+            <tr>
+              <td>Row 3</td>
+              <td>Row 3</td>
+            </tr>
+            <tr>
+              <td>Row 4</td>
+              <td>Row 4</td>
+            </tr>
+            <tr>
+              <td>Row 5</td>
+              <td>Row 5</td>
+            </tr>
+            <tr>
+              <td>Row 6</td>
+              <td>Row 6</td>
+            </tr>
+            <tr>
+              <td>Row 7</td>
+              <td>Row 7</td>
+            </tr>
+            <tr>
+              <td>Row 8</td>
+              <td>Row 8</td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+
+  </body>
+
+  <style>
+    
+    body { 
+        background-color: white;
+        display: flex;
+        justify-content: center;
+        overflow-x: hidden;
+    }
+    
+    .item-toolbar {
+      display: flex;
+      height: 1.8rem;
+      justify-content: space-between;
+      gap: .23rem;
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .item-name {
+      border-radius: .23rem;
+      padding: .23rem;
+      width: 70%;
+    }
+    
+    .button {
+        background-color: lightgray;
+        width: 7rem;
+        color: #000000;
+        padding: .23rem;
+        border-radius: 4px;
+        text-align: center;
+        cursor: pointer;
+        font-weight: bolder;
+        width: 30%;
+    }
+
+    .item-lists {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .container {
+        padding: 1rem;
+        height: 100vh;
+        max-width: 768px;
+        max-height: 1024px;
+        min-width: 375px;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    th {
+      border: solid 1px;
+      border-radius: .3rem;
+      padding: .2rem;
+    }
+
+    td {
+      border: 1px solid black;
+      border-radius: .3rem;
+      padding: .2rem;
+    }
+
+    /* 
+
+    .menu-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 1rem;
+    }
+
+    .button:hover {
+        background-color: #bdbdbd;
+    }
+    
+    */
+    
+    @media (min-width: 768px) {
+        .container {
+            border: solid 1px black;
+            border-radius: 1rem;
+        }
+    } 
+    </style>
+</html>
