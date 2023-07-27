@@ -8,10 +8,13 @@
   <body>
     
     <div class="container">
+      <h1>Daftar item</h1>
       <div class="item-toolbar">
         <input type="text" class="item-name" name="item-name" id="item-name" placeholder="Nama item baru">
         <button class="button">Tambahkan</button>
       </div>
+
+
       <div class="item-lists">
         <table>
           <thead>
@@ -56,6 +59,13 @@
           </tbody>
         </table>
         
+      </div>
+
+      <div class="navigation">
+        <button>
+          Home
+        </button>
+        <button>Stock</button>
       </div>
     </div>
 
@@ -103,7 +113,7 @@
     }
     
     .container {
-        padding: 1rem;
+        padding: .23rem;
         height: 100vh;
         max-width: 768px;
         max-height: 1024px;
@@ -124,6 +134,30 @@
       border: 1px solid black;
       border-radius: .3rem;
       padding: .2rem;
+    }
+
+    .navigation {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-bottom: .50rem;
+      border: 1px solid black;
+      padding: .4rem 1rem .4rem 1rem;
+      border-radius: .5rem;
+      display: flex;
+      gap: .9rem;
+    }
+
+    .navigation button {
+      background-color: lightgray;
+      padding: 5px 10px;
+      border-radius: 4px;
+      border: none;
+      font-weight: bold;
+      font-size: .7rem;
+      cursor: pointer;
+      text-transform: uppercase;
     }
 
     /* 
