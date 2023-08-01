@@ -56,6 +56,25 @@
         </table>
     </div>
 
+    <script>
+        const table = document.createElement("table");
+        table.setAttribute("class", "app");
+        table.setAttribute("border", "1");
+
+        for (let i = 0; i < 7; i++) {
+            const row = document.createElement("tr");
+            for (let j = 0; j < 6; j++) {
+                const cell = document.createElement("td");
+                cell.textContent = `Cell ${i}-${j}`;
+                row.appendChild(cell);
+            }
+            table.appendChild(row);
+        }
+
+        document.getElementById("app").appendChild(table);
+
+    </script>
+
 </body>
 
 </html>
