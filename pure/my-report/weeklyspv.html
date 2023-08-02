@@ -57,15 +57,52 @@
     </div>
 
     <script>
+
+        const rowTitles = [
+            'PARAMETER KINERJA',
+            'KUANTITATIF',
+            'AKURASI STOK',
+            'TotalProduk yg Masuk gudang ( Ctn )',
+            'Jumlah Item Produk yg Moving',
+            'JumlahItem Produk Stok yg ada Variant',
+            '(Ach %)',
+            'AKURASI FIFO',
+            'Jumlah Item Produk yg Keluar (diShipment)',
+            'Jumlah Item Produk yg Tidak FIFO',
+            '(Ach %)',
+            'AKUARASI MUAT (DO)',
+            'Jumlah DO dari Logistik',
+            'Jumlah DO yg termuat',
+            '(Ach %)',
+            'Jumlah Produk sesuai DO',
+            'JumlahProduk yg termuat',
+            'AKUARASI WAKTU MUAT',
+            'Realisasi Waktu Muat (Menit)',
+            '(Ach OK / NOK)',
+            'JUMLAH KOMPLAIN MUAT DARI CUSTOMER',
+            'SCORE KUANTITATIF',
+            'AKURASI STOK',
+            'AKURASI FIFO',
+            'AKURASI MUAT (DO)',
+            'AKURASI WAKTU MUAT',
+            'JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER',
+        ];
         const table = document.createElement("table");
         table.setAttribute("class", "app");
-        table.setAttribute("border", "1");
 
-        for (let i = 0; i < 7; i++) {
+        for (let i = 0; i < rowTitles.length; i++) {
+
             const row = document.createElement("tr");
+
             for (let j = 0; j < 6; j++) {
                 const cell = document.createElement("td");
-                cell.textContent = `Cell ${i}-${j}`;
+
+                if(j === 0) {
+                    cell.textContent = `${rowTitles[i]}`;
+                } else {
+
+                    cell.textContent = `Cell ${i}-${j}`;
+                }
                 row.appendChild(cell);
             }
             table.appendChild(row);
@@ -90,6 +127,7 @@
         border: 1px solid black;
         padding: .42rem;
         border-radius: .22rem;
+        font-size: .63rem;
     }
 
     .red {
