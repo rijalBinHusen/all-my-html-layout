@@ -40,8 +40,12 @@ body {
   background-color: #bdbdbd;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 400px) {
   .menu-wrapper {
     border: solid 1px black;
+  }
+  .container {
+    border: solid 1px black;
+    border-radius: 1rem;
   }
 }/*# sourceMappingURL=style.css.map */
