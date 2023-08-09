@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/style.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
     
     <div class="container">
       <h1>Stock folder</h1>
-      <div class="folder-toolbar">
+      <div class="form-input">
         <input type="text" class="folder-name" name="folder-name" id="folder-name" placeholder="Nama folder baru">
         <button class="button">Tambahkan</button>
       </div>
@@ -17,47 +17,47 @@
 
       <div class="folder-lists">
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder</p>
           <button class="button danger">Delete</button>
         </div>
         
-        <div class="folder-card">
+        <div class="item-card item-card-pointer">
           <p>Title folder sadfsafsfafsddddddddddddfasdf</p>
           <button class="button danger">Delete</button>
         </div>
@@ -73,127 +73,4 @@
     </div>
 
   </body>
-
-  <style>
-    
-    body { 
-        background-color: white;
-        display: flex;
-        justify-content: center;
-        overflow-x: hidden;
-    }
-
-    h1 {
-      text-transform: uppercase;
-    }
-    
-    .folder-toolbar {
-      display: flex;
-      height: 1.8rem;
-      justify-content: space-between;
-      align-items: center;
-      gap: .23rem;
-      margin-top: 1rem;
-      margin-bottom: 2rem;
-    }
-
-    .folder-toolbar input {
-      padding: .4rem;
-      font-size: large;
-    }
-
-    .folder-toolbar button {
-      padding-top: .4rem;
-      padding-bottom: .4rem;
-      font-size: large;
-    }
-
-    .folder-name {
-      border-radius: .23rem;
-      padding: .23rem;
-      width: 70%;
-    }
-    
-    .button {
-        background-color: lightgray;
-        min-width: 7rem;
-        color: #000000;
-        padding: .23rem;
-        border-radius: 4px;
-        text-align: center;
-        cursor: pointer;
-        font-weight: bolder;
-        width: 30%;
-    }
-
-    .folder-lists {
-      display: grid;
-      justify-content: center;
-    }
-    
-    .container {
-        padding: .23rem;
-        height: 100vh;
-        max-width: 768px;
-        max-height: 1024px;
-        min-width: 375px;
-        margin-right: 1rem;
-        margin-left: 1rem;
-        margin-bottom: 4rem;
-    }
-
-    .navigation {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      margin-bottom: .50rem;
-      border: 1px solid black;
-      padding: .4rem 1rem .4rem 1rem;
-      border-radius: .5rem;
-      display: flex;
-      gap: .9rem;
-      background-color: whitesmoke;
-    }
-
-    .navigation button {
-      background-color: lightgray;
-      padding: 5px 10px;
-      border-radius: 4px;
-      border: none;
-      font-weight: bold;
-      font-size: .7rem;
-      cursor: pointer;
-      text-transform: uppercase;
-    }
-    
-    .folder-card {
-      display: flex;
-      height: 1.8rem;
-      justify-content: space-between;
-      gap: .93rem;
-      align-items: center;
-      padding: .43rem;
-      border: 1px dashed black;
-      border-radius: .6rem;
-      margin-bottom: .43rem;
-      cursor: pointer;
-    }
-
-    .folder-card p {
-      font-size: large;
-      word-break: break-all;
-    }
-
-    .danger {
-      background-color: pink;
-    }
-    
-    @media (min-width: 768px) {
-        .container {
-            border: solid 1px black;
-            border-radius: 1rem;
-        }
-    } 
-    </style>
 </html>

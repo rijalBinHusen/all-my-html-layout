@@ -50,7 +50,7 @@ h1 {
   background-color: #bdbdbd;
 }
 
-.form-input-new-item {
+.form-input {
   display: flex;
   height: 1.8rem;
   justify-content: space-between;
@@ -59,13 +59,14 @@ h1 {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
-.form-input-new-item input {
+.form-input input {
   padding: 0.4rem;
   font-size: large;
   width: 70%;
   border: 1px solid black;
+  border-radius: 0.21rem;
 }
-.form-input-new-item button {
+.form-input button {
   padding-top: 0.4rem;
   padding-bottom: 0.4rem;
   font-size: large;
@@ -121,6 +122,10 @@ h1 {
   font-size: 1rem;
   cursor: pointer;
   text-transform: uppercase;
+}
+
+.danger {
+  background-color: pink;
 }
 
 @media (min-width: 400px) {

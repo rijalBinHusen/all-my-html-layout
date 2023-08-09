@@ -51,7 +51,7 @@ h1 {
     background-color: #bdbdbd;
 }
 
-.form-input-new-item {
+.form-input {
     display: flex;
     height: 1.8rem;
     justify-content: space-between;
@@ -65,6 +65,7 @@ h1 {
       font-size: large;
       width: 70%;
       border: 1px solid black;
+      border-radius: .21rem;
     }
 
     & button {
@@ -129,6 +130,10 @@ h1 {
         cursor: pointer;
         text-transform: uppercase;
     }
+  }
+
+  .danger {
+    background-color: pink;
   }
 
 @media (min-width: 400px) {
