@@ -65,20 +65,20 @@
             'TotalProduk yg Masuk gudang ( Ctn )',
             'Jumlah Item Produk yg Moving',
             'JumlahItem Produk Stok yg ada Variant',
-            '(Ach %)',
+            '(Achivement %)',
             'AKURASI FIFO',
             'Jumlah Item Produk yg Keluar (diShipment)',
             'Jumlah Item Produk yg Tidak FIFO',
-            '(Ach %)',
+            '(Achivement %)',
             'AKUARASI MUAT (DO)',
             'Jumlah DO dari Logistik',
             'Jumlah DO yg termuat',
-            '(Ach %)',
+            '(Achivement %)',
             'Jumlah Produk sesuai DO',
             'JumlahProduk yg termuat',
             'AKUARASI WAKTU MUAT',
             'Realisasi Waktu Muat (Menit)',
-            '(Ach OK / NOK)',
+            '(Achivement OK / NOK)',
             'JUMLAH KOMPLAIN MUAT DARI CUSTOMER',
             'SCORE KUANTITATIF',
             'AKURASI STOK',
@@ -99,9 +99,10 @@
 
                 if(j === 0) {
                     cell.textContent = `${rowTitles[i]}`;
+                    cell.setAttribute("class", "point-achivement")
                 } else {
 
-                    cell.textContent = `Cell ${i}-${j}`;
+                    cell.textContent = `${i}-${j}`;
                 }
                 row.appendChild(cell);
             }
@@ -117,6 +118,11 @@
 </html>
 
 <style>
+
+    .point-achivement {
+        max-width: 8rem;
+    }
+
     th {
         border: 1px solid black;
         padding: .42rem;
