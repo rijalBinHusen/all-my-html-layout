@@ -1,12 +1,20 @@
+* {
+    font-family: serif;
+}
+
 body{ 
     background-color: white;
     display: flex;
     justify-content: center;
 }
 
+h1 {
+    text-transform: uppercase;
+}
+
 .container {
-    display: flex;
     height: 100vh;
+    width: 100vw;
 }
 
 .main-menu {
@@ -18,28 +26,52 @@ body{
     max-width: 768px;
     max-height: 1024px;
     min-width: 375px;
+    height: 100vh;
 
     &-button  {
         width: 20rem;
+        text-transform: uppercase;
     }
 }
 
 .button {
     background-color: lightgray;
     color: #000000;
-    padding: 12px 24px;
+    padding: 12px 0 12px;
     border-radius: 4px;
     margin: 3px;
     text-align: center;
     cursor: pointer;
     font-weight: 700;
     font-size: 1rem;
-    text-transform: uppercase;
 }
 
 .button:hover {
     background-color: #bdbdbd;
 }
+
+.form-input-new-item {
+    display: flex;
+    height: 1.8rem;
+    justify-content: space-between;
+    align-items: center;
+    gap: .23rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    & input {
+      padding: .4rem;
+      font-size: large;
+      width: 70%;
+    }
+
+    & button {
+        padding-top: .4rem;
+        padding-bottom: .4rem;
+        font-size: large;
+        width: 30%;
+      }
+  }
 
 @media (min-width: 400px) {
     .menu-wrapper {
@@ -49,6 +81,8 @@ body{
     .container {
         border: solid 1px black;
         border-radius: 1rem;
+        margin-right: 1rem;
+        margin-left: 1rem;
     }
 
 }
