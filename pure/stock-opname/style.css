@@ -9,7 +9,7 @@ body {
   height: 100vh;
 }
 
-.menu-wrapper {
+.main-menu {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,18 +19,21 @@ body {
   max-height: 1024px;
   min-width: 375px;
 }
+.main-menu-button {
+  width: 20rem;
+}
 
 .button {
   background-color: lightgray;
-  width: 12rem;
   color: #000000;
   padding: 12px 24px;
   border-radius: 4px;
   margin: 3px;
   text-align: center;
   cursor: pointer;
-  font-weight: bolder;
+  font-weight: 700;
   font-size: 1rem;
+  text-transform: uppercase;
 }
 
 .button:hover {
