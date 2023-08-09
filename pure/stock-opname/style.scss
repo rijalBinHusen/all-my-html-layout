@@ -13,8 +13,12 @@ h1 {
 }
 
 .container {
+    max-width: 768px;
+    max-height: 1024px;
+    min-width: 375px;
     height: 100vh;
-    width: 100vw;
+    padding-left: 1rem;
+    padding-right: 1rem;
 }
 
 .main-menu {
@@ -23,9 +27,6 @@ h1 {
     align-items: center;
     justify-content: center;
     border-radius: 1rem;
-    max-width: 768px;
-    max-height: 1024px;
-    min-width: 375px;
     height: 100vh;
 
     &-button  {
@@ -71,6 +72,37 @@ h1 {
         font-size: large;
         width: 30%;
       }
+  }
+
+  .item-card {
+    display: flex;
+    height: 1.8rem;
+    justify-content: space-between;
+    gap: .93rem;
+    align-items: center;
+    padding: .43rem;
+    border: 1px dashed black;
+    border-radius: .6rem;
+    margin-bottom: .43rem;
+    
+    &-pointer {
+        cursor: pointer;
+    }
+
+    & p {
+        font-size: larger;
+        word-break: break-all;
+    }
+
+    & button {
+        padding: .3rem;
+        text-transform: uppercase;
+        font-size: small;
+    }
+  }
+
+  .secondary-color {
+    background-color: lightblue;
   }
 
 @media (min-width: 400px) {
