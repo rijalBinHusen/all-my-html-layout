@@ -1,0 +1,44 @@
+body {
+  background-color: white;
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+.menu-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  max-width: 768px;
+  max-height: 1024px;
+  min-width: 375px;
+}
+
+.button {
+  background-color: lightgray;
+  width: 12rem;
+  color: #000000;
+  padding: 12px 24px;
+  border-radius: 4px;
+  margin: 3px;
+  text-align: center;
+  cursor: pointer;
+  font-weight: bolder;
+  font-size: 1rem;
+}
+
+.button:hover {
+  background-color: #bdbdbd;
+}
+
+@media (min-width: 768px) {
+  .menu-wrapper {
+    border: solid 1px black;
+  }
+}/*# sourceMappingURL=style.css.map */
