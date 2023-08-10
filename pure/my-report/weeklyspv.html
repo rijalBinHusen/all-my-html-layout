@@ -153,7 +153,7 @@
         for (let report of mockData) {
 
             const divElmReportWraper = document.createElement("div");
-            divElmReportWraper.setAttribute("class", "report-wrapper");
+            divElmReportWraper.setAttribute("class", "report-wraper");
 
             const divElmReportDate = document.createElement("div");
             divElmReportDate.setAttribute("class", "report-date");
@@ -230,10 +230,8 @@
     }
 
     .report-wraper {
-        display: grid;
         justify-content: center;
         align-items: center;
-        background-color: cyan;
         width: 100%;
         border: 1px solid black;
         border-radius: .53rem;
@@ -241,13 +239,16 @@
 
     .report-date {
         background-color: cyan;
-        padding: .53rem 0 .53rem .63rem;
+        padding: .53rem 0 .53rem 0;
         font-size: large;
         font-weight: bold;
         border-radius: .53rem;
         box-shadow: 2px 4px 6px #000000;
         border: 1px solid black;
         cursor: pointer;
+        width: 100%;
+        text-align: center;
+        font-style: italic;
     }
 
     .detail-report {
