@@ -32,56 +32,9 @@
 
 <body>
     <div class="container">
-        <div class="daily-report">
-            <div class="report-wraper">
-                <!-- date report -->
-                <div class="report-date">
-                    <span>14-Jul-2023</span>
-                </div>
-                <!-- point of report -->
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi stock</p>
-                    <p>Total  produk masuk gudang : 134891</p>
-                    <p>Jumlah item produk yang moving: 214</p>
-                    <p>Jumlah item produk yang ada variance: 0</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi FIFO</p>
-                    <p>Jumlah Item Produk yg Keluar (diShipment): 252</p>
-                    <p>Jumlah Item Produk yg Tidak FIFO: 0</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi muat (DO)</p>
-                    <p>Jumlah DO dari Logistik : 237</p>
-                    <p>Jumlah DO yg termuat: 237</p>
-                    <p>Jumlah Produk sesuai DO: 146932</p>
-                    <p>JumlahProduk yg termuat: 146932</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi waktu muat</p>
-                    <p>Standard Waktu Muat (Menit) : 14693.2</p>
-                    <p>Realisasi Waktu Muat (Menit): 9644</p>
-                    <p>Pencapaian: OK</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">JUMLAH KOMPLAIN MUAT DARI CUSTOMER </p>
-                    <p>Total komlain : 0</p>
-                </div>
-                <div class="score-kuantitatif">
-                    <h1>Score kuantitatif</h1>
-                    <p>AKURASI STOK : 7</p>
-                    <p>AKURASI FIFO: 7</p>
-                    <p>AKURASI MUAT (DO): 7</p>
-                    <p>AKURASI WAKTU MUAT: 7</p>
-                    <p>JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER: 7</p>
-                    <p>Rata rata score: 7</p>
-                </div>
-            </div>
+        <div id="daily-report-wraper" class="daily-report">
 
-            <div class="summary-weekly-report">
+            <!-- <div class="summary-weekly-report">
                 
                 <div class="detail-report">
                     <p class="report-target-title">Akurasi stock</p>
@@ -132,63 +85,131 @@
 
         <div class="report-point">
             [Kasus] Diketahui pada tanggal 06.07.2023 terdapat muatan tujuan Kalindo Prima Guna telah selesai muat sekitar pukul 05.58 WIB namun pada DO tidak tercatat waktu mulai muat.	Tally tidak melaksanakan pola muat dengan mencatatkan waktu mulai muat	FL karu ditegur dan cek pekerjaan tally agar konsisten	Andre Rachmad Dwi H	06-Jul	06-Jul
-        </div>
+        </div> -->
     </div>
 
     <script>
 
-        // const rowTitles = [
-        //     'PARAMETER KINERJA',
-        //     'KUANTITATIF',
-        //     'AKURASI STOK',
-        //     'TotalProduk yg Masuk gudang ( Ctn )',
-        //     'Jumlah Item Produk yg Moving',
-        //     'JumlahItem Produk Stok yg ada Variant',
-        //     '(Achivement %)',
-        //     'AKURASI FIFO',
-        //     'Jumlah Item Produk yg Keluar (diShipment)',
-        //     'Jumlah Item Produk yg Tidak FIFO',
-        //     '(Achivement %)',
-        //     'AKUARASI MUAT (DO)',
-        //     'Jumlah DO dari Logistik',
-        //     'Jumlah DO yg termuat',
-        //     '(Achivement %)',
-        //     'Jumlah Produk sesuai DO',
-        //     'JumlahProduk yg termuat',
-        //     'AKUARASI WAKTU MUAT',
-        //     'Realisasi Waktu Muat (Menit)',
-        //     '(Achivement OK / NOK)',
-        //     'JUMLAH KOMPLAIN MUAT DARI CUSTOMER',
-        //     'SCORE KUANTITATIF',
-        //     'AKURASI STOK',
-        //     'AKURASI FIFO',
-        //     'AKURASI MUAT (DO)',
-        //     'AKURASI WAKTU MUAT',
-        //     'JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER',
-        // ];
-        // const table = document.createElement("table");
-        // table.setAttribute("class", "app");
+        const mockData = [
+                {
+                    date_report: "14-Jul-2023",
+                    data: [
+                        { 
+                            category_evaluation: "Akurasi stock",
+                            data: [
+                                { evaluation_point: "Total produk masuk gudang", point: 134891 },
+                                { evaluation_point: "Jumlah item produk yang moving", point: 214 },
+                                { evaluation_point: "Jumlah item produk yang ada variance", point: 0 },
+                                { evaluation_point: "Pencapaian", point: 100 },
+                            ]
+                        },
+                        { 
+                            category_evaluation: "Akurasi FIFO",
+                            data: [
+                                { evaluation_point: "Jumlah Item Produk yg Keluar (diShipment)", point: 252 },
+                                { evaluation_point: "Jumlah Item Produk yg Tidak FIFO", point: 0 },
+                                { evaluation_point: "Pencapaian", point: 100 },
+                            ]
+                        },
+                        { 
+                            category_evaluation: "Akurasi muat (DO)",
+                            data: [
+                                { evaluation_point: "Jumlah DO dari Logistik", point: 237 },
+                                { evaluation_point: "Jumlah DO yg termuat", point: 237 },
+                                { evaluation_point: "Jumlah Produk sesuai DO", point: 146932 },
+                                { evaluation_point: "JumlahProduk yg termuat", point: 146932 },
+                                { evaluation_point: "Pencapaian", point: 100 },
+                            ]
+                        },
+                        { 
+                            category_evaluation: "Akurasi waktu muat",
+                            data: [
+                                { evaluation_point: "Standard Waktu Muat (Menit)", point: 14693.2 },
+                                { evaluation_point: "Realisasi Waktu Muat (Menit)", point: 9644 },
+                                { evaluation_point: "Pencapaian", point: "OK" },
+                            ]
+                        },
+                        { 
+                            category_evaluation: "JUMLAH KOMPLAIN CUSTOMER",
+                            data: [
+                                { evaluation_point: "Total komplain", point: 0 },
+                            ]
+                        },
+                        { 
+                            category_evaluation: "Score kuantitatif",
+                            data: [
+                                { evaluation_point: "AKURASI STOK", point: 7 },
+                                { evaluation_point: "AKURASI FIFO", point: 7 },
+                                { evaluation_point: "AKURASI MUAT (DO)", point: 7 },
+                                { evaluation_point: "AKURASI WAKTU MUAT", point: 7 },
+                                { evaluation_point: "JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER", point: 7 },
+                                { evaluation_point: "Rata rata score", point: 7 },
+                            ]
+                        },
+                    ]
+                }
+            ]
+        
+        for (let report of mockData) {
 
-        // for (let i = 0; i < rowTitles.length; i++) {
+            const divElmReportWraper = document.createElement("div");
+            divElmReportWraper.setAttribute("class", "report-wrapper");
 
-        //     const row = document.createElement("tr");
+            const divElmReportDate = document.createElement("div");
+            divElmReportDate.setAttribute("class", "report-date");
 
-        //     for (let j = 0; j < 6; j++) {
-        //         const cell = document.createElement("td");
+            const spanElmDateReport = document.createElement("span");
+            spanElmDateReport.innerText = report.date_report;
 
-        //         if(j === 0) {
-        //             cell.textContent = `${rowTitles[i]}`;
-        //             cell.setAttribute("class", "point-achivement")
-        //         } else {
+            divElmReportDate.appendChild(spanElmDateReport);
+            divElmReportWraper.appendChild(divElmReportDate);
 
-        //             cell.textContent = `${i}-${j}`;
-        //         }
-        //         row.appendChild(cell);
-        //     }
-        //     table.appendChild(row);
-        // }
+            // looping data
+            for(let eval of report.data) {
+            
+                const divElmDetailReport = document.createElement("div");
+                divElmDetailReport.setAttribute("class", "detail-report");
+            
+                const table = document.createElement("table");
 
-        // document.getElementById("app").appendChild(table);
+                const tableHead = document.createElement("thead");
+                const tableHeadRow = document.createElement("tr");
+                const tableHeadCol = document.createElement("th");
+                tableHeadCol.setAttribute("colspan", "2")
+                tableHeadCol.innerText = eval.category_evaluation;
+
+                tableHeadRow.append(tableHeadCol);
+                tableHead.append(tableHeadRow)
+                table.append(tableHead);
+
+
+                const tableBody = document.createElement("tbody");
+                for(let evalPoint of eval.data) {
+                    const tableBodyRow = document.createElement("tr");
+                    const tableBodyCol1 = document.createElement("td");
+                    const tableBodyCol2 = document.createElement("td");
+
+                    tableBodyCol1.innerText = evalPoint.evaluation_point;
+                    tableBodyCol2.innerText = evalPoint.point;
+                    tableBodyCol2.setAttribute("class", "point");
+
+                    tableBodyRow.appendChild(tableBodyCol1);
+                    tableBodyRow.appendChild(tableBodyCol2);
+
+                    tableBody.appendChild(tableBodyRow);
+                }
+                
+                table.appendChild(tableBody);
+
+                divElmDetailReport.appendChild(table);
+
+                divElmReportWraper.appendChild(divElmDetailReport)
+
+            }
+
+            document.getElementById("daily-report-wraper").appendChild(divElmReportWraper);
+        }
+
 
     </script>
 
@@ -229,8 +250,17 @@
         cursor: pointer;
     }
 
+    .detail-report {
+        margin-top: 1rem;
+        justify-content: center;
+    }
+
     .point-achivement {
         max-width: 8rem;
+    }
+
+    table {
+        width: 100%;
     }
 
     th {
@@ -243,7 +273,8 @@
         border: 1px solid black;
         padding: .42rem;
         border-radius: .22rem;
-        font-size: .63rem;
+        font-size: .83rem;
+        font-weight: 500;
     }
 
     .red {
@@ -256,5 +287,9 @@
 
     .green {
         background-color: lawngreen;
+    }
+
+    .point {
+        font-weight: bolder;
     }
 </style>
