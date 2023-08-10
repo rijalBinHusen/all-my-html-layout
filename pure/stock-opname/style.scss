@@ -16,7 +16,6 @@ h1 {
     max-width: calc(100vw - 2rem);
     max-height: 1024px;
     min-width: 375px;
-    height: 100vh;
     padding-left: 1rem;
     padding-right: 1rem;
 }
@@ -107,6 +106,12 @@ h1 {
     background-color: lightblue;
   }
 
+  .lists {
+    &-folder, &-item {
+        padding-bottom: 7rem;
+    }
+  }
+
   
   .navigation {
     position: fixed;
@@ -134,6 +139,17 @@ h1 {
 
   .danger {
     background-color: pink;
+  }
+
+  
+.badge {
+    background-color: cyan;
+    color: black;
+    padding: .43rem;
+    text-align: center;
+    border-radius: 1rem;
+    font-size: small;
+    font-weight: bolder;
   }
 
 @media (min-width: 400px) {
