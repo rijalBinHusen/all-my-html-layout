@@ -77,11 +77,11 @@ h1 {
 
   .item-card {
     display: flex;
-    height: 1.8rem;
+    // height: 1.8rem;
     justify-content: space-between;
     gap: .93rem;
     align-items: center;
-    padding: .43rem;
+    padding: .23rem;
     border: 1px dashed black;
     border-radius: .6rem;
     margin-bottom: .43rem;
@@ -90,8 +90,8 @@ h1 {
         cursor: pointer;
     }
 
-    & p {
-        font-size: larger;
+    & span {
+        font-size: large;
         word-break: break-all;
     }
 
@@ -107,7 +107,7 @@ h1 {
   }
 
   .lists {
-    &-folder, &-item {
+    &-folder, &-item, &-stock {
         padding-bottom: 7rem;
     }
   }
@@ -124,6 +124,7 @@ h1 {
     border-radius: .5rem;
     display: flex;
     gap: .9rem;
+    background-color: white;
 
     & button {
         background-color: lightgray;

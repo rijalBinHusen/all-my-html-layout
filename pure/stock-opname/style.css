@@ -74,11 +74,10 @@ h1 {
 
 .item-card {
   display: flex;
-  height: 1.8rem;
   justify-content: space-between;
   gap: 0.93rem;
   align-items: center;
-  padding: 0.43rem;
+  padding: 0.23rem;
   border: 1px dashed black;
   border-radius: 0.6rem;
   margin-bottom: 0.43rem;
@@ -86,8 +85,8 @@ h1 {
 .item-card-pointer {
   cursor: pointer;
 }
-.item-card p {
-  font-size: larger;
+.item-card span {
+  font-size: large;
   word-break: break-all;
 }
 .item-card button {
@@ -100,7 +99,7 @@ h1 {
   background-color: lightblue;
 }
 
-.lists-folder, .lists-item {
+.lists-folder, .lists-item, .lists-stock {
   padding-bottom: 7rem;
 }
 
@@ -115,6 +114,7 @@ h1 {
   border-radius: 0.5rem;
   display: flex;
   gap: 0.9rem;
+  background-color: white;
 }
 .navigation button {
   background-color: lightgray;
