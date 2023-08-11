@@ -385,7 +385,7 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 async function reRenderData () {
     const dataFromServer = await fetchDataFromServer();
     let totalSumReport = totalAllDailyReport(dataFromServer);
-    console.log(totalSumReport)
+    
     dataFromServer.push(totalSumReport);
     let intepretDataFromServer = convertDataToRender(dataFromServer);
     mockData = intepretDataFromServer;

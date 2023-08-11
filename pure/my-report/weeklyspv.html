@@ -33,59 +33,6 @@
 <body>
     <div class="container">
         <div id="daily-report-wraper" class="daily-report">
-
-            <!-- <div class="summary-weekly-report">
-                
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi stock</p>
-                    <p>Total  produk masuk gudang : 134891</p>
-                    <p>Jumlah item produk yang moving: 214</p>
-                    <p>Jumlah item produk yang ada variance: 0</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi FIFO</p>
-                    <p>Jumlah Item Produk yg Keluar (diShipment): 252</p>
-                    <p>Jumlah Item Produk yg Tidak FIFO: 0</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi muat (DO)</p>
-                    <p>Jumlah DO dari Logistik : 237</p>
-                    <p>Jumlah DO yg termuat: 237</p>
-                    <p>Jumlah Produk sesuai DO: 146932</p>
-                    <p>JumlahProduk yg termuat: 146932</p>
-                    <p>Pencapaian: 100%</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">Akurasi waktu muat</p>
-                    <p>Standard Waktu Muat (Menit) : 14693.2</p>
-                    <p>Realisasi Waktu Muat (Menit): 9644</p>
-                    <p>Pencapaian: OK</p>
-                </div>
-                <div class="detail-report">
-                    <p class="report-target-title">JUMLAH KOMPLAIN MUAT DARI CUSTOMER </p>
-                    <p>Total komlain : 0</p>
-                </div>
-                <div class="score-kuantitatif">
-                    <h1>Score kuantitatif</h1>
-                    <p>AKURASI STOK : 7</p>
-                    <p>AKURASI FIFO: 7</p>
-                    <p>AKURASI MUAT (DO): 7</p>
-                    <p>AKURASI WAKTU MUAT: 7</p>
-                    <p>JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER: 7</p>
-                    <p>Rata rata score: 7</p>
-                </div>
-            </div>
-
-            <div class="average-score">
-                <p>Rata-rata Score Kuantitatif Minggu Ini: 6.75</p>
-            </div>
-        </div>
-
-        <div class="report-point">
-            [Kasus] Diketahui pada tanggal 06.07.2023 terdapat muatan tujuan Kalindo Prima Guna telah selesai muat sekitar pukul 05.58 WIB namun pada DO tidak tercatat waktu mulai muat.	Tally tidak melaksanakan pola muat dengan mencatatkan waktu mulai muat	FL karu ditegur dan cek pekerjaan tally agar konsisten	Andre Rachmad Dwi H	06-Jul	06-Jul
-        </div> -->
     </div>
 
     <script src="compiledFromTs.js"></script>
@@ -112,7 +59,8 @@
         width: 100%;
         border: 1px solid black;
         border-radius: .53rem;
-        margin-bottom: .2rem;
+        margin-bottom: .4rem;
+        box-shadow: 2px 0px 6px darkcyan;
     }
 
     .report-date {
@@ -121,8 +69,8 @@
         font-size: large;
         font-weight: bold;
         border-radius: .53rem;
-        box-shadow: 2px 4px 6px #000000;
         border: 1px solid black;
+        box-shadow: 2px 4px 6px darkcyan;
         cursor: pointer;
         width: 100%;
         text-align: center;
@@ -134,7 +82,7 @@
     }
 
     .detail-report {
-        margin-top: .4rem;
+        margin-bottom: .4rem;
         justify-content: center;
     }
 
