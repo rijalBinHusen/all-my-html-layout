@@ -15,7 +15,7 @@ interface reportToRender {
     data: detailReport[]
 }
 
-interface dataFromServer {
+interface dailyReport {
     id: string,
     collected: number,
     approval: number,
@@ -45,16 +45,22 @@ interface dataFromServer {
     total_komplain_muat: number
 }
 
+interface dataFromServer {
+    dailyReport: dailyReport[],
+    problem: string[];
+}
+
 // function randomNumber (): number {
 //     return Math.random() * 1000
 // }
 
-async function fetchDataFromServer (): Promise<dataFromServer[]> {
-    let result:dataFromServer[] = [];
+async function fetchDataFromServer (): Promise<dataFromServer> {
+    let dailyReport:dailyReport[] = [];
+    let problem: string[] = [];
     const date = new Date();
     for(let i = 1; i < 7; i ++) {
         date.setDate(date.getDate() + 1);
-        result.push({
+        dailyReport.push({
             approval: 19238019238,
             base_report_file: "kaljsdh",
             collected: 109238901238,
@@ -83,12 +89,14 @@ async function fetchDataFromServer (): Promise<dataFromServer[]> {
             warehouse_id: "1o23809",
             total_komplain_muat: 0
         })
+
+        problem.push("dlskjlakdf skdfj sdlkjs dfkjsad fpowieur pwoersdf lskdfjlk pwoeir laksdjf a;kjf pwoeri")
     }
 
-    return result;
+    return { dailyReport, problem };
 }
 
-function convertDataToRender(data: dataFromServer[]): reportToRender[] {
+function convertDataToRender(data: dailyReport[]): reportToRender[] {
     let result = <reportToRender[]>[];
     for(let datum of data) {
 
@@ -101,7 +109,7 @@ function convertDataToRender(data: dataFromServer[]): reportToRender[] {
     return result;
 }
 
-function templateDataToRender(data: dataFromServer): reportToRender {
+function templateDataToRender(data: dailyReport): reportToRender {
 
     const periodeToLocaleString = Number(data.periode) > 0 ? new Date(data.periode).toISOString().slice(0, 10) : data.periode;
     const achievementAkurasiStock = Math.round(((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100);
@@ -237,8 +245,11 @@ function templateDataToRender(data: dataFromServer): reportToRender {
             ]
         }
     ]
+    let problems: string[] = [];
 
     function renderData () {
+
+        const reportWrapper = document.getElementById("report-wraper");
     
         for (let [index, report] of mockData.entries()) {
 
@@ -307,12 +318,23 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 
             divElmReportWraper.appendChild(divElmDetailReportWrapper);
 
-            const reportWrapper = document.getElementById("daily-report-wraper");
-
             if(reportWrapper == null) return;
 
             reportWrapper.appendChild(divElmReportWraper);
         }
+
+        const elmDivProblem = document.createElement("div");
+        elmDivProblem.setAttribute("class", "problem-report");
+
+        for(let [index, problem] of problems.entries()) {
+            const elmParagraph = document.createElement("p");
+            elmParagraph.innerText = index + '. ' + problem;
+            
+            elmDivProblem.appendChild(elmParagraph);
+        }
+
+        reportWrapper?.appendChild(elmDivProblem);
+
     }
 
     function toggleHideContent(element: HTMLDivElement) {
@@ -336,8 +358,8 @@ function templateDataToRender(data: dataFromServer): reportToRender {
         }
     }
 
-    function totalAllDailyReport (data: dataFromServer[]): dataFromServer {
-        let result:dataFromServer = {
+    function totalAllDailyReport (data: dailyReport[]): dailyReport {
+        let result:dailyReport = {
             total_qty_in: 0,
             total_item_moving: 0,
             total_item_keluar: 0,
@@ -384,11 +406,12 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 
 async function reRenderData () {
     const dataFromServer = await fetchDataFromServer();
-    let totalSumReport = totalAllDailyReport(dataFromServer);
+    let totalSumReport = totalAllDailyReport(dataFromServer.dailyReport);
     
-    dataFromServer.push(totalSumReport);
-    let intepretDataFromServer = convertDataToRender(dataFromServer);
+    dataFromServer.dailyReport.push(totalSumReport);
+    let intepretDataFromServer = convertDataToRender(dataFromServer.dailyReport);
     mockData = intepretDataFromServer;
+    problems = dataFromServer.problem;
     renderData();
 }
 
