@@ -232,7 +232,7 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 
     function renderData () {
     
-        for (let report of mockData) {
+        for (let [index, report] of mockData.entries()) {
 
             const divElmReportWraper = document.createElement("div");
             divElmReportWraper.setAttribute("class", "report-wraper");
@@ -245,6 +245,14 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 
             divElmReportDate.appendChild(spanElmDateReport);
             divElmReportWraper.appendChild(divElmReportDate);
+
+            const divElmDetailReportWrapper = document.createElement("div");
+            const classToSet = index + 1 == mockData.length ? "detail-report-wrapper" : "detail-report-wrapper hide-content";
+            divElmDetailReportWrapper.setAttribute("class", classToSet);
+
+            divElmReportWraper.addEventListener('click', () => {
+                toggleHideContent(divElmDetailReportWrapper);
+            }, true);
 
             // looping data
             for(let eval of report.data) {
@@ -285,15 +293,38 @@ function templateDataToRender(data: dataFromServer): reportToRender {
 
                 divElmDetailReport.appendChild(table);
 
-                divElmReportWraper.appendChild(divElmDetailReport)
+                divElmDetailReportWrapper.appendChild(divElmDetailReport)
 
             }
+
+            divElmReportWraper.appendChild(divElmDetailReportWrapper);
 
             const reportWrapper = document.getElementById("daily-report-wraper");
 
             if(reportWrapper == null) return;
 
             reportWrapper.appendChild(divElmReportWraper);
+        }
+    }
+
+    function toggleHideContent(element: HTMLDivElement) {
+
+        
+        const isContentHidden = element.className.includes("hide-content");
+        
+        if(isContentHidden) {
+            
+            const getAllDetailReportWraper = document.getElementsByClassName("detail-report-wrapper");
+    
+            for(let DailyWraperelm of getAllDetailReportWraper) {
+    
+                DailyWraperelm.classList.add("hide-content");
+    
+            }
+            element.classList.remove("hide-content");
+        } else {
+            
+            element.classList.add("hide-content")
         }
     }
 
