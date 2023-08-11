@@ -88,132 +88,6 @@
         </div> -->
     </div>
 
-    <script>
-    /**
-
-        const mockData = [
-                {
-                    date_report: "14-Jul-2023",
-                    data: [
-                        { 
-                            category_evaluation: "Akurasi stock",
-                            data: [
-                                { evaluation_point: "Total produk masuk gudang", point: 134891 },
-                                { evaluation_point: "Jumlah item produk yang moving", point: 214 },
-                                { evaluation_point: "Jumlah item produk yang ada variance", point: 0 },
-                                { evaluation_point: "Pencapaian", point: 100 },
-                            ]
-                        },
-                        { 
-                            category_evaluation: "Akurasi FIFO",
-                            data: [
-                                { evaluation_point: "Jumlah Item Produk yg Keluar (diShipment)", point: 252 },
-                                { evaluation_point: "Jumlah Item Produk yg Tidak FIFO", point: 0 },
-                                { evaluation_point: "Pencapaian", point: 100 },
-                            ]
-                        },
-                        { 
-                            category_evaluation: "Akurasi muat (DO)",
-                            data: [
-                                { evaluation_point: "Jumlah DO dari Logistik", point: 237 },
-                                { evaluation_point: "Jumlah DO yg termuat", point: 237 },
-                                { evaluation_point: "Jumlah Produk sesuai DO", point: 146932 },
-                                { evaluation_point: "JumlahProduk yg termuat", point: 146932 },
-                                { evaluation_point: "Pencapaian", point: 100 },
-                            ]
-                        },
-                        { 
-                            category_evaluation: "Akurasi waktu muat",
-                            data: [
-                                { evaluation_point: "Standard Waktu Muat (Menit)", point: 14693.2 },
-                                { evaluation_point: "Realisasi Waktu Muat (Menit)", point: 9644 },
-                                { evaluation_point: "Pencapaian", point: "OK" },
-                            ]
-                        },
-                        { 
-                            category_evaluation: "JUMLAH KOMPLAIN CUSTOMER",
-                            data: [
-                                { evaluation_point: "Total komplain", point: 0 },
-                            ]
-                        },
-                        { 
-                            category_evaluation: "Score kuantitatif",
-                            data: [
-                                { evaluation_point: "AKURASI STOK", point: 7 },
-                                { evaluation_point: "AKURASI FIFO", point: 7 },
-                                { evaluation_point: "AKURASI MUAT (DO)", point: 7 },
-                                { evaluation_point: "AKURASI WAKTU MUAT", point: 7 },
-                                { evaluation_point: "JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER", point: 7 },
-                                { evaluation_point: "Rata rata score", point: 7 },
-                            ]
-                        },
-                    ]
-                }
-            ]
-        
-        for (let report of mockData) {
-
-            const divElmReportWraper = document.createElement("div");
-            divElmReportWraper.setAttribute("class", "report-wraper");
-
-            const divElmReportDate = document.createElement("div");
-            divElmReportDate.setAttribute("class", "report-date");
-
-            const spanElmDateReport = document.createElement("span");
-            spanElmDateReport.innerText = report.date_report;
-
-            divElmReportDate.appendChild(spanElmDateReport);
-            divElmReportWraper.appendChild(divElmReportDate);
-
-            // looping data
-            for(let eval of report.data) {
-            
-                const divElmDetailReport = document.createElement("div");
-                divElmDetailReport.setAttribute("class", "detail-report");
-            
-                const table = document.createElement("table");
-
-                const tableHead = document.createElement("thead");
-                const tableHeadRow = document.createElement("tr");
-                const tableHeadCol = document.createElement("th");
-                tableHeadCol.setAttribute("colspan", "2")
-                tableHeadCol.innerText = eval.category_evaluation;
-
-                tableHeadRow.append(tableHeadCol);
-                tableHead.append(tableHeadRow)
-                table.append(tableHead);
-
-
-                const tableBody = document.createElement("tbody");
-                for(let evalPoint of eval.data) {
-                    const tableBodyRow = document.createElement("tr");
-                    const tableBodyCol1 = document.createElement("td");
-                    const tableBodyCol2 = document.createElement("td");
-
-                    tableBodyCol1.innerText = evalPoint.evaluation_point;
-                    tableBodyCol2.innerText = evalPoint.point;
-                    tableBodyCol2.setAttribute("class", "point");
-
-                    tableBodyRow.appendChild(tableBodyCol1);
-                    tableBodyRow.appendChild(tableBodyCol2);
-
-                    tableBody.appendChild(tableBodyRow);
-                }
-                
-                table.appendChild(tableBody);
-
-                divElmDetailReport.appendChild(table);
-
-                divElmReportWraper.appendChild(divElmDetailReport)
-
-            }
-
-            document.getElementById("daily-report-wraper").appendChild(divElmReportWraper);
-        }
- **/
-
-    </script>
-
     <script src="compiledFromTs.js"></script>
 
 </body>
@@ -260,7 +134,7 @@
     }
 
     .detail-report {
-        margin-top: 1rem;
+        margin-top: .4rem;
         justify-content: center;
     }
 

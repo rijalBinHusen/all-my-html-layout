@@ -11,7 +11,7 @@ interface detailReport {
 }
 
 interface reportToRender {
-    date_report: string
+    date_report: string|number
     data: detailReport[]
 }
 
@@ -28,7 +28,7 @@ interface dataFromServer {
     base_report_file: string,
     is_finished: boolean,
     supervisor_id: string,
-    periode: number,
+    periode: number|string,
     shift: number,
     head_spv_id: string,
     warehouse_id: string,
@@ -101,7 +101,7 @@ function convertDataToRender(data: dataFromServer[]): reportToRender[] {
 
 function templateDataToRender(data: dataFromServer): reportToRender {
 
-    const periodeToLocaleString = new Date(data.periode).toISOString().slice(0, 10);
+    const periodeToLocaleString = Number(data.periode) > 0 ? new Date(data.periode).toISOString().slice(0, 10) : data.periode;
     const achievementAkurasiStock = (data.total_item_moving - data.item_variance) / data.total_item_moving;
     const achievementAkurasiFIFO = (data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar;
     const achievementAkurasiProdukTermuat = (data.total_qty_out + data.plan_out) / data.total_qty_out;
@@ -241,7 +241,7 @@ function templateDataToRender(data: dataFromServer): reportToRender {
             divElmReportDate.setAttribute("class", "report-date");
 
             const spanElmDateReport = document.createElement("span");
-            spanElmDateReport.innerText = report.date_report;
+            spanElmDateReport.innerText = report.date_report + '';
 
             divElmReportDate.appendChild(spanElmDateReport);
             divElmReportWraper.appendChild(divElmReportDate);
@@ -250,7 +250,7 @@ function templateDataToRender(data: dataFromServer): reportToRender {
             const classToSet = index + 1 == mockData.length ? "detail-report-wrapper" : "detail-report-wrapper hide-content";
             divElmDetailReportWrapper.setAttribute("class", classToSet);
 
-            divElmReportWraper.addEventListener('click', () => {
+            divElmReportDate.addEventListener('click', () => {
                 toggleHideContent(divElmDetailReportWrapper);
             }, true);
 
@@ -328,8 +328,55 @@ function templateDataToRender(data: dataFromServer): reportToRender {
         }
     }
 
+    function totalAllDailyReport (data: dataFromServer[]): dataFromServer {
+        let result = <dataFromServer>{
+            total_qty_in: 0,
+            total_item_moving: 0,
+            total_item_keluar: 0,
+            total_product_not_FIFO: 0,
+            total_do: 0,
+            total_qty_out: 0,
+            plan_out: 0,
+            total_waktu: 0,
+            approval: data[0].approval,
+            base_report_file: data[0].base_report_file,
+            collected: data[0].collected,
+            finished: data[0].finished,
+            head_spv_id: data[0].head_spv_id,
+            id: data[0].id,
+            is_finished: data[0].is_finished,
+            is_generated_document: data[0].is_generated_document,
+            item_variance: data[0].item_variance,
+            parent: data[0].parent,
+            parent_document: data[0].parent_document,
+            periode: "Rata rata point",
+            shared: data[0].shared,
+            shift: data[0].shift,
+            status: data[0].status,
+            supervisor_id: data[0].supervisor_id,
+            total_kendaraan: data[0].total_kendaraan,
+            warehouse_id: data[0].warehouse_id
+        };
+
+        for(let datum of data) {
+            result.total_qty_in += datum.total_qty_in
+            result.total_item_moving += datum.total_item_moving
+            result.total_item_keluar += datum.total_item_keluar
+            result.total_product_not_FIFO += datum.total_product_not_FIFO
+            result.total_do += datum.total_do
+            result.total_qty_out += datum.total_qty_out
+            result.plan_out += datum.plan_out
+            result.total_waktu += datum.total_waktu
+        }
+
+        return result;
+    }
+
 async function reRenderData () {
     const dataFromServer = await fetchDataFromServer();
+    let totalSumReport = totalAllDailyReport(dataFromServer);
+    console.log(totalSumReport)
+    dataFromServer.push(totalSumReport);
     let intepretDataFromServer = convertDataToRender(dataFromServer);
     mockData = intepretDataFromServer;
     renderData();
