@@ -324,11 +324,16 @@ function templateDataToRender(data: dailyReport): reportToRender {
         }
 
         const elmDivProblem = document.createElement("div");
-        elmDivProblem.setAttribute("class", "problem-report");
+        elmDivProblem.setAttribute("class", "report-problem");
+
+        const titleReportProblem = document.createElement("h2");
+        titleReportProblem.innerText = "Penjelasan atas target output yang tidak cerpai:"
+
+        elmDivProblem.appendChild(titleReportProblem);
 
         for(let [index, problem] of problems.entries()) {
             const elmParagraph = document.createElement("p");
-            elmParagraph.innerText = index + '. ' + problem;
+            elmParagraph.innerText = index + 1 + '. ' + problem;
             
             elmDivProblem.appendChild(elmParagraph);
         }
