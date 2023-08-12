@@ -16,26 +16,13 @@ interface reportToRender {
 }
 
 interface dailyReport {
-    id: string,
-    collected: number,
-    approval: number,
-    status: number,
-    shared: number,
-    finished: number,
     total_do: number,
     total_kendaraan: number,
     total_waktu: number,
-    base_report_file: string,
-    is_finished: boolean,
-    supervisor_id: string,
     periode: number|string,
     shift: number,
-    head_spv_id: string,
-    warehouse_id: string,
     is_generated_document: boolean,
     item_variance: number,
-    parent: string,
-    parent_document: string,
     plan_out: number,
     total_item_keluar: number,
     total_item_moving: number,
@@ -86,26 +73,13 @@ async function fetchDataFromServer (): Promise<dataFromServer> {
         ],
         "daily_reports": [
             {
-                id: "DOC23280104",
-                collected: 1689181200000,
-                approval: 1690245013302,
-                status: 2,
-                shared: 1690390800000,
-                finished: 1689354000000,
                 total_do: 11,
                 total_kendaraan: 11,
                 total_waktu: 180,
-                base_report_file: "bas23280034",
-                is_finished:true,
-                supervisor_id: "SPV23130000",
                 periode: "1689008400000",
                 shift: 1,
-                head_spv_id: "HEA22480001",
-                warehouse_id: "WHS22050001",
                 is_generated_document: false,
                 item_variance: 0,
-                parent: "0",
-                parent_document: "0",
                 plan_out: 0,
                 total_item_keluar: 0,
                 total_item_moving: 0,
@@ -141,7 +115,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
     const periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
     const achievementAkurasiStock = Math.round(((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100);
     const achievementAkurasiFIFO = Math.round(((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100);
-    const achievementAkurasiProdukTermuat = Math.round(((data.total_qty_out + data.plan_out) / data.total_qty_out) * 100);
+    const achievementAkurasiProdukTermuat = Math.round(((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100);
     const achievementAkurasiWaktu = (data.total_qty_out / 10) < data.total_waktu ? "Not Ok" : "Ok";
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
@@ -400,24 +374,11 @@ function templateDataToRender(data: dailyReport): reportToRender {
             total_qty_out: 0,
             plan_out: 0,
             total_waktu: 0,
-            approval: data[0].approval,
-            base_report_file: data[0].base_report_file,
-            collected: data[0].collected,
-            finished: data[0].finished,
-            head_spv_id: data[0].head_spv_id,
-            id: data[0].id,
-            is_finished: data[0].is_finished,
             is_generated_document: data[0].is_generated_document,
             item_variance: data[0].item_variance,
-            parent: data[0].parent,
-            parent_document: data[0].parent_document,
             periode: "Rata rata point",
-            shared: data[0].shared,
             shift: data[0].shift,
-            status: data[0].status,
-            supervisor_id: data[0].supervisor_id,
             total_kendaraan: data[0].total_kendaraan,
-            warehouse_id: data[0].warehouse_id,
             total_komplain_muat: 0,
         };
 
