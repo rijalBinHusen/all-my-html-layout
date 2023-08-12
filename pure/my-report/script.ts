@@ -46,54 +46,81 @@ interface dailyReport {
 }
 
 interface dataFromServer {
-    dailyReport: dailyReport[],
-    problem: string[];
+    daily_reports: dailyReport[],
+    problems: [{
+        periode: string,
+        masalah: string,
+        sumber_masalah: string,
+        solusi: string,
+        pic: string,
+        dead_line: string
+    }];
 }
 
-// function randomNumber (): number {
-//     return Math.random() * 1000
-// }
-
 async function fetchDataFromServer (): Promise<dataFromServer> {
-    let dailyReport:dailyReport[] = [];
-    let problem: string[] = [];
-    const date = new Date();
-    for(let i = 1; i < 7; i ++) {
-        date.setDate(date.getDate() + 1);
-        dailyReport.push({
-            approval: 19238019238,
-            base_report_file: "kaljsdh",
-            collected: 109238901238,
-            finished: 109283019238,
-            head_spv_id: "aslkdjhfksjhdfkljsdhfjkh",
-            id: "1lksjdf",
-            is_finished: true,
-            is_generated_document: false,
-            item_variance: 0,
-            parent: "sldkfj",
-            parent_document: "sldkfjskdjf",
-            periode: date.getTime(),
-            plan_out: 0,
-            shared: 10923810293,
-            shift: 1,
-            status: 2,
-            supervisor_id: "sldkfjslkdfj",
-            total_do: 123,
-            total_item_keluar: 1231,
-            total_item_moving: 123,
-            total_kendaraan: 234,
-            total_product_not_FIFO: 123,
-            total_qty_in: 123,
-            total_qty_out: 123,
-            total_waktu: 123,
-            warehouse_id: "1o23809",
-            total_komplain_muat: 0
-        })
+    let headersList = {
+        "Accept": "*/*",
+        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
+        "JWT-Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTE2NDEwNzksIm5iZiI6MTY5MTY0MTA3OSwiZXhwIjoxNjkxNzI3NDc5LCJqdGkiOiJSQU5ET00gVE9LRU4gVE9LRU4gUkFORE9NIiwiaXNzIjoiam9obmRvZSIsImF1ZCI6InNpdGUuY29tIiwiZGF0YSI6eyJpZCI6IjEifX0.ZXRvx95Hq4fzg0tFAie1x6X2EH6RI_hMPYMA4Bqytk0",
+        "Content-Type": "application/json"
+       }
+       
+       let response = await fetch("http://localhost/rest-php/myreport/report/weekly_report?supervisor_id=nme22030008&periode1=1688317200000&periode2=1688749200000", { 
+         method: "GET",
+         headers: headersList
+       });
 
-        problem.push("dlskjlakdf skdfj sdlkjs dfkjsad fpowieur pwoersdf lskdfjlk pwoeir laksdjf a;kjf pwoeri")
-    }
+       const is_request_failed = response?.status != 200;
 
-    return { dailyReport, problem };
+       if(is_request_failed) {
+        return {
+            problems: [
+            {
+                periode: "1690300000000",
+                masalah: "Report tidak ditemukan",
+                sumber_masalah: "Report tidak ditemukan",
+                solusi: "Report tidak ditemukan",
+                pic: "Report tidak ditemukan",
+                dead_line: "1690300000000"
+            },
+        ],
+        "daily_reports": [
+            {
+                id: "DOC23280104",
+                collected: 1689181200000,
+                approval: 1690245013302,
+                status: 2,
+                shared: 1690390800000,
+                finished: 1689354000000,
+                total_do: 11,
+                total_kendaraan: 11,
+                total_waktu: 180,
+                base_report_file: "bas23280034",
+                is_finished:true,
+                supervisor_id: "SPV23130000",
+                periode: "1689008400000",
+                shift: 1,
+                head_spv_id: "HEA22480001",
+                warehouse_id: "WHS22050001",
+                is_generated_document: false,
+                item_variance: 0,
+                parent: "0",
+                parent_document: "0",
+                plan_out: 0,
+                total_item_keluar: 0,
+                total_item_moving: 0,
+                total_product_not_FIFO: 0,
+                total_qty_in: 0,
+                total_qty_out: 0,
+                total_komplain_muat: 0
+            }]
+            }
+       }
+       
+       let data = await response.json();
+       
+
+       return data?.data as dataFromServer;
 }
 
 function convertDataToRender(data: dailyReport[]): reportToRender[] {
@@ -111,11 +138,11 @@ function convertDataToRender(data: dailyReport[]): reportToRender[] {
 
 function templateDataToRender(data: dailyReport): reportToRender {
 
-    const periodeToLocaleString = Number(data.periode) > 0 ? new Date(data.periode).toISOString().slice(0, 10) : data.periode;
+    const periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
     const achievementAkurasiStock = Math.round(((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100);
     const achievementAkurasiFIFO = Math.round(((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100);
     const achievementAkurasiProdukTermuat = Math.round(((data.total_qty_out + data.plan_out) / data.total_qty_out) * 100);
-    const achievementAkurasiWaktu = data.total_qty_out / 10 > data.total_waktu ? "Not Ok" : "Ok";
+    const achievementAkurasiWaktu = (data.total_qty_out / 10) < data.total_waktu ? "Not Ok" : "Ok";
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
     const scoreAkurasiFIFO = achievementAkurasiFIFO < 97 ? 5 : achievementAkurasiFIFO < 100 ? 6 : 7;
@@ -150,7 +177,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                     { evaluation_point: "Jumlah DO dari Logistik", point: data.total_do },
                     { evaluation_point: "Jumlah DO yg termuat", point: data.total_do },
                     { evaluation_point: "Pencapaian", point: '100%' },
-                    { evaluation_point: "Jumlah Produk sesuai DO", point: data.total_qty_out + data.plan_out },
+                    { evaluation_point: "Jumlah Produk sesuai DO", point: Number(data.total_qty_out) + Number(data.plan_out) },
                     { evaluation_point: "Jumlah Produk yg termuat", point: data.total_qty_out },
                     { evaluation_point: "Pencapaian", point: achievementAkurasiProdukTermuat  + '%'},
                 ]
@@ -395,15 +422,15 @@ function templateDataToRender(data: dailyReport): reportToRender {
         };
 
         for(let datum of data) {
-            result.total_qty_in += datum.total_qty_in
-            result.total_item_moving += datum.total_item_moving
-            result.total_item_keluar += datum.total_item_keluar
-            result.total_product_not_FIFO += datum.total_product_not_FIFO
-            result.total_do += datum.total_do
-            result.total_qty_out += datum.total_qty_out
-            result.plan_out += datum.plan_out
-            result.total_waktu += datum.total_waktu
-            result.total_komplain_muat += datum.total_komplain_muat
+            result.total_qty_in += Number(datum.total_qty_in)
+            result.total_item_moving += Number(datum.total_item_moving)
+            result.total_item_keluar += Number(datum.total_item_keluar)
+            result.total_product_not_FIFO += Number(datum.total_product_not_FIFO)
+            result.total_do += Number(datum.total_do)
+            result.total_qty_out += Number(datum.total_qty_out)
+            result.plan_out += Number(datum.plan_out)
+            result.total_waktu += Number(datum.total_waktu)
+            result.total_komplain_muat += Number(datum.total_komplain_muat)
         }
 
         return result;
@@ -411,12 +438,19 @@ function templateDataToRender(data: dailyReport): reportToRender {
 
 async function reRenderData () {
     const dataFromServer = await fetchDataFromServer();
-    let totalSumReport = totalAllDailyReport(dataFromServer.dailyReport);
+    let totalSumReport = totalAllDailyReport(dataFromServer.daily_reports);
     
-    dataFromServer.dailyReport.push(totalSumReport);
-    let intepretDataFromServer = convertDataToRender(dataFromServer.dailyReport);
+    dataFromServer.daily_reports.push(totalSumReport);
+    let intepretDataFromServer = convertDataToRender(dataFromServer.daily_reports);
+
     mockData = intepretDataFromServer;
-    problems = dataFromServer.problem;
+    dataFromServer.problems.forEach((rec) => {
+        const periodeProblem = new Date(Number(rec.periode)).toLocaleDateString();
+
+        const stringToPush = `${periodeProblem} ${rec.masalah} ${rec.sumber_masalah} ${rec.solusi}`;
+
+        problems.push(stringToPush);
+    });
     renderData();
 }
 
