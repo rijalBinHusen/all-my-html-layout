@@ -32,6 +32,12 @@
 
 <body>
     <div class="container">
+        <div id="form">
+            <input type="text" name="supervisor-id" id="supervisor-id">
+            <input type="text" name="head-supervisor-id" id="head-supervisor-id">
+            <input type="date" name="periode1" id="periode1">
+            <input type="date" name="periode2" id="periode2">
+        </div>
         <div id="report-wraper" class="daily-report">
     </div>
 
@@ -79,10 +85,14 @@
 
     .report-problem {
         border: 1px solid black;
-        padding: 0 1rem 1rem 1rem;
+        padding: 0 1rem 0rem 1rem;
         border-radius: .53rem;
     }
 
+    .report-problem p {
+        border-bottom: 1px solid gray;
+        padding-bottom: 1rem;
+    }
 
     .hide-content > * {
         display: none;

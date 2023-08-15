@@ -45,14 +45,13 @@ interface dataFromServer {
 }
 
 async function fetchDataFromServer (): Promise<dataFromServer> {
+    let url = "http://localhost/rest-php/myreport/report/weekly_report?head_supervisor_id=HEA22480001&periode1=1690736400000&periode2=1691168400000"
     let headersList = {
         "Accept": "*/*",
-        "User-Agent": "Thunder Client (https://www.thunderclient.com)",
-        "JWT-Authorization": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2OTE2NDEwNzksIm5iZiI6MTY5MTY0MTA3OSwiZXhwIjoxNjkxNzI3NDc5LCJqdGkiOiJSQU5ET00gVE9LRU4gVE9LRU4gUkFORE9NIiwiaXNzIjoiam9obmRvZSIsImF1ZCI6InNpdGUuY29tIiwiZGF0YSI6eyJpZCI6IjEifX0.ZXRvx95Hq4fzg0tFAie1x6X2EH6RI_hMPYMA4Bqytk0",
         "Content-Type": "application/json"
        }
        
-       let response = await fetch("http://localhost/rest-php/myreport/report/weekly_report?supervisor_id=nme22030008&periode1=1688317200000&periode2=1688749200000", { 
+       let response = await fetch(url, { 
          method: "GET",
          headers: headersList
        });
@@ -113,9 +112,9 @@ function convertDataToRender(data: dailyReport[]): reportToRender[] {
 function templateDataToRender(data: dailyReport): reportToRender {
 
     const periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
-    const achievementAkurasiStock = Math.round(((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100);
-    const achievementAkurasiFIFO = Math.round(((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100);
-    const achievementAkurasiProdukTermuat = Math.round(((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100);
+    const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100;
+    const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100;
+    const achievementAkurasiProdukTermuat = ((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100;
     const achievementAkurasiWaktu = (data.total_qty_out / 10) < data.total_waktu ? "Not Ok" : "Ok";
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
@@ -134,7 +133,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                     { evaluation_point: "Total produk masuk gudang", point: data.total_qty_in },
                     { evaluation_point: "Jumlah item produk yang moving", point: data.total_item_moving },
                     { evaluation_point: "Jumlah item produk yang ada variance", point: data.item_variance },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiStock  + '%'},
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiStock.toFixed(2)  + '%'},
                 ]
             },
             { 
@@ -142,7 +141,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                 data: [
                     { evaluation_point: "Jumlah Item Produk yg Keluar (diShipment)", point: data.total_item_keluar },
                     { evaluation_point: "Jumlah Item Produk yg Tidak FIFO", point: data.total_product_not_FIFO },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiFIFO  + '%'},
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiFIFO.toFixed(2)  + '%'},
                 ]
             },
             { 
@@ -153,7 +152,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                     { evaluation_point: "Pencapaian", point: '100%' },
                     { evaluation_point: "Jumlah Produk sesuai DO", point: Number(data.total_qty_out) + Number(data.plan_out) },
                     { evaluation_point: "Jumlah Produk yg termuat", point: data.total_qty_out },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiProdukTermuat  + '%'},
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiProdukTermuat.toFixed(2)  + '%'},
                 ]
             },
             { 
@@ -187,65 +186,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
     return result;
 }
 
-    let mockData = <reportToRender[]>[
-        {
-            date_report: "14-Jul-2023",
-            data: [
-                { 
-                    category_evaluation: "Akurasi stock",
-                    data: [
-                        { evaluation_point: "Total produk masuk gudang", point: 134891 },
-                        { evaluation_point: "Jumlah item produk yang moving", point: 214 },
-                        { evaluation_point: "Jumlah item produk yang ada variance", point: 0 },
-                        { evaluation_point: "Pencapaian", point: 100 },
-                    ]
-                },
-                { 
-                    category_evaluation: "Akurasi FIFO",
-                    data: [
-                        { evaluation_point: "Jumlah Item Produk yg Keluar (diShipment)", point: 252 },
-                        { evaluation_point: "Jumlah Item Produk yg Tidak FIFO", point: 0 },
-                        { evaluation_point: "Pencapaian", point: 100 },
-                    ]
-                },
-                { 
-                    category_evaluation: "Akurasi muat (DO)",
-                    data: [
-                        { evaluation_point: "Jumlah DO dari Logistik", point: 237 },
-                        { evaluation_point: "Jumlah DO yg termuat", point: 237 },
-                        { evaluation_point: "Jumlah Produk sesuai DO", point: 146932 },
-                        { evaluation_point: "JumlahProduk yg termuat", point: 146932 },
-                        { evaluation_point: "Pencapaian", point: 100 },
-                    ]
-                },
-                { 
-                    category_evaluation: "Akurasi waktu muat",
-                    data: [
-                        { evaluation_point: "Standard Waktu Muat (Menit)", point: 14693.2 },
-                        { evaluation_point: "Realisasi Waktu Muat (Menit)", point: 9644 },
-                        { evaluation_point: "Pencapaian", point: "OK" },
-                    ]
-                },
-                { 
-                    category_evaluation: "JUMLAH KOMPLAIN CUSTOMER",
-                    data: [
-                        { evaluation_point: "Total komplain", point: 0 },
-                    ]
-                },
-                { 
-                    category_evaluation: "Score kuantitatif",
-                    data: [
-                        { evaluation_point: "AKURASI STOK", point: 7 },
-                        { evaluation_point: "AKURASI FIFO", point: 7 },
-                        { evaluation_point: "AKURASI MUAT (DO)", point: 7 },
-                        { evaluation_point: "AKURASI WAKTU MUAT", point: 7 },
-                        { evaluation_point: "JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER", point: 7 },
-                        { evaluation_point: "Rata rata score", point: 7 },
-                    ]
-                },
-            ]
-        }
-    ]
+    let mockData = <reportToRender[]>[];
     let problems: string[] = [];
 
     function renderData () {
@@ -328,13 +269,13 @@ function templateDataToRender(data: dailyReport): reportToRender {
         elmDivProblem.setAttribute("class", "report-problem");
 
         const titleReportProblem = document.createElement("h2");
-        titleReportProblem.innerText = "Penjelasan atas target output yang tidak cerpai:"
+        titleReportProblem.innerText = "Penjelasan atas target output yang tidak cercapai:"
 
         elmDivProblem.appendChild(titleReportProblem);
 
-        for(let [index, problem] of problems.entries()) {
+        for(let problem of problems) {
             const elmParagraph = document.createElement("p");
-            elmParagraph.innerText = index + 1 + '. ' + problem;
+            elmParagraph.innerHTML = problem;
             
             elmDivProblem.appendChild(elmParagraph);
         }
@@ -375,7 +316,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
             plan_out: 0,
             total_waktu: 0,
             is_generated_document: data[0].is_generated_document,
-            item_variance: data[0].item_variance,
+            item_variance: 0,
             periode: "Rata rata point",
             shift: data[0].shift,
             total_kendaraan: data[0].total_kendaraan,
@@ -392,6 +333,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
             result.plan_out += Number(datum.plan_out)
             result.total_waktu += Number(datum.total_waktu)
             result.total_komplain_muat += Number(datum.total_komplain_muat)
+            result.item_variance += Number(datum.item_variance)
         }
 
         return result;
@@ -408,7 +350,10 @@ async function reRenderData () {
     dataFromServer.problems.forEach((rec) => {
         const periodeProblem = new Date(Number(rec.periode)).toLocaleDateString();
 
-        const stringToPush = `${periodeProblem} ${rec.masalah} ${rec.sumber_masalah} ${rec.solusi}`;
+        let stringToPush = `<b>Periode: ${periodeProblem}</b> <br/>`
+        stringToPush += `<b>Masalah: </b>${rec.masalah} <br/>`;
+        stringToPush += `<b>Sumber masalah: </b> ${rec.sumber_masalah}<br/>`;
+        stringToPush += `<b>Solusi: </b> ${rec.solusi}`;
 
         problems.push(stringToPush);
     });
