@@ -55,7 +55,6 @@ h1 {
   justify-content: space-between;
   align-items: center;
   gap: 0.23rem;
-  padding-top: 1rem;
   padding-bottom: 1rem;
 }
 .form-input input {
@@ -93,6 +92,41 @@ h1 {
   padding: 0.3rem;
   text-transform: uppercase;
   font-size: small;
+}
+
+.stock-opname-card {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.93rem;
+  align-items: center;
+  padding: 0.23rem;
+  border: 1px dashed black;
+  border-radius: 0.6rem;
+  margin-bottom: 0.43rem;
+}
+.stock-opname-card-pointer {
+  cursor: pointer;
+}
+.stock-opname-card span {
+  display: flex;
+  word-break: break-all;
+  margin-bottom: 0.2rem;
+  align-items: center;
+}
+.stock-opname-card button {
+  padding: 0.3rem;
+  text-transform: uppercase;
+  font-size: small;
+  width: 100%;
+  margin-bottom: 0.24rem;
+  font-weight: 600;
+  border-radius: 0.33rem;
+  border: 1px solid black;
+  cursor: pointer;
+}
+.stock-opname-card .total {
+  font-weight: bolder;
+  font-size: larger;
 }
 
 .secondary-color {
