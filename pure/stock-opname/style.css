@@ -129,6 +129,39 @@ h1 {
   font-size: larger;
 }
 
+/* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  /* Style the buttons inside the tab */
+  /* Change background color of buttons on hover */
+  /* Create an active/current tablink class */
+}
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 0.63rem 0px 0.63rem;
+  transition: 0.3s;
+  font-size: 17px;
+  width: 50%;
+  text-transform: uppercase;
+  color: gray;
+}
+.tab button:hover {
+  background-color: #ddd;
+}
+.tab button.active {
+  border-bottom: 4px solid black;
+  color: black;
+  font-weight: 600;
+}
+
 .secondary-color {
   background-color: lightblue;
 }
@@ -151,7 +184,7 @@ h1 {
   background-color: white;
 }
 .navigation button {
-  background-color: lightgray;
+  background-color: lightblue;
   padding: 5px 10px;
   border-radius: 4px;
   border: none;
