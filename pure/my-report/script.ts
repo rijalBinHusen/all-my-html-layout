@@ -44,23 +44,31 @@ interface dataFromServer {
     }];
 }
 
+function isEpochTime(number: number): boolean {
+    // Check if the number is a string.
+  if (typeof number === "number") {
+    return false;
+  }
+
+  // Check if the number is a valid Unix epoch time.
+  try {
+    // Convert the number to a Date object.
+    const date = new Date(number);
+
+    // Check if the date is a valid Unix epoch time.
+    const millisecondsSinceEpoch = date.getTime();
+    return millisecondsSinceEpoch >= 0 && millisecondsSinceEpoch <= 9999999999999;
+
+  } catch (error) {
+
+    return false;
+  }
+}
+
 async function fetchDataFromServer (): Promise<dataFromServer> {
-    let url = "http://localhost/rest-php/myreport/report/weekly_report?head_supervisor_id=HEA22480001&periode1=1690736400000&periode2=1691168400000"
-    let headersList = {
-        "Accept": "*/*",
-        "Content-Type": "application/json"
-       }
-       
-       let response = await fetch(url, { 
-         method: "GET",
-         headers: headersList
-       });
 
-       const is_request_failed = response?.status != 200;
-
-       if(is_request_failed) {
-        return {
-            problems: [
+    const defaultResponse:dataFromServer = {
+        problems: [
             {
                 periode: "1690300000000",
                 masalah: "Report tidak ditemukan",
@@ -86,8 +94,53 @@ async function fetchDataFromServer (): Promise<dataFromServer> {
                 total_qty_in: 0,
                 total_qty_out: 0,
                 total_komplain_muat: 0
-            }]
             }
+        ]
+    };
+    
+    const urlSearch = window.location.search;
+    const urlSplitted = urlSearch.split('&');
+    const responsibleSearch = urlSplitted[0].split("=");
+    const isHeadSupervisorMode = responsibleSearch[0] === '?head_supervisor_id';
+    const isSupervisorMode = responsibleSearch[0] === '?supervisor_id';
+    const responsibleToSearch = responsibleSearch[1];
+
+    const periode1URL = urlSplitted[1].split("=");
+    const isRequestPeriode1 = periode1URL[0] === 'periode1';
+    const isRequestPeriode1EpochTime = isEpochTime(Number(periode1URL[1]));
+    const perioded1ToSearch = Number(periode1URL[1]);
+
+    const periode2URL = urlSplitted[2].split("=");
+    const isRequestPeriode2 = periode2URL[0] === 'periode2';
+    const isRequestPeriode2EpochTime = isEpochTime(Number(periode2URL[1]));
+    const periode2ToSearch = Number(periode2URL[1]);
+
+    console.log(`${responsibleSearch[0]}=${responsibleToSearch}&periode1=${perioded1ToSearch}&periode2=${periode2ToSearch}`)
+
+    const isResponsibleOke = isHeadSupervisorMode || isSupervisorMode;
+    const isURLSearchOke = isResponsibleOke && isRequestPeriode1 && isRequestPeriode2 && isRequestPeriode1EpochTime && isRequestPeriode2EpochTime;
+
+    console.log("Responsible", isResponsibleOke ," periode1 ", isRequestPeriode1 , " periode2 ", isRequestPeriode2  ," periode1 epoch ", isRequestPeriode1EpochTime  ," periode2 epoch ", isRequestPeriode2EpochTime);
+    if(!isURLSearchOke) return defaultResponse;
+    
+    const backEndURL = "http://localhost/rest-php/myreport/report/weekly_report";
+    const urlToFetch = `${backEndURL}${responsibleSearch[0]}=${responsibleToSearch}&periode1=${perioded1ToSearch}&periode2=${periode2ToSearch}`
+    
+    let headersList = {
+        "Accept": "*/*",
+        "Content-Type": "application/json"
+       }
+       
+       let response = await fetch(urlToFetch, { 
+         method: "GET",
+         headers: headersList
+       });
+
+       const is_request_failed = response?.status != 200;
+
+       if(is_request_failed) {
+
+        return defaultResponse;
        }
        
        let data = await response.json();
