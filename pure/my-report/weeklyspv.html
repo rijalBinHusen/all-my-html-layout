@@ -32,21 +32,7 @@
 
 <body>
     <div class="container">
-        <div id="form">
-            <div class="responsible">
-                <label for="supervisor-id">Supervisor</label>
-                <input type="text" name="supervisor-id" id="supervisor-id">
-                <label for="head-supervisor-id">Kepala bagian</label>
-                <input type="text" name="head-supervisor-id" id="head-supervisor-id">
-            </div>
-            <div class="periode">
-                <label for="periode1">Tanggal mulai</label>
-                <input type="date" name="periode1" id="periode1">
-                <label for="periode2">Tanggal akhir</label>
-                <input type="date" name="periode2" id="periode2">
-            </div>
-        </div>
-        <div id="report-wraper" class="daily-report">
+        <div id="report-wraper" class="daily-report"></div>
     </div>
 
     <script src="compiledFromTs.js"></script>
@@ -56,7 +42,6 @@
 </html>
 
 <style>
-
     .container {
         max-width: 412px;
         max-height: 1024px;
@@ -102,28 +87,7 @@
         padding-bottom: 1rem;
     }
 
-    #form {
-        display: flex;
-        flex-direction: row;
-        margin-bottom: 1rem;
-        gap: 1rem;
-    }
-
-    #form div {
-        display: flex;
-        flex-direction: column;
-        width: 50%;
-    }
-
-    #form input {
-        padding: .23rem 0 .23rem .23rem;
-        border: 1px solid black;
-        border-radius: .23rem;
-        font-weight: 500;
-        font-size: medium;
-    }
-
-    .hide-content > * {
+    .hide-content>* {
         display: none;
     }
 
