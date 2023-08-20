@@ -3,6 +3,7 @@
 interface pointReport {
     evaluation_point: string
     point: number | string
+    className?: string
 }
 
 interface detailReport {
@@ -11,6 +12,7 @@ interface detailReport {
 }
 
 interface reportToRender {
+    className?: string
     date_report: string | number
     data: detailReport[]
 }
@@ -163,6 +165,7 @@ function convertDataToRender(data: dailyReport[]): reportToRender[] {
 function templateDataToRender(data: dailyReport): reportToRender {
 
     const periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
+
     const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100;
     const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100;
     const achievementAkurasiProdukTermuat = ((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100;
@@ -175,7 +178,15 @@ function templateDataToRender(data: dailyReport): reportToRender {
     const scoreKomplainMuat = data.total_komplain_muat == 0 ? 7 : 5;
     const scoreRataRata = (scoreAkurasiStock + scoreAkurasiFIFO + scoreAkurasiProdukTermuat + scoreAkurasiWaktu + scoreKomplainMuat) / 5;
 
+    const classNameScoreAkurasiStock = achievementAkurasiStock < 97 ? 'red' : achievementAkurasiStock < 100 ? 'yellow' : 'green';
+    const classNameScoreAkurasiFIFO = achievementAkurasiFIFO < 97 ? 'red' : achievementAkurasiFIFO < 100 ? 'yellow' : 'green';
+    const classNameScoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 'green' : ((100 + achievementAkurasiProdukTermuat) / 2) < 97 ? 'yellow' : 'red';
+    const classNameScoreAkurasiWaktu = achievementAkurasiWaktu == 'Ok' ? 'green' : 'red';
+    const classNameScoreKomplainMuat = data.total_komplain_muat == 0 ? 'green' : 'red';
+    const classNameScoreRataRata = scoreRataRata < 6 ? 'red' : scoreRataRata < 7 ? 'yellow' : 'green';
+
     let result: reportToRender = {
+        className: classNameScoreRataRata,
         date_report: periodeToLocaleString,
         data: [
             {
@@ -184,7 +195,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                     { evaluation_point: "Total produk masuk gudang", point: data.total_qty_in },
                     { evaluation_point: "Jumlah item produk yang moving", point: data.total_item_moving },
                     { evaluation_point: "Jumlah item produk yang ada variance", point: data.item_variance },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiStock.toFixed(2) + '%' },
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiStock.toFixed(2) + '%', className: classNameScoreAkurasiStock },
                 ]
             },
             {
@@ -192,7 +203,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                 data: [
                     { evaluation_point: "Jumlah Item Produk yg Keluar (diShipment)", point: data.total_item_keluar },
                     { evaluation_point: "Jumlah Item Produk yg Tidak FIFO", point: data.total_product_not_FIFO },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiFIFO.toFixed(2) + '%' },
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiFIFO.toFixed(2) + '%', className: classNameScoreAkurasiFIFO },
                 ]
             },
             {
@@ -203,7 +214,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
                     { evaluation_point: "Pencapaian", point: '100%' },
                     { evaluation_point: "Jumlah Produk sesuai DO", point: Number(data.total_qty_out) + Number(data.plan_out) },
                     { evaluation_point: "Jumlah Produk yg termuat", point: data.total_qty_out },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiProdukTermuat.toFixed(2) + '%' },
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiProdukTermuat.toFixed(2) + '%', className: classNameScoreAkurasiProdukTermuat },
                 ]
             },
             {
@@ -211,24 +222,24 @@ function templateDataToRender(data: dailyReport): reportToRender {
                 data: [
                     { evaluation_point: "Standard Waktu Muat (Menit)", point: data.total_qty_out / 10 },
                     { evaluation_point: "Realisasi Waktu Muat (Menit)", point: data.total_waktu },
-                    { evaluation_point: "Pencapaian", point: achievementAkurasiWaktu },
+                    { evaluation_point: "Pencapaian", point: achievementAkurasiWaktu, className: classNameScoreAkurasiWaktu },
                 ]
             },
             {
                 category_evaluation: "JUMLAH KOMPLAIN CUSTOMER",
                 data: [
-                    { evaluation_point: "Total komplain", point: data.total_komplain_muat },
+                    { evaluation_point: "Total komplain", point: data.total_komplain_muat, className: classNameScoreKomplainMuat },
                 ]
             },
             {
                 category_evaluation: "Score kuantitatif",
                 data: [
-                    { evaluation_point: "AKURASI STOK", point: scoreAkurasiStock },
-                    { evaluation_point: "AKURASI FIFO", point: scoreAkurasiFIFO },
-                    { evaluation_point: "AKURASI MUAT (DO)", point: scoreAkurasiProdukTermuat },
-                    { evaluation_point: "AKURASI WAKTU MUAT", point: scoreAkurasiWaktu },
-                    { evaluation_point: "JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER", point: scoreKomplainMuat },
-                    { evaluation_point: "Rata rata score", point: scoreRataRata },
+                    { evaluation_point: "AKURASI STOK", point: scoreAkurasiStock, className: classNameScoreAkurasiStock },
+                    { evaluation_point: "AKURASI FIFO", point: scoreAkurasiFIFO, className: classNameScoreAkurasiFIFO },
+                    { evaluation_point: "AKURASI MUAT (DO)", point: scoreAkurasiProdukTermuat, className: classNameScoreAkurasiProdukTermuat },
+                    { evaluation_point: "AKURASI WAKTU MUAT", point: scoreAkurasiWaktu, className: classNameScoreAkurasiWaktu },
+                    { evaluation_point: "JUMLAH KOMPLAIN QUANTITY (t/-) DARI CUSTOMER", point: scoreKomplainMuat, className: classNameScoreKomplainMuat },
+                    { evaluation_point: "Rata rata score", point: scoreRataRata, className: classNameScoreRataRata },
                 ]
             },
         ]
@@ -252,7 +263,7 @@ function renderData() {
         divElmReportWraper.setAttribute("class", "report-wraper");
 
         const divElmReportDate = document.createElement("div");
-        divElmReportDate.setAttribute("class", "report-date");
+        divElmReportDate.setAttribute("class", "report-date " + report.className);
 
         const spanElmDateReport = document.createElement("span");
         spanElmDateReport.innerText = report.date_report + '';
@@ -290,7 +301,10 @@ function renderData() {
 
             const tableBody = document.createElement("tbody");
             for (let evalPoint of eval.data) {
+
                 const tableBodyRow = document.createElement("tr");
+                tableBodyRow.setAttribute("class", evalPoint.className || "no-class");
+
                 const tableBodyCol1 = document.createElement("td");
                 const tableBodyCol2 = document.createElement("td");
 
@@ -373,7 +387,7 @@ function totalAllDailyReport(data: dailyReport[]): dailyReport {
         total_waktu: 0,
         is_generated_document: data[0].is_generated_document,
         item_variance: 0,
-        periode: "Rata rata point",
+        periode: "Grand total",
         shift: data[0].shift,
         total_kendaraan: data[0].total_kendaraan,
         total_komplain_muat: 0,
