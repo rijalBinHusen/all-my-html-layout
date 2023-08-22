@@ -1,0 +1,79 @@
+body {
+  background-color: black;
+}
+
+.sections {
+    width: 100%;
+    position: relative;
+    height: 100vh;
+    display: flex;
+  }
+  .panels {
+    width: 50%;
+    /*   height: 100vh; */
+    background: lime;
+    overflow: hidden;
+    position: relative;
+  }
+  .container-page {
+    width: 50%;
+    background-color: aqua;
+  }
+  .container-page h2 {
+    font-size: 30px;
+  }
+  .panel {
+    height: 100vh;
+    width: 100%;
+    margin-left: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  
+  .description {
+    height: 100vh;
+  }
+  
+  .blue {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+  
+  .blue h1 {
+    margin: 0 0 1rem 0;
+    text-align: center;
+  }
+  
+  .green {
+    height: 100vh;
+  }
+  
+  section.spacer {
+    width: 100%;
+    height: 100vh;
+    background: #333;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+  }
+
+  .red {
+    background-color: red;
+  }
+
+  .orange {
+    background-color: orange;
+  }
+
+  .purple {
+    background-color: purple;
+  }
+
+  .green {
+    background-color: green;
+  }
