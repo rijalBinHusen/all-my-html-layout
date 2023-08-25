@@ -35,6 +35,10 @@ interface dailyReport {
 }
 
 interface dataFromServer {
+    info: {
+        bagian: string
+        PIC_name: string
+    }
     daily_reports: dailyReport[],
     problems: [{
         periode: string,
@@ -71,6 +75,10 @@ function isEpochTime(number: number): boolean {
 async function fetchDataFromServer(): Promise<dataFromServer> {
 
     const defaultResponse: dataFromServer = {
+        info: {
+            bagian: "Tidak ditemukan",
+            PIC_name: "Tidak ditemukan"
+        },
         problems: [
             {
                 periode: "1690300000000",
@@ -427,6 +435,21 @@ async function reRenderData() {
 
         problems.push(stringToPush);
     });
+
+    const PICElm = document.getElementById("PIC-name");
+    const bagianElm = document.getElementById("bagian");
+    const periodeElm = document.getElementById("periode");
+
+    if(PICElm !== null && bagianElm !== null && periodeElm !== null) {
+        PICElm.innerText = dataFromServer.info.PIC_name;
+        bagianElm.innerText = dataFromServer.info.bagian;
+
+        const dateStart = intepretDataFromServer[0].date_report;
+        const dateEnd = intepretDataFromServer[intepretDataFromServer.length -2].date_report;
+
+        periodeElm.innerText = `${dateStart} Sampai dengan ${dateEnd}`;
+    }
+
     renderData();
 }
 
