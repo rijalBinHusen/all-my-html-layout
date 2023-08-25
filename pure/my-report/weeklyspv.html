@@ -32,10 +32,11 @@
 
 <body>
     <div class="container">
+        <h2>Rapor 3R Gudang jadi</h2>
         <div id="report-info" class="report-info">
-            <p>Fungsi level: <span id="PIC-name"></span></p>
-            <p>Area: <span id="bagian"></span></p>
-            <p>Periode: <span id="periode"></span></p>
+            <p><b>Fungsi level:</b> <span id="PIC-name"></span></p>
+            <p><b>Area:</b> <span id="bagian"></span></p>
+            <p><b>Periode:</b> <span id="periode"></span></p>
         </div>
         <div id="report-wraper" class="daily-report"></div>
     </div>
@@ -89,6 +90,17 @@
     .report-problem p {
         border-bottom: 1px solid gray;
         padding-bottom: 1rem;
+    }
+
+    .report-info {
+        border: 1px solid black;
+        padding: 0 1rem 0rem 1rem;
+        border-radius: .53rem;
+        margin-bottom: 1rem;
+    }
+
+    .report-info p {
+        font-size: large;
     }
 
     .hide-content>* {
