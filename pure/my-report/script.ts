@@ -280,7 +280,7 @@ function renderData() {
         divElmReportWraper.appendChild(divElmReportDate);
 
         const divElmDetailReportWrapper = document.createElement("div");
-        const classToSet = i === mockData.length ? "detail-report-wrapper" : "detail-report-wrapper hide-content";
+        const classToSet = (i + 1) === mockData.length ? "detail-report-wrapper" : "detail-report-wrapper hide-content";
         divElmDetailReportWrapper.setAttribute("class", classToSet);
 
         divElmReportDate.addEventListener('click', () => {
