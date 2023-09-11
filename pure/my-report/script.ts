@@ -452,8 +452,8 @@ async function reRenderData() {
         PICElm.innerText = dataFromServer.info.PIC_name;
         bagianElm.innerText = dataFromServer.info.bagian;
 
-        const dateStart = intepretDataFromServer[0].date_report;
-        const dateEnd = intepretDataFromServer[intepretDataFromServer.length -2].date_report;
+        const dateStart = intepretDataFromServer[0].date_report.toString().split(" ")[0];
+        const dateEnd = intepretDataFromServer[intepretDataFromServer.length -2].date_report.toString().split(" ")[0];
 
         periodeElm.innerText = `${dateStart} Sampai dengan ${dateEnd}`;
     }
