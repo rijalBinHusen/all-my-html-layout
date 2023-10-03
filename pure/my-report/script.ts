@@ -183,7 +183,7 @@ function templateDataToRender(data: dailyReport): reportToRender {
 
     const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100;
     const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100;
-    const achievementAkurasiProdukTermuat = ((Number(data.total_qty_out) + Number(data.plan_out)) / data.total_qty_out) * 100;
+    const achievementAkurasiProdukTermuat = (data.total_qty_out / (Number(data.total_qty_out) + Number(data.plan_out))) * 100;
     const achievementAkurasiWaktu = (data.total_qty_out / 10) < data.total_waktu ? "Not Ok" : "Ok";
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
