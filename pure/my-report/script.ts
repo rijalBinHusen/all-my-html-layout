@@ -174,7 +174,7 @@ function convertDataToRender(data: dailyReport[]): reportToRender[] {
 
 function templateDataToRender(data: dailyReport): reportToRender {
 
-    let periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString() : data.periode;
+    let periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString("id-ID") : data.periode;
 
     const is_generated_document = data?.is_generated_document == "1";
     if(is_generated_document) {
@@ -434,7 +434,7 @@ async function reRenderData() {
 
     mockData = intepretDataFromServer;
     dataFromServer.problems.forEach((rec) => {
-        const periodeProblem = new Date(Number(rec.periode)).toLocaleDateString();
+        const periodeProblem = new Date(Number(rec.periode)).toLocaleDateString("id-ID");
 
         let stringToPush = `<b>Periode: ${periodeProblem}</b> <br/>`
         stringToPush += `<b>Masalah: </b>${rec.masalah} <br/>`;
