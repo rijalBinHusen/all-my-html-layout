@@ -225,6 +225,13 @@ h1 {
     font-weight: bolder;
   }
 
+.button-duplicate {
+  background-color: gainsboro;
+  color: black;
+  font-weight: 900;
+  border-radius: 5px;
+}
+
 @media (min-width: 400px) {
     .menu-wrapper {
         border: solid 1px black;
