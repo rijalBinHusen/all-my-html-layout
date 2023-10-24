@@ -232,6 +232,41 @@ h1 {
   border-radius: 5px;
 }
 
+.modal-stock-opname {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0px;
+  left: 0px;
+  justify-content: center;
+  justify-items: center;
+  align-items: center;
+  background-color: gainsboro;
+  z-index: 1;
+}
+
+.form-stock-opname {
+  display: flex;
+  flex-direction: column;
+  width: 80vw;
+  height: 70vh;
+  gap: .5rem;
+  padding: 1rem 0 1rem 0;
+}
+
+.form-stock-opname label {
+  font-size: 1.5rem;
+}
+
+.modal-stock-opname input {
+  width: 100%;
+  height: 2rem;
+  font-size: 1.2rem;
+  border: 1px solid black;
+}
+
 @media (min-width: 400px) {
     .menu-wrapper {
         border: solid 1px black;
