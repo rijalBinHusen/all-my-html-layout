@@ -188,14 +188,14 @@ function templateDataToRender(data: dailyReport): reportToRender {
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
     const scoreAkurasiFIFO = achievementAkurasiFIFO < 97 ? 5 : achievementAkurasiFIFO < 100 ? 6 : 7;
-    const scoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 7 : ((100 + achievementAkurasiProdukTermuat) / 2) < 97 ? 6 : 5;
+    const scoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 7 : ((100 + achievementAkurasiProdukTermuat) / 2) > 97 ? 6 : 5;
     const scoreAkurasiWaktu = achievementAkurasiWaktu == 'Ok' ? 7 : 5;
     const scoreKomplainMuat = data.total_komplain_muat == 0 ? 7 : 5;
     const scoreRataRata = is_generated_document ? 5 : (scoreAkurasiStock + scoreAkurasiFIFO + scoreAkurasiProdukTermuat + scoreAkurasiWaktu + scoreKomplainMuat) / 5;
 
     const classNameScoreAkurasiStock = achievementAkurasiStock < 97 ? 'red' : achievementAkurasiStock < 100 ? 'yellow' : 'green';
     const classNameScoreAkurasiFIFO = achievementAkurasiFIFO < 97 ? 'red' : achievementAkurasiFIFO < 100 ? 'yellow' : 'green';
-    const classNameScoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 'green' : ((100 + achievementAkurasiProdukTermuat) / 2) < 97 ? 'yellow' : 'red';
+    const classNameScoreAkurasiProdukTermuat = ((100 + achievementAkurasiProdukTermuat) / 2) >= 100 ? 'green' : ((100 + achievementAkurasiProdukTermuat) / 2) > 97 ? 'yellow' : 'red';
     const classNameScoreAkurasiWaktu = achievementAkurasiWaktu == 'Ok' ? 'green' : 'red';
     const classNameScoreKomplainMuat = data.total_komplain_muat == 0 ? 'green' : 'red';
     const classNameScoreRataRata = scoreRataRata < 6 ? 'red' : scoreRataRata < 7 ? 'yellow' : 'green';
