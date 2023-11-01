@@ -9,12 +9,38 @@
 
 <body>
     <div class="date-picker">
-        <select id="year"></select>
-        <select id="month"></select>
         <select id="date"></select>
-        <div id="result"></div>
+        <select id="month"></select>
+        <select id="year"></select>
     </div>
+    <div id="result"></div>
     <script src="compiledFromTs.js"></script>
 </body>
+
+<style>
+    .date-picker {
+        display: flex;
+    }
+
+    select::-ms-expand {
+        display: none;
+    }
+    select {
+        display: inline-block;
+        box-sizing: border-box;
+        padding: 0.4em 2em 0.4em 0.4em;
+        border: 1px solid gainsboro;
+        font: inherit;
+        line-height: inherit;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        -ms-appearance: none;
+        appearance: none;
+        background-repeat: no-repeat;
+        background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%);
+        background-position: right 15px top 1em, right 10px top 1em;
+        background-size: 5px 5px, 5px 5px;
+    }
+</style>
 
 </html>
