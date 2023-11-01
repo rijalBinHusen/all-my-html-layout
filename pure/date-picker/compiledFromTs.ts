@@ -24,7 +24,7 @@
 
             getDates() {
                 let dates = <number[]>[]
-                for (let date = 1; date < this.lastDate; date++) {
+                for (let date = 1; date <= this.lastDate; date++) {
 
                     dates.push(date)
                 }
@@ -57,6 +57,18 @@
                 this.firstDate = 1;
                 this.lastDate = lastDay.getDate();
             }
+
+            getCurrentDate() {
+                return this.date.getDate();
+            }
+
+            getCurrentMonth(){
+                return this.date.getMonth();
+            }
+
+            getCurrentFullYear() {
+                return this.date.getFullYear();
+            }
         }
 
         let myDate = new DatePicker();
@@ -73,27 +85,54 @@
             renderMonth() {
                 this.monthElm.innerHTML = "";
                 const months = myDate.getMonths();
+                const currentMonth = myDate.getCurrentMonth();
 
                 for(let month of months) {
                     let optionElm = document.createElement('option');
                     optionElm.value = month.number + '';
                     optionElm.innerHTML = month.name;
 
+                    if(currentMonth === month.number) {
+                        optionElm.setAttribute('selected', 'selected')
+                    }
+
                     this.monthElm.appendChild(optionElm);
                 }
+
+                this.monthElm.addEventListener('change', () => {
+                    this.changeMonth();
+                })
             }
 
             renderDates() {
                 this.dateElm.innerHTML = "";
                 const dates = myDate.getDates();
+                const currentDate = myDate.getCurrentDate();
 
                 for(let date of dates) {
                     let optionElm = document.createElement('option');
                     optionElm.value = date + '';
                     optionElm.innerHTML = date + '';
 
+                    if(currentDate === date) {
+                        optionElm.setAttribute('selected', 'selected')
+                    }
+
                     this.dateElm.appendChild(optionElm);
                 }
+            }
+
+            changeMonth() {
+                const month = document.getElementById("month") as HTMLSelectElement;
+                myDate.setMonth(Number(month.value));
+                this.renderDates();
+                this.showResult();
+                console.log(this)
+            }
+
+            showResult() {
+                const result = document.getElementById("result") as HTMLDivElement;
+                result.innerHTML = myDate.date + "";
             }
         }
         
