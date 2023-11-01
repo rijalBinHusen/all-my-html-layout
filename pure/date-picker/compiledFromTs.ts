@@ -3,9 +3,11 @@
             date: Date;
             firstDate: number;
             lastDate: number;
-            constructor() {
-                this.date = new Date()
+            yearLimit: number;
+            constructor(yearLimit: number) {
+                this.date = new Date();
                 this.setFirstAndLastDate();
+                this.yearLimit = yearLimit;
             }
 
             setDate(yourDate: number) {
@@ -69,17 +71,47 @@
             getCurrentFullYear() {
                 return this.date.getFullYear();
             }
+
+            getYears() {
+                let result = <number[]>[];
+                let fullYearLimit = this.getCurrentFullYear() + this.yearLimit;
+                let lastYear = this.getCurrentFullYear() > fullYearLimit
+                                ? this.getCurrentFullYear()
+                                : fullYearLimit;
+                let firstYear = this.getCurrentFullYear() < fullYearLimit
+                                ? this.getCurrentFullYear()
+                                : fullYearLimit;
+
+                for(let year = firstYear; year <= lastYear; year++) {
+                    result.push(year);
+                }
+                return result;
+            }
         }
 
-        let myDate = new DatePicker();
+        let myDate = new DatePicker(14);
 
         class Dom {
             dateElm: HTMLSelectElement;
             monthElm: HTMLSelectElement;
+            yearElm: HTMLSelectElement;
             constructor() {
 
                 this.dateElm = document.getElementById("date") as HTMLSelectElement;
-                this.monthElm = document.getElementById("month")  as HTMLSelectElement;
+                this.monthElm = document.getElementById("month") as HTMLSelectElement;
+                this.yearElm = document.getElementById("year") as HTMLSelectElement;
+
+                this.dateElm.addEventListener('change', () => {
+                    this.changeDate();
+                })
+                
+                this.monthElm.addEventListener('change', () => {
+                    this.changeMonth();
+                })
+                
+                this.yearElm.addEventListener('change', () => {
+                    this.changeYear();
+                })
             }
 
             renderMonth() {
@@ -98,10 +130,25 @@
 
                     this.monthElm.appendChild(optionElm);
                 }
+                
+            }
 
-                this.monthElm.addEventListener('change', () => {
-                    this.changeMonth();
-                })
+            renderYears() {
+                this.yearElm.innerHTML = "";
+                const years = myDate.getYears();
+                const currentYear = myDate.getCurrentFullYear();
+
+                for(let year of years) {
+                    let optionElm = document.createElement('option');
+                    optionElm.value = year + '';
+                    optionElm.innerHTML = year + '';
+
+                    if(currentYear === year) {
+                        optionElm.setAttribute('selected', 'selected')
+                    }
+
+                    this.yearElm.appendChild(optionElm);
+                }
             }
 
             renderDates() {
@@ -127,12 +174,25 @@
                 myDate.setMonth(Number(month.value));
                 this.renderDates();
                 this.showResult();
-                console.log(this)
+            }
+
+            changeYear() {
+                const month = document.getElementById("year") as HTMLSelectElement;
+                myDate.setYear(Number(month.value));
+                this.renderDates();
+                this.renderMonth();
+                this.showResult();
+            }
+
+            changeDate() {
+                const month = document.getElementById("date") as HTMLSelectElement;
+                myDate.setDate(Number(month.value));
+                this.showResult();
             }
 
             showResult() {
                 const result = document.getElementById("result") as HTMLDivElement;
-                result.innerHTML = myDate.date + "";
+                result.innerHTML = myDate.date.toLocaleString("id-ID");
             }
         }
         
@@ -140,3 +200,4 @@
 
         theDom.renderMonth();
         theDom.renderDates();
+        theDom.renderYears();
