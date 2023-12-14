@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="scroller">
+        <div class="container">
+            <div id="d1"></div>
+            <div id="d2"></div>
+            <div id="d3"></div>
+            <div id="d4"></div>
+            <div id="d5"></div>
+            <div id="d6"></div>
+            <div id="d7"></div>
+            <!-- ... -->
+        </div>
+    </div>
+    <button>Scroll to: </button> <input type="text" value="4" />
+
+    <script>
+
+        const btn = document.querySelector("button");
+        const inputElm = document.querySelector("input");
+        const scroller = document.querySelector(".scroller");
+
+        function scrollToElement() {
+            const elmIdToScroll = inputElm.value;
+
+            const elmToScroll = document.getElementById('d' + elmIdToScroll);
+            // change background
+            elmToScroll.style.backgroundColor = "#9f3";
+            // change position
+            const scrollPosition = elmToScroll.getBoundingClientRect().left;
+
+            scroller.scrollLeft = scrollPosition;
+
+        }
+
+        btn.addEventListener("click", scrollToElement)
+
+    </script>
+</body>
+
+<style>
+    .scroller {
+        width: 300px;
+        height: 100px;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
+
+    .container {
+        position: relative;
+        /*important for the .position() method */
+        height: 100px;
+        width: 770px;
+    }
+
+    .container div {
+        height: 90px;
+        width: 60px;
+        float: left;
+        margin: 5px;
+        background: #39f;
+    }
+</style>
+
+</html>
