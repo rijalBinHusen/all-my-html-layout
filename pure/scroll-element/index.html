@@ -10,20 +10,20 @@
 <body>
     <div class="scroller">
 
-        <a class="prev">❮</a>
+        <a class="prev" onclick="prevElement()">❮</a>
         <div class="container">
 
-            <div id="d1"></div>
-            <div id="d2"></div>
-            <div id="d3"></div>
-            <div id="d4"></div>
-            <div id="d5"></div>
-            <div id="d6"></div>
-            <div id="d7"></div>
+            <div class="list-element" id="d1">1</div>
+            <div class="list-element" id="d2">2</div>
+            <div class="list-element" id="d3">3</div>
+            <div class="list-element" id="d4">4</div>
+            <div class="list-element" id="d5">5</div>
+            <div class="list-element" id="d6">6</div>
+            <div class="list-element" id="d7">7</div>
             <!-- ... -->
         </div>
 
-        <a class="next">❯</a>
+        <a class="next" onclick="nextElement()">❯</a>
     </div>
     <div>
 
@@ -39,13 +39,37 @@
         function scrollToElement() {
             const elmIdToScroll = inputElm.value;
 
+            const allElement = document.querySelectorAll(".list-element");
+
+            allElement.forEach((elm) => elm.classList.remove("active"))
+
             const elmToScroll = document.getElementById('d' + elmIdToScroll);
             // change background
-            elmToScroll.style.backgroundColor = "#9f3";
+            elmToScroll.classList.add('active');
             // change position
             const scrollPosition = elmToScroll.getBoundingClientRect().left;
+            console.log('currentElm: d' + elmIdToScroll, 'position: ', scrollPosition)
 
             scroller.scrollLeft = scrollPosition;
+
+        }
+
+        function nextElement() {
+            const elmIdToScroll = inputElm.value;
+
+            if (elmIdToScroll == 7) inputElm.value = 1;
+            else inputElm.value = Number(elmIdToScroll) + 1;
+
+            btn.click();
+
+        }
+
+        function prevElement() {
+            const elmIdToScroll = inputElm.value;
+
+            if (elmIdToScroll != 1) inputElm.value = Number(elmIdToScroll) - 1;
+
+            btn.click();
 
         }
 
@@ -71,12 +95,19 @@
         width: 770px;
     }
 
-    .container div {
+    .list-element {
         height: 90px;
         width: 60px;
         float: left;
         margin: 5px;
-        background: #39f;
+        border: 1px solid black;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .active {
+        background-color: #9f3;
     }
 
 
