@@ -9,7 +9,10 @@
 
 <body>
     <div class="scroller">
+
+        <a class="prev">❮</a>
         <div class="container">
+
             <div id="d1"></div>
             <div id="d2"></div>
             <div id="d3"></div>
@@ -19,8 +22,13 @@
             <div id="d7"></div>
             <!-- ... -->
         </div>
+
+        <a class="next">❯</a>
     </div>
-    <button>Scroll to: </button> <input type="text" value="4" />
+    <div>
+
+        <button>Scroll to: </button> <input type="text" value="4" />
+    </div>
 
     <script>
 
@@ -52,10 +60,12 @@
         height: 100px;
         overflow-x: auto;
         overflow-y: hidden;
+        display: grid;
+        align-items: center;
     }
 
     .container {
-        position: relative;
+        /* position: relative; */
         /*important for the .position() method */
         height: 100px;
         width: 770px;
@@ -67,6 +77,35 @@
         float: left;
         margin: 5px;
         background: #39f;
+    }
+
+
+    /* Next & previous buttons */
+    .prev,
+    .next {
+        cursor: pointer;
+        position: absolute;
+        /* top: 50%; */
+        width: auto;
+        padding: 6px;
+        color: black;
+        font-weight: bold;
+        font-size: 18px;
+        transition: 0.6s ease;
+        border-radius: 0 3px 3px 0;
+        user-select: none;
+    }
+
+    /* Position the "next button" to the right */
+    .next {
+        right: 550px;
+        border-radius: 3px 0 0 3px;
+    }
+
+    /* On hover, add a black background color with a little bit see-through */
+    .prev:hover,
+    .next:hover {
+        background-color: gray;
     }
 </style>
 
