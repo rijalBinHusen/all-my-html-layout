@@ -177,13 +177,13 @@ function templateDataToRender(data: dailyReport): reportToRender {
     let periodeToLocaleString = Number(data.periode) > 0 ? new Date(Number(data.periode)).toLocaleDateString("id-ID") : data.periode;
 
     const is_generated_document = data?.is_generated_document == "1";
-    if(is_generated_document) {
+    if (is_generated_document) {
         periodeToLocaleString = periodeToLocaleString + ` (${data.document_info})`;
     }
 
-    const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100;
-    const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100;
-    const achievementAkurasiProdukTermuat = (data.total_qty_out / (Number(data.total_qty_out) + Number(data.plan_out))) * 100;
+    const achievementAkurasiStock = ((data.total_item_moving - data.item_variance) / data.total_item_moving) * 100 || 100;
+    const achievementAkurasiFIFO = ((data.total_item_keluar - data.total_product_not_FIFO) / data.total_item_keluar) * 100 || 100;
+    const achievementAkurasiProdukTermuat = (data.total_qty_out / (Number(data.total_qty_out) + Number(data.plan_out))) * 100 || 100;
     const achievementAkurasiWaktu = (data.total_qty_out / 10) < data.total_waktu ? "Not Ok" : "Ok";
 
     const scoreAkurasiStock = achievementAkurasiStock < 97 ? 5 : achievementAkurasiStock < 100 ? 6 : 7;
@@ -448,12 +448,12 @@ async function reRenderData() {
     const bagianElm = document.getElementById("bagian");
     const periodeElm = document.getElementById("periode");
 
-    if(PICElm !== null && bagianElm !== null && periodeElm !== null) {
+    if (PICElm !== null && bagianElm !== null && periodeElm !== null) {
         PICElm.innerText = dataFromServer.info.PIC_name;
         bagianElm.innerText = dataFromServer.info.bagian;
 
         const dateStart = intepretDataFromServer[0].date_report.toString().split(" ")[0];
-        const dateEnd = intepretDataFromServer[intepretDataFromServer.length -2].date_report.toString().split(" ")[0];
+        const dateEnd = intepretDataFromServer[intepretDataFromServer.length - 2].date_report.toString().split(" ")[0];
 
         periodeElm.innerText = `${dateStart} Sampai dengan ${dateEnd}`;
     }
