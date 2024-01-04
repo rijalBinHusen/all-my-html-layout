@@ -348,6 +348,9 @@ function renderData() {
         reportWrapper.appendChild(divElmReportWraper);
     }
 
+    // there is no problem
+    if (!problems.length) return
+
     const elmDivProblem = document.createElement("div");
     elmDivProblem.setAttribute("class", "report-problem");
 
