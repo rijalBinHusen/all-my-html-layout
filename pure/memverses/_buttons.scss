@@ -1,0 +1,15 @@
+@import "variables"; // Import global variables
+
+button {
+    background-color: $primary-color;
+    color: $secondary-color;
+    border: none;
+    padding: $spacing-unit;
+    font-family: $font-family-sans-serif;
+    font-size: $font-size-base;
+    cursor: pointer;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
+}
