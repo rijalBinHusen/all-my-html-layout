@@ -6,15 +6,20 @@ header {
     font-size: 40px;
     margin-bottom: 10px; }
 
-button {
-  background-color: #415edd;
-  color: #f5f5f5;
-  border: none;
-  padding: 10px;
+.button {
+  color: #415edd;
+  border: 1px solid #415edd;
+  padding: 5px 15px 5px 15px;
   font-family: "Roboto", sans-serif;
   font-size: 16px;
-  cursor: pointer; }
-  button:hover {
+  cursor: pointer;
+  border-radius: .2rem; }
+  .button:hover {
     background-color: gainsboro; }
+
+.container {
+  display: grid;
+  align-content: center;
+  justify-content: center; }
 
 /*# sourceMappingURL=home.css.map */
