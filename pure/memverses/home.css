@@ -38,8 +38,26 @@ body {
   font-size: 16px;
   font-weight: bolder;
   cursor: pointer;
-  border-radius: .2rem; }
+  border-radius: 0.2rem; }
   .folder button:hover {
     background-color: gainsboro; }
+
+.bottom-nav {
+  display: flex;
+  position: fixed;
+  bottom: 30px;
+  justify-content: end;
+  max-width: 1024px;
+  min-width: 768px; }
+  .bottom-nav button {
+    padding: .3rem .8rem .3rem .8rem;
+    font-size: x-large;
+    font-weight: bolder;
+    background-color: #415edd;
+    color: #f5f5f5;
+    border-radius: 0.2rem; }
+    .bottom-nav button:hover {
+      background-color: #f5f5f5;
+      color: #415edd; }
 
 /*# sourceMappingURL=home.css.map */
