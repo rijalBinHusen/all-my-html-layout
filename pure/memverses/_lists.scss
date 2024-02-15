@@ -10,8 +10,25 @@
     place-items: center;
     font-weight: normal;
     cursor: pointer;
+
+    &:hover {
+        background-color: $secondary-color;
+        color: $primary-color;
+        font-weight: bolder;
+    }
 }
 
-.folder:hover {
-    background-color: $primary-color;
+.folder button {
+    color: $primary-color;
+    border: 2px solid $primary-color;
+    padding: 5px 15px 5px 15px;
+    font-family: $font-family-sans-serif;
+    font-size: $font-size-base;
+    font-weight: bolder;
+    cursor: pointer;
+    border-radius: .2rem;
+
+    &:hover {
+        background-color: darken($secondary-color, 10%);
+    }
 }
