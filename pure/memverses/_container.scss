@@ -1,5 +1,10 @@
-.container {
+body {
     display: grid;
     align-content: center;
     justify-content: center;
+}
+
+.container {
+    max-width: 1024px;
+    min-width: 768px;
 }
