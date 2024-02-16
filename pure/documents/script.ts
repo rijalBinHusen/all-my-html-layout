@@ -92,45 +92,51 @@ function renderData(data: data[]) {
         let documents = document.createElement("table");
         
         const thead = document.createElement("thead")
+        const trHead = document.createElement("tr");
+
         const th1 = document.createElement("th");
         th1.innerHTML = "Tanggal"
-        thead.appendChild(th1)
+        trHead.appendChild(th1)
 
         const th2 = document.createElement("th");
         th2.innerHTML = "Gudang"
-        thead.appendChild(th2)
+        trHead.appendChild(th2)
 
         const th3 = document.createElement("th");
         th3.innerHTML = "Selisih hari"
-        thead.appendChild(th3)
+        trHead.appendChild(th3)
+
+        thead.appendChild(trHead);
 
         // append th to table
         documents.append(thead);
 
+        const tbody = document.createElement("tbody");
         // create td for table body
         for(let documentData of datum.documents) {
             const periode = new Date(documentData.date).getTime();
             const current = new Date().getTime();
             const varianceDay = Math.floor((current - periode) / (1000 * 60 * 60 * 24));
 
-            const tbody = document.createElement("tbody");
+            const trBody = document.createElement("tr");
 
             const td1 = document.createElement("td");
             td1.innerHTML = documentData.date;
-            tbody.appendChild(td1)
+            trBody.appendChild(td1)
 
             const td2 = document.createElement("td");
             td2.innerHTML = documentData.warehouse;
-            tbody.appendChild(td2)
+            trBody.appendChild(td2)
 
             const td3 = document.createElement("td");
             td3.innerHTML = `H+ ${varianceDay} Hari`;
-            tbody.appendChild(td3)
+            trBody.appendChild(td3)
 
             // append td to table
-            documents.append(tbody)
+            tbody.append(trBody)
         }
         
+        documents.appendChild(tbody);
         body.append(documents);
         // append table to body
     }
