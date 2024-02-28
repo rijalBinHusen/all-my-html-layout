@@ -76,8 +76,10 @@ async function startFetch(date1, date2) {
             if (isItemOnResult) {
                 const isDateExists = result[findIndex].date_expired.includes(dateExpired);
                 // date doesn't exists
-                if (!isDateExists)
+                if (!isDateExists) {
+                    result[findIndex].oldest_date = greatestDate(dateExpired, result[findIndex].oldest_date);
                     result[findIndex].date_expired.push(dateExpired);
+                }
             }
             // item doesn't exists
             else {
@@ -90,7 +92,8 @@ async function startFetch(date1, date2) {
                     item_kode,
                     shift,
                     selesai_muat: detail.hdr.selesai_muat,
-                    gudang: detail.hdr.gudang
+                    gudang: detail.hdr.gudang,
+                    oldest_date: dateExpired
                 });
             }
         }
@@ -127,4 +130,29 @@ function convertToDateCreatedGoods(yourDate) {
     }
     // return number / month now / year now
     return `${dateInput}/${monthNow}/${year}`;
+}
+function greatestDate(date1, date2) {
+    const date1Splited = date1.split("/");
+    const date2Splited = date2.split("/");
+    // compare date and month
+    const isDate1Greater = date1Splited[0] > date2Splited[0] && date1Splited[1] >= date2Splited[1];
+    return isDate1Greater ? date1 : date2;
+}
+const test = [
+    { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
+    { date_expect: "23/2/24", test: greatestDate("23/2/24", "8/2/24") },
+    { date_expect: "21/2/24", test: greatestDate("21/2/24", "8/2/24") },
+    { date_expect: "20/2/24", test: greatestDate("20/2/24", "8/2/24") },
+    { date_expect: "16/2/24", test: greatestDate("16/2/24", "8/2/24") },
+    { date_expect: "24/3/24", test: greatestDate("21/3/24", "24/3/24") },
+    { date_expect: "21/2/24", test: greatestDate("26/1/24", "21/2/24") },
+    { date_expect: "24/2/24", test: greatestDate("31/1/24", "24/2/24") },
+    { date_expect: "26/4/24", test: greatestDate("23/4/24", "26/4/24") },
+    { date_expect: "28/5/24", test: greatestDate("24/3/24", "28/5/24") },
+    { date_expect: "31/3/24", test: greatestDate("24/2/24", "31/3/24") },
+    { date_expect: "12/7/24", test: greatestDate("23/6/24", "12/7/24") },
+    { date_expect: "14/8/24", test: greatestDate("23/5/24", "14/8/24") },
+];
+for (let t of test) {
+    console.log(t.test === t.test);
 }
