@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div id="display"></div>
+    <input type="text" name="" id="start">
+    <input type="text" name="" id="end">
+    <button id="btn">Mulai</button>
+    
+<!-- <script src="index.js" type="javascript"></script> -->
+<!-- <script type="module" crossorigin="" src="index.js"></script> -->
+<script src="index.js"></script>
+<script type="text/javascript">
+    function startProses () {
+        const startDate = document.getElementById("start");
+        const endDate = document.getElementById("end");
+
+        const start = startDate.value;
+        const end = endDate.value;
+
+        startFetch(start, end);
+    }
+
+function init () {
+    const btn = document.getElementById("btn");
+    btn.addEventListener("click", startProses);
+}
+
+init()
+</script>
+</body>
+</html>
