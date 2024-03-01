@@ -132,6 +132,7 @@ interface result {
     karu: string
     qty: number
     no_pol: string
+    catatan: string
 }
 
 interface list_item_out {
@@ -273,6 +274,7 @@ async function startFetch(date1: string, date2: string) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
+                catatan: item.note
             })
             
         }
