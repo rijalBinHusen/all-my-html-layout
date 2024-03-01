@@ -1,6 +1,8 @@
 async function startFetch(date1, date2) {
     let result = [];
-    const retrieve_history = await fetch(`${location.origin}/warehouse/history/get_list_muat?tgl1=${date1}&tgl2=${date2}&nodo=&checklist=&tally=&src=1&flag=2`, {
+    // report/get_list_item_out?tgl1=2024-02-29&tgl2=2024-02-29&nodo=&item_tgl1=2024-02-29&item_tgl2=2024-02-29&item_name=&item_id=&src=1
+    // const retrieve_history = await fetch(`${location.origin}/warehouse/history/get_list_muat?tgl1=${date1}&tgl2=${date2}&nodo=&checklist=&tally=&src=1&flag=2`, {
+    const retrieve_history = await fetch(`${location.origin}/warehouse/report/get_list_item_out?tgl1=${date1}&tgl2=${date2}&nodo=&item_tgl1=${date1}&item_tgl2=${date2}&item_name=&item_id=&src=1`, {
         "headers": {
             "accept": "application/json, text/javascript, */*; q=0.01",
             "accept-language": "en-US,en;q=0.9",
@@ -28,9 +30,8 @@ async function startFetch(date1, date2) {
     for (let out of groupingOutput) {
         timer += 70;
         await new Promise(resolve => setTimeout(resolve, timer));
-        if (timer >= 5000) {
+        if (timer >= 5000)
             timer = 700;
-        }
         count++;
         console.log(`mendapatkan data ${count} dari ${groupingOutput.length}`);
         const retrieve_detail = await fetch(`${location.origin}/warehouse/history/detail_muat?nodo=${out.nodo}&sysdo=${out.sysdo}&id_muat=${out.id_muat}`, {
@@ -68,42 +69,33 @@ async function startFetch(date1, date2) {
                     date_details.setDate(date_details.getDate() - 1);
                 }
             }
-            const dateTransaction = date_details.toISOString().slice(0, 10);
-            // is item exists
-            const findIndex = result.findIndex((res) => res.date_transaction === dateTransaction && res.item_kode === detail.dtl[0].itemid && res.shift === shift);
-            const isItemOnResult = findIndex > -1;
+            const dateTransaction = date_details.toLocaleDateString("id-ID");
             const dateExpired = convertToDateCreatedGoods(item.expired);
-            if (isItemOnResult) {
-                const isDateExists = result[findIndex].date_expired.includes(dateExpired);
-                // date doesn't exists
-                if (!isDateExists) {
-                    result[findIndex].oldest_date = greatestDate(dateExpired, result[findIndex].oldest_date);
-                    result[findIndex].date_expired.push(dateExpired);
-                }
-            }
-            // item doesn't exists
-            else {
-                const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
-                const item_kode = detail.dtl[findItemIdIndex].itemid;
-                result.push({
-                    id: result.length,
-                    date_expired: [dateExpired],
-                    date_transaction: dateTransaction,
-                    item_kode,
-                    shift,
-                    selesai_muat: detail.hdr.selesai_muat,
-                    gudang: detail.hdr.gudang,
-                    oldest_date: dateExpired
-                });
-            }
+            const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
+            const item_kode = detail.dtl[findItemIdIndex].itemid;
+            const item_name = detail.dtl[findItemIdIndex].description;
+            result.push({
+                id: result.length,
+                date_transaction: dateTransaction,
+                gudang: detail.hdr.gudang,
+                mulai_muat: detail.hdr.jam_muat,
+                selesai_muat: detail.hdr.selesai_muat,
+                shift,
+                item_kode,
+                item_name,
+                date_expired: dateExpired,
+                tally: item.created_by,
+                karu: out.update_by,
+            });
         }
     }
     if (!result.length)
         return;
-    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}.json`;
-    const jsonStr = JSON.stringify(result);
+    const convertedToCSV = objToCsv(result);
+    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}.csv`;
+    // const jsonStr = JSON.stringify(convertedToCSV);
     let element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonStr));
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(convertedToCSV));
     element.setAttribute('download', filename);
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -138,21 +130,26 @@ function greatestDate(date1, date2) {
     const isDate1Greater = date1Splited[0] > date2Splited[0] && date1Splited[1] >= date2Splited[1];
     return isDate1Greater ? date1 : date2;
 }
-const test = [
-    { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
-    { date_expect: "23/2/24", test: greatestDate("23/2/24", "8/2/24") },
-    { date_expect: "21/2/24", test: greatestDate("21/2/24", "8/2/24") },
-    { date_expect: "20/2/24", test: greatestDate("20/2/24", "8/2/24") },
-    { date_expect: "16/2/24", test: greatestDate("16/2/24", "8/2/24") },
-    { date_expect: "24/3/24", test: greatestDate("21/3/24", "24/3/24") },
-    { date_expect: "21/2/24", test: greatestDate("26/1/24", "21/2/24") },
-    { date_expect: "24/2/24", test: greatestDate("31/1/24", "24/2/24") },
-    { date_expect: "26/4/24", test: greatestDate("23/4/24", "26/4/24") },
-    { date_expect: "28/5/24", test: greatestDate("24/3/24", "28/5/24") },
-    { date_expect: "31/3/24", test: greatestDate("24/2/24", "31/3/24") },
-    { date_expect: "12/7/24", test: greatestDate("23/6/24", "12/7/24") },
-    { date_expect: "14/8/24", test: greatestDate("23/5/24", "14/8/24") },
-];
-for (let t of test) {
-    console.log(t.test === t.test);
+function objToCsv(data) {
+    const headers = Object.keys(data[0]).join();
+    const content = data.map(r => Object.values(r).join());
+    return [headers].concat(content).join("\n");
 }
+// const test = [
+//     { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
+//     { date_expect: "23/2/24", test: greatestDate("23/2/24", "8/2/24") },
+//     { date_expect: "21/2/24", test: greatestDate("21/2/24", "8/2/24") },
+//     { date_expect: "20/2/24", test: greatestDate("20/2/24", "8/2/24") },
+//     { date_expect: "16/2/24", test: greatestDate("16/2/24", "8/2/24") },
+//     { date_expect: "24/3/24", test: greatestDate("21/3/24", "24/3/24") },
+//     { date_expect: "21/2/24", test: greatestDate("26/1/24", "21/2/24") },
+//     { date_expect: "24/2/24", test: greatestDate("31/1/24", "24/2/24") },
+//     { date_expect: "26/4/24", test: greatestDate("23/4/24", "26/4/24") },
+//     { date_expect: "28/5/24", test: greatestDate("24/3/24", "28/5/24") },
+//     { date_expect: "31/3/24", test: greatestDate("24/2/24", "31/3/24") },
+//     { date_expect: "12/7/24", test: greatestDate("23/6/24", "12/7/24") },
+//     { date_expect: "14/8/24", test: greatestDate("23/5/24", "14/8/24") },
+// ]
+// for (let t of test) {
+//     console.log(t.test === t.test)
+// }
