@@ -73,16 +73,19 @@ async function startFetch(date1, date2) {
             const dateExpired = convertToDateCreatedGoods(item.expired);
             const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
             const item_kode = detail.dtl[findItemIdIndex].itemid;
-            const item_name = detail.dtl[findItemIdIndex].description;
+            // @ts-ignore
+            const item_name = detail.dtl[findItemIdIndex].description.replaceAll(",", "");
             result.push({
-                id: result.length,
                 date_transaction: dateTransaction,
+                no_do: out.nodo,
+                no_pol: detail.hdr.nopol,
                 gudang: detail.hdr.gudang,
+                shift,
                 mulai_muat: detail.hdr.jam_muat,
                 selesai_muat: detail.hdr.selesai_muat,
-                shift,
                 item_kode,
                 item_name,
+                qty: Number(item.qty),
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,

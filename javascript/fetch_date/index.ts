@@ -119,7 +119,7 @@ interface detailResponse {
 }
 
 interface result {
-    id: number,
+    no_do: string,
     date_transaction: string,
     shift: number
     item_kode: string,
@@ -130,6 +130,8 @@ interface result {
     gudang: string
     tally: string
     karu: string
+    qty: number
+    no_pol: string
 }
 
 interface list_item_out {
@@ -254,20 +256,23 @@ async function startFetch(date1: string, date2: string) {
 
             const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
             const item_kode = detail.dtl[findItemIdIndex].itemid;
-            const item_name = detail.dtl[findItemIdIndex].description;
+            // @ts-ignore
+            const item_name = detail.dtl[findItemIdIndex].description.replaceAll(",", "");
 
             result.push({
-                id: result.length,
-                date_expired: dateExpired,
                 date_transaction: dateTransaction,
-                item_kode,
-                shift,
-                selesai_muat: detail.hdr.selesai_muat,
+                no_do: out.nodo,
+                no_pol: detail.hdr.nopol,
                 gudang: detail.hdr.gudang,
+                shift,
+                mulai_muat: detail.hdr.jam_muat,
+                selesai_muat: detail.hdr.selesai_muat,
+                item_kode,
                 item_name,
+                qty: Number(item.qty),
+                date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
-                mulai_muat: detail.hdr.jam_muat
             })
             
         }
