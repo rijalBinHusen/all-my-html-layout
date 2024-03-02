@@ -133,6 +133,7 @@ interface result {
     qty: number
     no_pol: string
     catatan: string
+    fifo_or_not_fifo: string
 }
 
 interface list_item_out {
@@ -274,20 +275,59 @@ async function startFetch(date1: string, date2: string) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
-                catatan: item.note
+                catatan: item.note,
+                fifo_or_not_fifo: "FIFO"
             })
             
         }
     }
 
+    // sort by item kode
+    // sort by end loading
+    // @ts-ignore
+    result.sort(function(a, b)  {
+        // Sort by count
+        const mulaiMuatA = new Date(a.mulai_muat);
+        const mulaiMuatB = new Date(b.mulai_muat);
+        var dCount = mulaiMuatA.getTime() - mulaiMuatB.getTime();
+        if(dCount) return dCount;
+    
+        let x = a.item_kode.toLowerCase();
+        let y = b.item_kode.toLowerCase();
+        if (x < y) {return -1;}
+        if (x > y) {return 1;}
+        return 0;
+    });
+
+    // find fifo or not fifo
+    // if expired_date[0] > expired_date[1] 'not fifo'
+    for (let out of result) {
+        const findRerod = result.find((rec) => rec.item_kode === out.item_kode);
+
+        if(findRerod) {
+
+            const firstExpired = new Date(findRerod.date_expired).getTime();
+            const currExpired = new Date(out.date_expired).getTime();
+
+            if(currExpired > firstExpired) {
+                out.fifo_or_not_fifo = "Not FIFO"
+            }
+        }
+    }
+
+
     if (!result.length) return;
 
     const convertedToCSV = objToCsv(result);
-    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}.csv`;
-    // const jsonStr = JSON.stringify(convertedToCSV);
+    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}`;
+    downloadAsFile(convertedToCSV, filename + ".csv");
+    downloadAsFile(JSON.stringify(result), filename + ".json")
+}
 
+function downloadAsFile(object: string, filename: string) {
+    
     let element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(convertedToCSV));
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(object));
     element.setAttribute('download', filename);
 
     element.style.display = 'none';
@@ -331,7 +371,7 @@ function greatestDate(date1: string, date2: string) {
     return isDate1Greater ? date1 : date2
 }
 
-function objToCsv(data) {
+function objToCsv(data: any) {
     const headers = Object.keys(data[0]).join();
     const content = data.map(r => Object.values(r).join());
     return [headers].concat(content).join("\n");

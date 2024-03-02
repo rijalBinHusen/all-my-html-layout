@@ -89,16 +89,42 @@ async function startFetch(date1, date2) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
+                catatan: item.note
             });
         }
     }
+    // sort by item kode
+    // sort by end loading
+    // @ts-ignore
+    result.sort(function (a, b) {
+        // Sort by count
+        const mulaiMuatA = new Date(a.mulai_muat);
+        const mulaiMuatB = new Date(b.mulai_muat);
+        var dCount = mulaiMuatA.getTime() - mulaiMuatB.getTime();
+        if (dCount)
+            return dCount;
+        let x = a.item_kode.toLowerCase();
+        let y = b.item_kode.toLowerCase();
+        if (x < y) {
+            return -1;
+        }
+        if (x > y) {
+            return 1;
+        }
+        return 0;
+    });
+    // find fifo or not fifo
+    // if expired_date[0] > expired_date[1] 'not fifo'
     if (!result.length)
         return;
     const convertedToCSV = objToCsv(result);
-    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}.csv`;
-    // const jsonStr = JSON.stringify(convertedToCSV);
+    const filename = `Tanggal expired transaksi ${date1} sampai dengan ${date2}`;
+    downloadAsFile(convertedToCSV, filename + ".csv");
+    downloadAsFile(JSON.stringify(result), filename + ".json");
+}
+function downloadAsFile(object, filename) {
     let element = document.createElement('a');
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(convertedToCSV));
+    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(object));
     element.setAttribute('download', filename);
     element.style.display = 'none';
     document.body.appendChild(element);
