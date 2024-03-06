@@ -311,7 +311,7 @@ async function startFetch(date1: string, date2: string) {
             const firstExpired = new Date(findRerod.date_expired).getTime();
             const currExpired = new Date(out.date_expired).getTime();
 
-            if(currExpired > firstExpired) {
+            if(currExpired < firstExpired) {
                 out.fifo_or_not_fifo = "Not FIFO"
             }
         }
