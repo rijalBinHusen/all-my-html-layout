@@ -89,7 +89,7 @@ async function startFetch(date1, date2) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
-                catatan: item.note,
+                catatan: item.note.replaceAll(",", ""),
                 fifo_or_not_fifo: "FIFO",
                 real_date: item.expired
             });
