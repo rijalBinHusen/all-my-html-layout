@@ -125,6 +125,7 @@ interface result {
     item_kode: string,
     item_name: string
     date_expired: string
+    real_date: string
     mulai_muat: string
     selesai_muat: string,
     gudang: string
@@ -276,7 +277,8 @@ async function startFetch(date1: string, date2: string) {
                 tally: item.created_by,
                 karu: out.update_by,
                 catatan: item.note,
-                fifo_or_not_fifo: "FIFO"
+                fifo_or_not_fifo: "FIFO",
+                real_date: item.expired
             })
             
         }

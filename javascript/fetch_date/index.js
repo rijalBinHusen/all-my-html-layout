@@ -89,7 +89,9 @@ async function startFetch(date1, date2) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
-                catatan: item.note
+                catatan: item.note,
+                fifo_or_not_fifo: "FIFO",
+                real_date: item.expired
             });
         }
     }
@@ -115,6 +117,16 @@ async function startFetch(date1, date2) {
     });
     // find fifo or not fifo
     // if expired_date[0] > expired_date[1] 'not fifo'
+    for (let out of result) {
+        const findRerod = result.find((rec) => rec.item_kode === out.item_kode);
+        if (findRerod) {
+            const firstExpired = new Date(findRerod.date_expired).getTime();
+            const currExpired = new Date(out.date_expired).getTime();
+            if (currExpired > firstExpired) {
+                out.fifo_or_not_fifo = "Not FIFO";
+            }
+        }
+    }
     if (!result.length)
         return;
     const convertedToCSV = objToCsv(result);
