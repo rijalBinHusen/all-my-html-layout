@@ -89,7 +89,7 @@ async function startFetch(date1, date2) {
                 date_expired: dateExpired,
                 tally: item.created_by,
                 karu: out.update_by,
-                catatan: item.note.replaceAll(",", ""),
+                catatan: item.note.replaceAll(",", "."),
                 fifo_or_not_fifo: "FIFO",
                 real_date: item.expired
             });
@@ -118,10 +118,13 @@ async function startFetch(date1, date2) {
     // find fifo or not fifo
     // if expired_date[0] > expired_date[1] 'not fifo'
     for (let out of result) {
-        const findRerod = result.find((rec) => rec.item_kode === out.item_kode);
-        if (findRerod) {
-            const firstExpired = new Date(findRerod.date_expired).getTime();
-            const currExpired = new Date(out.date_expired).getTime();
+        const findIndex = result.findLastIndex((rec) => rec.item_kode === out.item_kode);
+        if (findIndex > -1) {
+            const record = result[findIndex];
+            const firstDateSplit = record.date_expired.split("/");
+            const firstExpired = new Date(`${firstDateSplit[1]}/${firstDateSplit[0]}/24`).getTime();
+            const currExpSplit = out.date_expired.split("/");
+            const currExpired = new Date(`${currExpSplit[1]}/${currExpSplit[0]}/24`).getTime();
             if (currExpired < firstExpired) {
                 out.fifo_or_not_fifo = "Not FIFO";
             }
