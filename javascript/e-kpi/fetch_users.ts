@@ -68,7 +68,7 @@ async function fetch_users(start:number, end: number) {
     const result = <Result[]>[];
 
 
-    for(let i = start; i < end; i++) {
+    for(let i = start; i <= end; i++) {
 
         console.log(`Fetching user ${i} dari ${end}, the timeout is ${timer}ms`);
 

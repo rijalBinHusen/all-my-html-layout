@@ -4,3 +4,4 @@
 .sass-cache
 node_modules
 fetch_users.js
+fetch_report.js
