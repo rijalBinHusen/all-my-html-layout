@@ -2,6 +2,7 @@ async function startFetch(date1, date2) {
     let result = [];
     // report/get_list_item_out?tgl1=2024-02-29&tgl2=2024-02-29&nodo=&item_tgl1=2024-02-29&item_tgl2=2024-02-29&item_name=&item_id=&src=1
     // const retrieve_history = await fetch(`${location.origin}/warehouse/history/get_list_muat?tgl1=${date1}&tgl2=${date2}&nodo=&checklist=&tally=&src=1&flag=2`, {
+    // http://192.168.8.7:8080/warehouse/history/get_list_muat?tgl1=2024-05-07&tgl2=2024-05-07&nodo=&checklist=&tally=&src=1&flag=2
     const retrieve_history = await fetch(`${location.origin}/warehouse/report/get_list_item_out?tgl1=${date1}&tgl2=${date2}&nodo=&item_tgl1=${date1}&item_tgl2=${date2}&item_name=&item_id=&src=1`, {
         "headers": {
             "accept": "application/json, text/javascript, */*; q=0.01",
@@ -34,6 +35,7 @@ async function startFetch(date1, date2) {
             timer = 700;
         count++;
         console.log(`mendapatkan data ${count} dari ${groupingOutput.length}`);
+        // ?action=insert&noDO=${}&register=${}&start=${}&finish=${}&noSO=${}&itemId=${}&qty=${}&nopol=${}&jenisKendaraan=${}&ekspedisi=${}&locationId=${}&userCheck=${}&statusMuat=${}&gudang=${}&dock=${}&shift=${}&lamaMuat=${}&idle=${}&totalQty=${}&idGudang=${}&nextGudang
         const retrieve_detail = await fetch(`${location.origin}/warehouse/history/detail_muat?nodo=${out.nodo}&sysdo=${out.sysdo}&id_muat=${out.id_muat}`, {
             "headers": {
                 "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
@@ -49,6 +51,7 @@ async function startFetch(date1, date2) {
         if (retrieve_detail.status != 200)
             return;
         const detail = await retrieve_detail.json();
+        await sendToGoogleAppScript(out.nodo, detail.hdr.datetime, detail.hdr.jam_muat, detail.hdr.selesai_muat, out.trno, out.itemid, out.description, Number(detail.dtl[0].qty), detail.hdr.nopol, detail.hdr.jenis_kendaraan2, detail.hdr.locid, detail.m_item[0].created_by, detail.hdr.gudang, detail.hdr.dock2, "tidak ditemukan", detail.hdr.tujuan);
         for (let item of detail.m_item) {
             const date_details = detail.hdr.selesai_muat ? new Date(detail.hdr.selesai_muat) : new Date();
             const transaction_clock = date_details.getHours();
@@ -178,6 +181,28 @@ function objToCsv(data) {
     const headers = Object.keys(data[0]).join();
     const content = data.map(r => Object.values(r).join());
     return [headers].concat(content).join("\n");
+}
+const googleScriptURL = "https://script.google.com/macros/s/AKfycbw7QsdSavj5gooDuyiISmDDMMg4y34hSzHxkvXEOV3Y9A5ooXmRRjbTI4TU9X416PHk9A/exec";
+function sendToGoogleAppScript(nodo, register, mulai, selesai, so, item_id, item_description, qty, nopol, jenis_kendaraan, location_id, user_check, name_gudang, dock, next_gudang, tujuan) {
+    const date_finished = new Date(selesai);
+    const transaction_clock = date_finished.getHours();
+    let shift = 3;
+    // 07 - 14, 15 - 22, 23 - 06
+    const isShift1 = transaction_clock >= 7 && transaction_clock <= 14;
+    const isShift2 = transaction_clock >= 15 && transaction_clock <= 22;
+    if (isShift1)
+        shift = 1;
+    else if (isShift2)
+        shift = 2;
+    const registerMuat = new Date(register);
+    const startMuat = new Date(mulai);
+    const selesaiMuat = new Date(selesai);
+    const lamaMuat = (selesaiMuat.getTime() - startMuat.getTime()) / (1000 * 60);
+    const idleMuat = (startMuat.getTime() - registerMuat.getTime()) / (1000 * 60);
+    const parameterURLGoogleScript = `?action=insert&nodo=${nodo}&register=${register}&start=${mulai}&finish=${selesai}&noso=${so}&item_id=${item_id}&item_description=${item_description}&qty=${qty}&nopol=${nopol}&jenis_kendaraan=${jenis_kendaraan}&ekspedisi=tidak ditemukan&location_id=${location_id}&user_check=${user_check}&status_muat=done&gudang=${name_gudang}&dock=${dock}&shift=${shift}&lama_muat=${lamaMuat}&idle=${idleMuat}&total_qty=${qty}&id_gudang=${location_id}&next_gudang=${next_gudang}&customer=${tujuan}`;
+    return fetch(googleScriptURL + parameterURLGoogleScript, {
+        mode: "no-cors"
+    });
 }
 // const test = [
 //     { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
