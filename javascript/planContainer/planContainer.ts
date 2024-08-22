@@ -11,6 +11,12 @@ let spreadsheetAPIKey = '';
 let spreadsheetId = '';
 let range = ''; // Replace with your desired range
 
+let telegramBotToken = 0;
+let telegramBotAction = "";
+let telegramBotSubscriber = "";
+
+const doPushed = <string[]>[];
+
 async function getPlanContainer(): Promise<undefined|string[][]> {
 
     const warningDOdidntExists = "Tidak ada nomor do di google spreadsheet plan";
@@ -121,9 +127,9 @@ async function getDetailDO(nodo: string): Promise<getDetailDO|undefined> {
     if(responseJSON.dtl.length) return responseJSON
 }
 
-function sendDetailDOToGoogleAppScript(nodo: string, noso: string, customer: string, gudang: string, item: string, qty: string): Promise<Response> {
-    const url = `https://script.google.com/macros/s/AKfycbxC8Szkb_pqJPiXPTsGGoAeTYqtGMWVKFouAi5BrAMsyce9kYtlLGZG_4jjOW1DhzSg4g/exec`;
-    const parameter = `?action=${actionGoogleAppScript}&token=${tokenGoogleAppScript}&nodo=${nodo}&noso=${noso}&customer=${customer}&gudang=${gudang}&item=${encodeURIComponent(item)}&qty=${qty}`;
+function sendDetailDOToGoogleAppScript(expected: string, nodo: string, noso: string, customer: string, gudang: string, item: string, qty: string): Promise<Response> {
+    const url = `https://script.google.com/macros/s/AKfycbzH3wa52h1jL7Fm4Y4s-3zIhmQ18dGFUZTYq4K1qcIhuBlbn27Sl6AGvjMhWKieCftYrQ/exec`;
+    const parameter = `?action=${actionGoogleAppScript}&expected=${expected}&token=${tokenGoogleAppScript}&nodo=${nodo}&noso=${noso}&customer=${customer}&gudang=${gudang}&item=${encodeURIComponent(item)}&qty=${qty}`;
     console.log(`Mengirim do detail ke google spreadsheet nomorDO ${nodo}, item: ${item}`)
     return fetch(url + parameter, {
     "headers": {
@@ -146,29 +152,51 @@ function sendDetailDOToGoogleAppScript(nodo: string, noso: string, customer: str
     });
 }
 
+const timeWaiting = 1000 * 60 * 45;
+
 function wait () {
     return new Promise((resolve) => {
-        setTimeout(() => resolve, 1000 * 60 * 45)
+        setTimeout(() => resolve(""), timeWaiting)
     })
+}
+
+function notifyToTelegram(message: string) {
+    var url = 'https://script.google.com/macros/s/AKfycbzj451vW2mjR1q0SrGc0JTEIlT-P2oyvMFn-7_WAfPDdpGfzEwUQXaoqF30IX_wLY-I1Q/exec'; // Replace with your target URL
+    const parameter = `?action=${telegramBotAction}&token=${telegramBotToken}&subscriber=${telegramBotSubscriber}&message=` + encodeURIComponent(message)
+    fetch(url + parameter, { mode: 'no-cors' });
+}
+
+async function pauseCrawler() {
+    const dateNow = new Date();
+    dateNow.setTime(dateNow.getTime() + timeWaiting)
+    console.log("Crawler verhicles paused, would crawl again in less than 60 Minutes at", dateNow.toLocaleTimeString("ID-id"))
+    await wait();
+    startCrawler();
 }
 
 async function startCrawler() {
     const getListDO = await getPlanContainer();
-    if( !getListDO || !getListDO?.length) return;
+    if( !getListDO || !getListDO?.length) {
+        notifyToTelegram(`Tidak ada plan kontainer untuk didapatkan`)
+        pauseCrawler();
+        return;
+    }
 
     let index = 1;
-    const doPushed = <string[]>[];
     for(let nodo of getListDO) {
         if(!nodo.length || !nodo[0]) continue;
         console.log(`Mendapatkan informasi DO ${index} dari ${getListDO.length}`);
+        index += 1
         
         if(doPushed.includes(nodo[0])) continue;
+        else doPushed.push(nodo[0]);
         const getDODetail = await getDetailDO(nodo[0]);
         if(!getDODetail) continue;
 
         for(let doDetail of getDODetail.dtl) {
-           await sendDetailDOToGoogleAppScript(getDODetail.hdr.NoDo, doDetail.trno, doDetail.custname, doDetail.locationid, doDetail.description, doDetail.qtydo)
+           await sendDetailDOToGoogleAppScript(getDODetail.hdr.TglKirim, getDODetail.hdr.NoDo, doDetail.trno, doDetail.custname, doDetail.locationid, doDetail.description, doDetail.qtydo)
         }
+        notifyToTelegram(`Berhasil mendapatkan detail plan container nomor DO ${getDODetail.hdr.NoDo}`);
     }
-    index += 1
+    pauseCrawler();
 }
