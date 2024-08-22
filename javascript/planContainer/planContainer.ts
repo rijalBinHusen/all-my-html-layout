@@ -30,7 +30,7 @@ async function getPlanContainer(): Promise<undefined|string[][]> {
   
     const listNomorDO = await getData.json() as listPlanContainerResponse;
     
-    if(listNomorDO.values.length) {
+    if(listNomorDO?.values && listNomorDO.values.length) {
         console.log(doExists + listNomorDO.values.length)
         return listNomorDO.values
     }
