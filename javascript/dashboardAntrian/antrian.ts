@@ -49,13 +49,22 @@ function wait () {
     })
 }
 
+let previouseData = <string>"";
+
 async function runOurDashboard() {
     const dashboardString = await fetchDashboard();
     if(!dashboardString) return;
     const dataLocation = await parseDashboardResponse(dashboardString);
     if(!dataLocation) return;
-    const message = `Dashboard antrian gudang\n\n${dataLocation.join("\n")}`
-    notifyToTelegram(message);
+    const joinData = dataLocation.join("\n");
+
+    if(previouseData != joinData) {
+
+        const message = `Dashboard antrian gudang\n\n${joinData}`
+        notifyToTelegram(message);
+        previouseData = joinData;    
+    }
+
     await wait();
     runOurDashboard()
 }
