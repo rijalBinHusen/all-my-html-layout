@@ -35,8 +35,37 @@ async function parseDashboardResponse(html: string): Promise<string[]|undefined>
         let areaTitleElment = area.querySelector("h3.text-center");
         if(!areaTitleElment) continue;
         const areaTitle = areaTitleElment.innerHTML.replace(/\t|\n/g, "").split("    ")[0].replace("/<span>∞</span>", "");
-        data.push(areaTitle);
+        data.push("\n" + areaTitle);
+
+        const areaWarehouses = area.querySelectorAll("div.server-rack");
+        for(let areaWarehouse of areaWarehouses) {
+            let areaLabel = areaWarehouse.querySelector("p.label")?.innerHTML.replace(/\t|\n/g, "");
+            if(areaLabel) data.push(" * " + areaLabel);
+
+            const vehicles = areaWarehouse.querySelectorAll("div.informasi");
+            if(vehicles.length == 0)  continue;
+            let totalMuat = 0;
+            let totalAntri = 0;
+
+            for(let vehicle of vehicles) {
+                // const nopol = vehicle.getAttribute("data-nopol");
+                const flag = vehicle.getAttribute("data-flag");
+                // const isMuat = 
+                flag && flag == "2" ? totalMuat += 1 : totalAntri+= 1
+                // console.log(nopol, isMuat)
+                // const vehicleInfoAsObject = {
+                //         nopol: vehicle.getAttribute("data-nopol"),
+                //         nodo: vehicle.getAttribute("data-nodo"),
+                //         flag: vehicle.getAttribute("data-flag"),
+                //         location: areaLabel,
+                //     }
+
+                // console.log(vehicleInfoAsObject)
+            }
+            data.push(`   - Muat: ${totalMuat}, Antri: ${totalAntri} \n`)
+        }
     }
+    console.log(data.join("\n"))
     return data;
 }
 
@@ -65,6 +94,9 @@ async function runOurDashboard() {
         previouseData = joinData;    
     }
 
+    const currentDate = new Date();
+    currentDate.setTime(currentDate.getTime() + timeWaiting);
+    console.log(`Akan mendapatkan data lagi pada ${currentDate.toLocaleTimeString("ID-id")}`)
     await wait();
     runOurDashboard()
 }
