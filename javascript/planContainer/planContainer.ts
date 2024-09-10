@@ -193,10 +193,33 @@ async function startCrawler() {
         const getDODetail = await getDetailDO(nodo[0]);
         if(!getDODetail) continue;
 
+        const SOFromSpreadsheet = nodo[1].split(",")
+        const SOFromDODetail = <string[]>[];
+        let countSODetailed = 0;
         for(let doDetail of getDODetail.dtl) {
+            if(!SOFromDODetail.includes(doDetail.trno)) {
+                SOFromDODetail.push(doDetail.trno);
+                countSODetailed++
+            }
            await sendDetailDOToGoogleAppScript(getDODetail.hdr.TglKirim, getDODetail.hdr.NoDo, doDetail.trno, doDetail.custname, doDetail.locationid, doDetail.description, doDetail.qtydo)
         }
-        notifyToTelegram(`Berhasil mendapatkan detail plan container nomor DO ${getDODetail.hdr.NoDo}`);
+
+        let isAllSODetailed = SOFromSpreadsheet.length === countSODetailed;
+        let messageToNotify;
+        const message2 = `SO dari google spreadsheet:\n${SOFromSpreadsheet.join(",")}\n\n`;
+        const message3 = `SO dari e-tally:\n${SOFromDODetail.join(",")}`;
+        if(isAllSODetailed) {
+            const message1 = `✅ Berhasil mendapatkan detail plan container nomor DO ${getDODetail.hdr.NoDo}\n\n`;
+            messageToNotify = message1 + message2 + message3; 
+        } else {
+            const message = `❌ terdapat SO belum detail nomor DO ${getDODetail.hdr.NoDo}\n\n`;
+            messageToNotify = message + message2 + message3; 
+            
+        }
+
+        notifyToTelegram(messageToNotify);
     }
     pauseCrawler();
 }
+
+startCrawler();
