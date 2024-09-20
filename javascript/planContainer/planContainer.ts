@@ -152,7 +152,7 @@ function sendDetailDOToGoogleAppScript(expected: string, nodo: string, noso: str
     });
 }
 
-const timeWaiting = 1000 * 60 * 45;
+const timeWaiting = 1000 * 60 * 3;
 
 function wait () {
     return new Promise((resolve) => {
@@ -189,32 +189,34 @@ async function startCrawler() {
         index += 1
         
         if(doPushed.includes(nodo[0])) continue;
-        else doPushed.push(nodo[0]);
+    
         const getDODetail = await getDetailDO(nodo[0]);
         if(!getDODetail) continue;
 
         const SOFromSpreadsheet = nodo[1].split(",")
-        const SOFromDODetail = <string[]>[];
-        let countSODetailed = 0;
-        for(let doDetail of getDODetail.dtl) {
-            if(!SOFromDODetail.includes(doDetail.trno)) {
-                SOFromDODetail.push(doDetail.trno);
-                countSODetailed++
-            }
-           await sendDetailDOToGoogleAppScript(getDODetail.hdr.TglKirim, getDODetail.hdr.NoDo, doDetail.trno, doDetail.custname, doDetail.locationid, doDetail.description, doDetail.qtydo)
-        }
+        // const SOFromDODetail = <string[]>getDODetail.dtl.map((doDetail) => doDetail.trno);
+        const SOFromDODetail = <string[]>[ ...new Set(getDODetail.dtl.map((doDetail) => doDetail.trno))];
 
-        let isAllSODetailed = SOFromSpreadsheet.length === countSODetailed;
-        let messageToNotify;
-        const message2 = `SO dari google spreadsheet:\n${SOFromSpreadsheet.join(",")}\n\n`;
-        const message3 = `SO dari e-tally:\n${SOFromDODetail.join(",")}`;
-        if(isAllSODetailed) {
-            const message1 = `✅ Berhasil mendapatkan detail plan container nomor DO ${getDODetail.hdr.NoDo}\n\n`;
-            messageToNotify = message1 + message2 + message3; 
-        } else {
-            const message = `❌ terdapat SO belum detail nomor DO ${getDODetail.hdr.NoDo}\n\n`;
+        let isAllSODetailed = SOFromSpreadsheet.length === SOFromDODetail.length;
+
+        let messageToNotify: string;
+        const message2 = `SO spreadsheet:\n${SOFromSpreadsheet.join(",")}\n\n`;
+        const message3 = `SO e-tally:\n${SOFromDODetail.join(",")}`;
+
+        if(!isAllSODetailed) {
+            const message = `❌ Gagal, nomor DO ${getDODetail.hdr.NoDo}\n\n`;
             messageToNotify = message + message2 + message3; 
-            
+        }
+        
+        else {
+
+            for(let doDetail of getDODetail.dtl) {
+               await sendDetailDOToGoogleAppScript(getDODetail.hdr.TglKirim, getDODetail.hdr.NoDo, doDetail.trno, doDetail.custname, doDetail.locationid, doDetail.description, doDetail.qtydo)
+            }
+
+            const message1 = `✅ Berhasil mendapatkan detail ${getDODetail.hdr.NoDo}\n\n`;
+            messageToNotify = message1 + message2 + message3; 
+            doPushed.push(nodo[0]);
         }
 
         notifyToTelegram(messageToNotify);
