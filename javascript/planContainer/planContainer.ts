@@ -15,8 +15,6 @@ let telegramBotToken = 0;
 let telegramBotAction = "";
 let telegramBotSubscriber = "";
 
-const doPushed = <string[]>[];
-
 async function getPlanContainer(): Promise<undefined|string[][]> {
 
     const warningDOdidntExists = "Tidak ada nomor do di google spreadsheet plan";
@@ -175,6 +173,9 @@ async function pauseCrawler() {
 }
 
 async function startCrawler() {
+
+    const doPushed = <string[]>[];
+
     const getListDO = await getPlanContainer();
     if( !getListDO || !getListDO?.length) {
         notifyToTelegram(`Tidak ada plan kontainer untuk didapatkan`)
@@ -189,6 +190,7 @@ async function startCrawler() {
         index += 1
         
         if(doPushed.includes(nodo[0])) continue;
+        else doPushed.push(nodo[0]);
     
         const getDODetail = await getDetailDO(nodo[0]);
         if(!getDODetail) continue;
@@ -215,8 +217,7 @@ async function startCrawler() {
             }
 
             const message1 = `✅ Berhasil mendapatkan detail ${getDODetail.hdr.NoDo}\n\n`;
-            messageToNotify = message1 + message2 + message3; 
-            doPushed.push(nodo[0]);
+            messageToNotify = message1 + message2 + message3;
         }
 
         notifyToTelegram(messageToNotify);
