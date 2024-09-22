@@ -138,8 +138,6 @@ interface result {
 }
 
 interface list_item_out {
-    trno: string,
-    custname: string,
     sysdo: string,
     sys: string,
     lineno: string,
@@ -148,6 +146,8 @@ interface list_item_out {
     id_muat: string,
     lineno_split: null,
     nodo: string,
+    trno: string,
+    nopol: string,
     description: string,
     itemid: string,
     unitid: string,
@@ -155,13 +155,15 @@ interface list_item_out {
     awal: string,
     selisih: string,
     rak: string,
+    expired: string,
     flag: string,
     created_by: string,
-    times: string,
+    times: string, // start 
     times2: string,
-    jam_muat: string,
+    jam_muat: string, // get in dock
     checklist: string,
     update_by: string,
+    custname: string,
     locationid: string
 }
 
@@ -192,115 +194,73 @@ async function startFetch(date1: string, date2: string) {
 
     const allOutput = await retrieve_history.json() as list_item_out[];
 
-    allOutput.forEach((output) => {
-        const isOutputPushed = groupingOutput.findIndex((grouped) => grouped.nodo === output.nodo && grouped.sysdo === output.sysdo && grouped.id_muat === output.id_muat);
+    for (let output of allOutput) {
+        const dateTransaction = convertToDateTransactionAndShift(output.times2);
+        const dateExpired = convertToDateCreatedGoods(output.expired);
 
-        // record never pushed
-        if (isOutputPushed === -1) {
-            groupingOutput.push(output)
+        result.push({
+            date_transaction: dateTransaction.dateTransaction,
+            no_do: output.nodo,
+            no_pol: output.nopol,
+            gudang: output.locationid,
+            shift: dateTransaction.shift,
+            mulai_muat: output.jam_muat,
+            selesai_muat: output.times2,
+            item_kode: output.itemid,
+            item_name: output.description,
+            qty: Number(output.qty),
+            date_expired: dateExpired,
+            tally: output.created_by,
+            karu: output.update_by,
+            catatan: "Kosong",
+            fifo_or_not_fifo: "FIFO",
+            real_date: output.expired
+        })
+
+        const isCoretDO = output.qtydo != output.qtydo2;
+
+        if (isCoretDO) {
+
         }
-    })
+
+    }
+    // ============== Old concept
+
+    // allOutput.forEach((output) => {
+    //     const isOutputPushed = groupingOutput.findIndex((grouped) => grouped.nodo === output.nodo && grouped.sysdo === output.sysdo && grouped.id_muat === output.id_muat);
+
+    //     // record never pushed
+    //     if (isOutputPushed === -1) {
+    //         groupingOutput.push(output)
+    //     }
+    // })
 
     let count = 0;
     let timer = 700;
 
-    for (let out of groupingOutput) {
+    // for (let out of groupingOutput) {
 
-        timer += 70
-        await new Promise(resolve => setTimeout(resolve, timer));
-        if (timer >= 5000) timer = 700;
+    //     timer += 70
+    //     await new Promise(resolve => setTimeout(resolve, timer));
+    //     if (timer >= 5000) timer = 700;
 
-        count++
-        console.log(`mendapatkan data ${count} dari ${groupingOutput.length}`);
-        // ?action=insert&noDO=${}&register=${}&start=${}&finish=${}&noSO=${}&itemId=${}&qty=${}&nopol=${}&jenisKendaraan=${}&ekspedisi=${}&locationId=${}&userCheck=${}&statusMuat=${}&gudang=${}&dock=${}&shift=${}&lamaMuat=${}&idle=${}&totalQty=${}&idGudang=${}&nextGudang
-        const retrieve_detail = await fetch(`${location.origin}/warehouse/history/detail_muat?nodo=${out.nodo}&sysdo=${out.sysdo}&id_muat=${out.id_muat}`, {
-            "headers": {
-                "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-                "accept-language": "en-US,en;q=0.9",
-                "upgrade-insecure-requests": "1"
-            },
-            "referrerPolicy": "strict-origin-when-cross-origin",
-            "body": null,
-            "method": "GET",
-            "mode": "cors",
-            "credentials": "include"
-        });
-
-        if (retrieve_detail.status != 200) return;
-        
-        const detail = await retrieve_detail.json() as detailResponse;
-
-        await sendToGoogleAppScript(out.nodo, detail.hdr.datetime, detail.hdr.jam_muat,detail.hdr.selesai_muat,out.trno, out.itemid, out.description,Number(detail.dtl[0].qty),detail.hdr.nopol,detail.hdr.jenis_kendaraan2,detail.hdr.locid,detail.m_item[0].created_by,detail.hdr.gudang,detail.hdr.dock2,"tidak ditemukan", detail.hdr.tujuan)
-
-        for (let item of detail.m_item) {
-
-            const date_details = detail.hdr.selesai_muat ? new Date(detail.hdr.selesai_muat) : new Date();
-            const transaction_clock = date_details.getHours();
-
-            let shift = 3;
-
-            // 07 - 14, 15 - 22, 23 - 06
-            const isShift1 = transaction_clock >= 7 && transaction_clock <= 14;
-            const isShift2 = transaction_clock >= 15 && transaction_clock <= 22;
-            // const isShift3 = transaction_clock >= 23 || transaction_clock <= 6;
-
-            // shift
-            if (isShift1) shift = 1;
-            else if (isShift2) shift = 2;
-            else {
-                // shift 3
-                if (transaction_clock < 7) {
-                    // if shift 3 and clock < 7 the date - 1
-                    date_details.setDate(date_details.getDate() - 1);
-                }
-            }
-
-
-            const dateTransaction = date_details.toLocaleDateString("id-ID");
-
-            const dateExpired = convertToDateCreatedGoods(item.expired);
-
-            const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
-            const item_kode = detail.dtl[findItemIdIndex].itemid;
-            // @ts-ignore
-            const item_name = detail.dtl[findItemIdIndex].description.replaceAll(",", "");
-
-            result.push({
-                date_transaction: dateTransaction,
-                no_do: out.nodo,
-                no_pol: detail.hdr.nopol,
-                gudang: detail.hdr.gudang,
-                shift,
-                mulai_muat: detail.hdr.jam_muat,
-                selesai_muat: detail.hdr.selesai_muat,
-                item_kode,
-                item_name,
-                qty: Number(item.qty),
-                date_expired: dateExpired,
-                tally: item.created_by,
-                karu: out.update_by,
-                catatan: item.note.replaceAll(",", "."),
-                fifo_or_not_fifo: "FIFO",
-                real_date: item.expired
-            })
-            
-        }
-    }
+    //     count++
+    //     console.log(`mendapatkan data ${count} dari ${groupingOutput.length}`);
 
     // sort by item kode
     // sort by end loading
     // @ts-ignore
-    result.sort(function(a, b)  {
+    result.sort(function (a, b) {
         // Sort by count
         const mulaiMuatA = new Date(a.mulai_muat);
         const mulaiMuatB = new Date(b.mulai_muat);
         var dCount = mulaiMuatA.getTime() - mulaiMuatB.getTime();
-        if(dCount) return dCount;
-    
+        if (dCount) return dCount;
+
         let x = a.item_kode.toLowerCase();
         let y = b.item_kode.toLowerCase();
-        if (x < y) {return -1;}
-        if (x > y) {return 1;}
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
         return 0;
     });
 
@@ -309,7 +269,7 @@ async function startFetch(date1: string, date2: string) {
     for (let out of result) {
         const findIndex = result.findLastIndex((rec) => rec.item_kode === out.item_kode);
 
-        if(findIndex > -1) {
+        if (findIndex > -1) {
 
             const record = result[findIndex]
 
@@ -319,7 +279,7 @@ async function startFetch(date1: string, date2: string) {
             const currExpSplit = out.date_expired.split("/");
             const currExpired = new Date(`${currExpSplit[1]}/${currExpSplit[0]}/24`).getTime();
 
-            if(currExpired < firstExpired) {
+            if (currExpired < firstExpired) {
                 out.fifo_or_not_fifo = "Not FIFO"
             }
         }
@@ -335,7 +295,7 @@ async function startFetch(date1: string, date2: string) {
 }
 
 function downloadAsFile(object: string, filename: string) {
-    
+
     let element = document.createElement('a');
     element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(object));
     element.setAttribute('download', filename);
@@ -389,8 +349,8 @@ function objToCsv(data: any) {
 
 const googleScriptURL = "https://script.google.com/macros/s/AKfycbw7QsdSavj5gooDuyiISmDDMMg4y34hSzHxkvXEOV3Y9A5ooXmRRjbTI4TU9X416PHk9A/exec"
 
-function sendToGoogleAppScript(nodo: string, register: string, mulai: string, selesai: string, so: string, item_id: string, item_description: string, qty: number, nopol: string, jenis_kendaraan: string, location_id: string, user_check: string, name_gudang:string, dock:string, next_gudang: string, tujuan: string) {
-    
+function sendToGoogleAppScript(nodo: string, register: string, mulai: string, selesai: string, so: string, item_id: string, item_description: string, qty: number, nopol: string, jenis_kendaraan: string, location_id: string, user_check: string, name_gudang: string, dock: string, next_gudang: string, tujuan: string) {
+
     const date_finished = new Date(selesai);
     const transaction_clock = date_finished.getHours();
     let shift = 3;
@@ -414,6 +374,90 @@ function sendToGoogleAppScript(nodo: string, register: string, mulai: string, se
         mode: "no-cors"
     });
 }
+
+function convertToDateTransactionAndShift(yourDate: string): { dateTransaction: string, shift: number } {
+
+    const date_details = yourDate ? new Date(yourDate) : new Date();
+    const transaction_clock = date_details.getHours();
+
+    let shift = 3;
+
+    // 07 - 14, 15 - 22, 23 - 06
+    const isShift1 = transaction_clock >= 7 && transaction_clock <= 14;
+    const isShift2 = transaction_clock >= 15 && transaction_clock <= 22;
+    // const isShift3 = transaction_clock >= 23 || transaction_clock <= 6;
+
+    // shift
+    if (isShift1) shift = 1;
+    else if (isShift2) shift = 2;
+    else {
+        // shift 3
+        if (transaction_clock < 7) {
+            // if shift 3 and clock < 7 the date - 1
+            date_details.setDate(date_details.getDate() - 1);
+        }
+    }
+
+
+    const dateTransaction = date_details.toLocaleDateString("id-ID");
+    return { dateTransaction, shift };
+}
+
+async function detailingCoretDO(nodo: string, sysdo: string, id_muat: string): Promise<undefined> {
+    // ?action=insert&noDO=${}&register=${}&start=${}&finish=${}&noSO=${}&itemId=${}&qty=${}&nopol=${}&jenisKendaraan=${}&ekspedisi=${}&locationId=${}&userCheck=${}&statusMuat=${}&gudang=${}&dock=${}&shift=${}&lamaMuat=${}&idle=${}&totalQty=${}&idGudang=${}&nextGudang
+    const retrieve_detail = await fetch(`${location.origin}/warehouse/history/detail_muat?nodo=${nodo}&sysdo=${sysdo}&id_muat=${id_muat}`, {
+        "headers": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-language": "en-US,en;q=0.9",
+            "upgrade-insecure-requests": "1"
+        },
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": null,
+        "method": "GET",
+        "mode": "cors",
+        "credentials": "include"
+    });
+
+    if (retrieve_detail.status != 200) return;
+
+    const detail = await retrieve_detail.json() as detailResponse;
+
+    // await sendToGoogleAppScript(out.nodo, detail.hdr.datetime, detail.hdr.jam_muat,detail.hdr.selesai_muat,out.trno, out.itemid, out.description,Number(detail.dtl[0].qty),detail.hdr.nopol,detail.hdr.jenis_kendaraan2,detail.hdr.locid,detail.m_item[0].created_by,detail.hdr.gudang,detail.hdr.dock2,"tidak ditemukan", detail.hdr.tujuan)
+
+    for (let item of detail.m_item) {
+
+        const date_details = detail.hdr.selesai_muat ? new Date(detail.hdr.selesai_muat) : new Date();
+        const transaction_clock = date_details.getHours();
+
+        let shift = 3;
+
+        // 07 - 14, 15 - 22, 23 - 06
+        const isShift1 = transaction_clock >= 7 && transaction_clock <= 14;
+        const isShift2 = transaction_clock >= 15 && transaction_clock <= 22;
+        // const isShift3 = transaction_clock >= 23 || transaction_clock <= 6;
+
+        // shift
+        if (isShift1) shift = 1;
+        else if (isShift2) shift = 2;
+        else {
+            // shift 3
+            if (transaction_clock < 7) {
+                // if shift 3 and clock < 7 the date - 1
+                date_details.setDate(date_details.getDate() - 1);
+            }
+        }
+
+
+        const dateTransaction = date_details.toLocaleDateString("id-ID");
+
+        const dateExpired = convertToDateCreatedGoods(item.expired);
+
+        const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
+        const item_kode = detail.dtl[findItemIdIndex].itemid;
+        // @ts-ignore
+        const item_name = detail.dtl[findItemIdIndex].description.replaceAll(",", "");
+
+    }
 
 // const test = [
 //     { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
