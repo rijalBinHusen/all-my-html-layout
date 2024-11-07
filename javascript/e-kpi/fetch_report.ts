@@ -51,7 +51,7 @@ interface Users_and_details {
 
 async function login(username: string, password: string): Promise<boolean> {
 
-    const login = await fetch("http://182.16.186.138:8080/KPI/auth/login", {
+    const login = await fetch(location.origin + "/KPI/auth/login", {
         "headers": {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
             "accept-language": "en-US,en;q=0.9",
@@ -59,7 +59,7 @@ async function login(username: string, password: string): Promise<boolean> {
             "content-type": "application/x-www-form-urlencoded",
             "upgrade-insecure-requests": "1"
         },
-            "referrer": "http://182.16.186.138:8080/KPI/",
+            "referrer": location.origin + "/KPI/",
             "referrerPolicy": "strict-origin-when-cross-origin",
             "body": `username=${username}&password=${password}`,
             "method": "POST",
@@ -67,22 +67,22 @@ async function login(username: string, password: string): Promise<boolean> {
             "credentials": "include"
         });
 
-        return login.url === "http://182.16.186.138:8080/KPI/raport"
+        return login.url === location.origin + "/KPI/raport"
 }
 
 function logout() {
-    return fetch("http://182.16.186.138:8080/KPI/auth/logout")
+    return fetch(location.origin + "/KPI/auth/logout")
 }
 
 async function insert_kpi(user_id: string, periode1: string, periode2: string) {
 
-    const response_report = await fetch(`http://182.16.186.138:8080/KPI/raport/detail_raport?id=${user_id}&dept=7&raport=&tgl1=${periode1}&tgl2=${periode2}`, {
+    const response_report = await fetch(location.origin + `/KPI/raport/detail_raport?id=${user_id}&dept=7&raport=&tgl1=${periode1}&tgl2=${periode2}`, {
         "headers": {
             "accept": "application/json, text/javascript, */*; q=0.01",
             "accept-language": "en-US,en;q=0.9",
             "x-requested-with": "XMLHttpRequest"
         },
-        "referrer": "http://182.16.186.138:8080/KPI/raport",
+        "referrer": location.origin + "/KPI/raport",
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": null,
         "method": "GET",
@@ -133,14 +133,14 @@ async function insert_kpi(user_id: string, periode1: string, periode2: string) {
     formData.append("tgl_akhir", periode2);
     formData.append("nama", report.nama);
                 
-    await fetch("http://182.16.186.138:8080/KPI/raport/edit_raport", {
+    await fetch(location.origin + "/KPI/raport/edit_raport", {
         "headers": {
             "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
             "accept-language": "en-US,en;q=0.9",
             "cache-control": "max-age=0",
             "upgrade-insecure-requests": "1"
         },
-        "referrer": "http://182.16.186.138:8080/KPI/raport",
+        "referrer": location.origin + "/KPI/raport",
         "referrerPolicy": "strict-origin-when-cross-origin",
         "body": formData,
         "method": "POST",
@@ -167,7 +167,10 @@ async function start_insert(users: Users_and_details[], periode1: string, period
 
         // login
         const isLoginSuccess = await login(user.username, user.password);
-        if(!isLoginSuccess) continue;
+        if(!isLoginSuccess) {
+            console.log(`Gagal login ${user.name}`);
+            continue;
+        }
 
         // insert kpi
         await insert_kpi(user.id_user, periode1, periode2)
@@ -175,3 +178,48 @@ async function start_insert(users: Users_and_details[], periode1: string, period
         await logout();
     }
 }
+
+interface spreadsheetReponse {
+    range: string,
+    majorDimension: string,
+    values: string[][]
+}
+
+// let spreadsheetId = "";
+// let range = "";
+// let spreadsheetAPIKey = "";
+
+async function getUsersEKPI(): Promise<Users_and_details[]|false> {
+    
+    // Construct the URL for the Google Sheets API request
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${spreadsheetId}/values/${range}?key=${spreadsheetAPIKey}`;
+    
+    // Fetch the data from the spreadsheet
+    const getData = await fetch(url);
+  
+    const listUser = await getData.json() as spreadsheetReponse;
+    
+    if(listUser?.values && listUser.values.length) {
+        const userList:Users_and_details[] = listUser.values.map((rec) => ({
+            name: rec[0],
+            username: rec[1],
+            password: rec[2],
+            id_user: rec[3]
+        }));
+        return userList
+    }
+
+    return false
+}
+
+async function startProcess() {
+    const getUsers = await getUsersEKPI();
+    if(!getUsers) {
+        console.log("Gagal mendapatkan users");
+        return;
+    }
+
+    start_insert(getUsers, "2024-10-27", "2024-11-02")
+}
+
+startProcess()

@@ -424,57 +424,34 @@ async function detailingCoretDO(nodo: string, sysdo: string, id_muat: string): P
 
     // await sendToGoogleAppScript(out.nodo, detail.hdr.datetime, detail.hdr.jam_muat,detail.hdr.selesai_muat,out.trno, out.itemid, out.description,Number(detail.dtl[0].qty),detail.hdr.nopol,detail.hdr.jenis_kendaraan2,detail.hdr.locid,detail.m_item[0].created_by,detail.hdr.gudang,detail.hdr.dock2,"tidak ditemukan", detail.hdr.tujuan)
 
-    for (let item of detail.m_item) {
-
-        const date_details = detail.hdr.selesai_muat ? new Date(detail.hdr.selesai_muat) : new Date();
-        const transaction_clock = date_details.getHours();
-
-        let shift = 3;
-
-        // 07 - 14, 15 - 22, 23 - 06
-        const isShift1 = transaction_clock >= 7 && transaction_clock <= 14;
-        const isShift2 = transaction_clock >= 15 && transaction_clock <= 22;
-        // const isShift3 = transaction_clock >= 23 || transaction_clock <= 6;
-
-        // shift
-        if (isShift1) shift = 1;
-        else if (isShift2) shift = 2;
-        else {
-            // shift 3
-            if (transaction_clock < 7) {
-                // if shift 3 and clock < 7 the date - 1
-                date_details.setDate(date_details.getDate() - 1);
-            }
+        const dataToSend = {
+            "no do": "",
+            "finish": "",
+            "customer": "",
+            "description": "",
+            "qty plan": "",
+            "qty real": "",
+            "kubikasi plan": "",
+            "kubikasi real": "",
+            "jenis kendaraan": "",
+            "ekspedisi": "",
+            "gudang sj": "",
+            "kubikasikendaraan": "",
+            "kubikasitermuat": "",
+            "infull/tidakinfull": ""
         }
 
+    let index = 0;
+    for (let item of detail.m_item) {
 
-        const dateTransaction = date_details.toLocaleDateString("id-ID");
-
-        const dateExpired = convertToDateCreatedGoods(item.expired);
-
-        const findItemIdIndex = detail.dtl.findIndex((d) => d.lineno === item.lineno);
-        const item_kode = detail.dtl[findItemIdIndex].itemid;
-        // @ts-ignore
-        const item_name = detail.dtl[findItemIdIndex].description.replaceAll(",", "");
+        dataToSend["no do"] = nodo,
+        dataToSend["finish"] = detail.hdr.selesai_muat,
+        dataToSend["customer"] = detail.hdr.tujuan,
+        dataToSend["description"] = detail.dtl[index].description,
+        dataToSend["qty plan"] = detail.dtl[index].qtydo,
+        dataToSend["qty real"] = detail.dtl[index].qtydo2,
+        dataToSend["kubikasi plan"] = detail.dtl[index].kubikasi
+        
 
     }
-
-// const test = [
-//     { date_expect: "22/2/24", test: greatestDate("22/2/24", "8/2/24") },
-//     { date_expect: "23/2/24", test: greatestDate("23/2/24", "8/2/24") },
-//     { date_expect: "21/2/24", test: greatestDate("21/2/24", "8/2/24") },
-//     { date_expect: "20/2/24", test: greatestDate("20/2/24", "8/2/24") },
-//     { date_expect: "16/2/24", test: greatestDate("16/2/24", "8/2/24") },
-//     { date_expect: "24/3/24", test: greatestDate("21/3/24", "24/3/24") },
-//     { date_expect: "21/2/24", test: greatestDate("26/1/24", "21/2/24") },
-//     { date_expect: "24/2/24", test: greatestDate("31/1/24", "24/2/24") },
-//     { date_expect: "26/4/24", test: greatestDate("23/4/24", "26/4/24") },
-//     { date_expect: "28/5/24", test: greatestDate("24/3/24", "28/5/24") },
-//     { date_expect: "31/3/24", test: greatestDate("24/2/24", "31/3/24") },
-//     { date_expect: "12/7/24", test: greatestDate("23/6/24", "12/7/24") },
-//     { date_expect: "14/8/24", test: greatestDate("23/5/24", "14/8/24") },
-// ]
-
-// for (let t of test) {
-//     console.log(t.test === t.test)
-// }
+}
