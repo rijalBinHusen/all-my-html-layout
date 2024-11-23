@@ -105,9 +105,10 @@ async function insert_kpi(user_id: string, periode1: string, periode2: string, k
 
     // add kuantitatif
     for(let [index, kuan] of report.kuanti.entries()) {
-        formData.append(`target1[${index}]`, '100');
         formData.append(`real1[${index}]`, kuantitatifPoint[index].points + '');
+        formData.append(`target1[${index}]`, '100');
         formData.append(`id1[${index}]`, '');
+        formData.append(`desk1[${index}]`, kuan.desk);
         formData.append(`indikator1[${index}]`, kuan.indikator);
         formData.append(`params1[${index}]`, kuan.params);
         formData.append(`bobot1[${index}]`, kuan.bobot);
@@ -135,24 +136,20 @@ async function insert_kpi(user_id: string, periode1: string, periode2: string, k
     formData.append("tgl_akhir", periode2);
     formData.append("nama", report.nama);
     
-
-    for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-    // await fetch(location.origin + "/KPI/raport/edit_raport", {
-    //     "headers": {
-    //         "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    //         "accept-language": "en-US,en;q=0.9",
-    //         "cache-control": "max-age=0",
-    //         "upgrade-insecure-requests": "1"
-    //     },
-    //     "referrer": location.origin + "/KPI/raport",
-    //     "referrerPolicy": "strict-origin-when-cross-origin",
-    //     "body": formData,
-    //     "method": "POST",
-    //     "mode": "cors",
-    //     "credentials": "include"
-    // });
+    await fetch(location.origin + "/KPI/raport/edit_raport", {
+        "headers": {
+            "accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+            "accept-language": "en-US,en;q=0.9",
+            "cache-control": "max-age=0",
+            "upgrade-insecure-requests": "1"
+        },
+        "referrer": location.origin + "/KPI/raport",
+        "referrerPolicy": "strict-origin-when-cross-origin",
+        "body": formData,
+        "method": "POST",
+        "mode": "cors",
+        "credentials": "include"
+    });
 
     return true
 }
@@ -312,7 +309,7 @@ async function startProcess() {
         
         if(!isEKPIPointExists) {
             console.log(`Gagal melakukan input E-KPI ${user.name} karena nilai tidak ditemukan`);
-            return;
+            continue;
         }
         // insert kpi
         await insert_kpi(user.id_user, periode1, periode2, pointsKPI[user.name].kuanti, pointsKPI[user.name].kuali);
